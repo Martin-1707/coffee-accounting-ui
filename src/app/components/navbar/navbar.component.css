@@ -1,0 +1,63 @@
+/* --- Estilos generales --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  body {
+    background: #FFF2DF;
+    color: #3E2522;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* --- Header y navegación --- */
+  header {
+    background: #B5835A;
+    padding: 15px 20px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-links a {
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .nav-links a:hover {
+    color: #7A554D;
+  }
+  
+  /* --- Botón de login --- */
+  .btn-login {
+    background: #7A554D;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  
+  .btn-login:hover {
+    background: #5A3A33;
+  }
+  

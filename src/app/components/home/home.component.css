@@ -1,0 +1,146 @@
+/* --- Estilos generales --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  body {
+    background: #cc9138;
+    color: #3E2522;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* --- Header y navegación --- */
+  header {
+    background: #B5835A;
+    padding: 15px 20px;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-links a {
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .nav-links a:hover {
+    color: #7A554D;
+  }
+  
+  /* --- Botón de login --- */
+  .btn-login {
+    background: #7A554D;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  
+  .btn-login:hover {
+    background: #5A3A33;
+  }
+  
+  /* --- Menú Hamburguesa --- */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .hamburger .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: #B5835A;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  
+    .nav-links.show {
+      display: flex;
+    }
+  
+    .hamburger {
+      display: flex;
+    }
+  }
+  
+  /* --- Sección de bienvenida --- */
+  .landing-section {
+    text-align: center;
+    padding: 50px 20px;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background: #B5835A;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+  }
+  
+  .cta-button:hover {
+    background: #7A554D;
+  }
+  
+  /* --- Sección "Sobre Nosotros" --- */
+  .about-section {
+    text-align: center;
+    padding: 50px 20px;
+    background: #FFE0B2;
+  }
+  
+  .about-button {
+    display: inline-block;
+    background: #3E2522;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  
+  /* --- Footer --- */
+  .footer {
+    background: #3E2522;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .footer-section {
+    margin-bottom: 10px;
+  }
+  

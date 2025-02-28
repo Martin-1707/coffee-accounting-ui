@@ -1,0 +1,18 @@
+.dashboard-container {
+    height: 100vh;
+    display: flex;
+  }
+  
+  mat-sidenav {
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+    background-color: #fff;
+  }
+  
+  mat-sidenav-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow: auto;
+  }
+  

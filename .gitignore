@@ -1,0 +1,42 @@
+# 🔥 Salida compilada
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# 🛑 Ignorar node_modules y dist
+node_modules/
+dist/
+
+# 🔐 Ignorar archivos sensibles
+src/assets/env.js
+
+# 🛑 Archivos innecesarios de Node
+npm-debug.log
+yarn-error.log
+
+# 🖥️ Archivos de IDEs y editores
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# 💻 Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# 🚀 Angular cache y cobertura de tests
+.angular/
+.angular/cache/
+.sass-cache/
+coverage/
+
+# 🔄 Archivos de sistema innecesarios
+.DS_Store
+Thumbs.db

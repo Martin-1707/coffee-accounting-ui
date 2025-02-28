@@ -1,0 +1,24 @@
+<header>
+    <div class="container">
+      <div>
+        <a routerLink="/" class="logo-button">
+          <!-- <img src="assets/logo.png" alt="Logo del negocio" /> -->
+        </a>
+      </div>
+      
+      <nav>
+        <ul class="nav-links">
+          <li><a routerLink="/home">Inicio</a></li>
+          <li><a routerLink="/nosotros">Nosotros</a></li>
+        </ul>
+      </nav>
+  
+      <div class="login-button">
+        <button (click)="handleLogin()" class="btn-login">
+          {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
+        </button>
+      </div>
+
+    </div>
+  </header>
+  
