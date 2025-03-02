@@ -1,10 +1,4 @@
-<mat-sidenav-container class="dashboard-container">
-    <mat-sidenav mode="side" [(opened)]="isExpanded" disableClose="true">
-      <app-sidenav></app-sidenav>
-    </mat-sidenav>
-    
-    <mat-sidenav-content class="dashboard-content">
-      <h1>Bienvenido al Dashboard</h1>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-  
+<app-sidenav [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+(changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)">
+  <h1>Granos</h1>
+</app-sidenav>
