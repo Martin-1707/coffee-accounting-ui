@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, EventEmitter, Input, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -23,19 +23,27 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatListModule,
   ],
   templateUrl: './sidenav.component.html',
-  styleUrl:  './sidenav.component.css',
+  styleUrls: ['./sidenav.component.css'],
 })
 export class SidenavComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  @Input() isLeftSidebarCollapsed: boolean = false;
   @Output() changeIsLeftSidebarCollapsed = new EventEmitter<boolean>();
   username: string = '';
   rol: string = '';
-  
-
 
   menuItems: any[] = [
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
-    { icon: 'payments', label: 'Abono', route: '/abono'}
+    { icon: 'payments', label: 'Abono', route: '/abono' },
+    { icon: 'shopping_cart', label: 'Compra de Insumos', route: '/compra-insumo' },
+    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta' },
+    { icon: 'history', label: 'Historial Estado de Venta', route: '/historial-estado-venta' },
+    { icon: 'store', label: 'Producto', route: '/producto' },
+    { icon: 'admin_panel_settings', label: 'Rol', route: '/roles' },
+    { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago' },
+    { icon: 'people', label: 'Usuario', route: '/usuarios' },
+    { icon: 'sell', label: 'Venta', route: '/ventas' },
+    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto' }
   ];
 
   constructor(
@@ -44,7 +52,7 @@ export class SidenavComponent implements OnInit {
     private breakpointObserver: BreakpointObserver
   ) {}
 
-  isLoggedIn = this.loginService.verificar();
+  isLoggedIn = computed(() => this.loginService.verificar());
 
   ngOnInit() {
     this.username = this.loginService.showUser();

@@ -13,8 +13,6 @@ import { CommonModule } from '@angular/common';
     MatTableModule, 
     MatIconModule, 
     RouterModule,
-    MatPaginator,
-    SidenavComponent,
     MatSidenavModule,
     CommonModule
   ],
@@ -22,6 +20,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './listarabono.component.css'
 })
 export class ListarabonoComponent {
-  isExpanded: boolean = true; // Se mantiene abierto por defecto
 
 }

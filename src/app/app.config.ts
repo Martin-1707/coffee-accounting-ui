@@ -25,11 +25,10 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: environment.base ? [new URL(environment.base).hostname] : [],
-          disallowedRoutes: environment.base ? [`${environment.base}/login/forget`] : [],
-        },
+          allowedDomains: [environment.dom],
+          disallowedRoutes: [`${environment.base}/login/forget`]
+          },
       })
     )
-    , provideAnimationsAsync()
   ],
 };

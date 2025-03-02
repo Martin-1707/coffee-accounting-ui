@@ -51,9 +51,9 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(request).subscribe(
       (data: any) => {
-        if (data.token) {
-          sessionStorage.setItem('token', data.token); // 🔥 Guarda el token correctamente
-          console.log("✅ Token guardado:", data.token);
+        if (data.jwttoken) {
+          sessionStorage.setItem('token', data.jwttoken); // 🔥 Guarda el token correctamente
+          console.log("✅ Token guardado:", data.jwttoken);
           this.router.navigate(['dashboard']);
         } else {
           console.error("❌ No se recibió un token válido del backend.");

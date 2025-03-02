@@ -9,7 +9,7 @@ node_modules/
 dist/
 
 # 🔐 Ignorar archivos sensibles
-src/assets/env.js
+src/environments/environment.ts
 
 # 🛑 Archivos innecesarios de Node
 npm-debug.log

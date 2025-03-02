@@ -31,7 +31,6 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/assets/env.js"
             ],
             "server": "src/main.server.ts",
             "prerender": true,

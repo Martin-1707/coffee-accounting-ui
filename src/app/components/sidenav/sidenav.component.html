@@ -1,26 +1,30 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [opened]="true" class="sidenav">
+  <mat-sidenav #sidenav mode="side" [opened]="!isLeftSidebarCollapsed" class="sidenav" [ngClass]="{'sidenav-collapsed': isLeftSidebarCollapsed}">
     <div class="logo-container">
       <button class="logo" (click)="toggleCollapse()">
         <i class="fal fa-bars"></i>
       </button>
-      <div class="logo-text" *ngIf="sidenav.opened">App</div>
-      <button class="btn-close" (click)="closeSidenav()" *ngIf="sidenav.opened">
+      <div class="logo-text" *ngIf="!isLeftSidebarCollapsed">App</div>
+      <button class="btn-close" (click)="closeSidenav()" *ngIf="!isLeftSidebarCollapsed">
         <i class="fal fa-times close-icon"></i>
       </button>
     </div>
     <mat-nav-list>
       <a mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route">
         <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-        <span *ngIf="sidenav.opened">{{item.label}}</span>
+        <span class="menu-label" *ngIf="!isLeftSidebarCollapsed">{{item.label}}</span>
       </a>
       <button mat-button color="warn" (click)="logout()">
         <mat-icon>logout</mat-icon>
-        <span *ngIf="sidenav.opened">Cerrar Sesión</span>
+        <span *ngIf="!isLeftSidebarCollapsed">Cerrar Sesión</span>
       </button>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
+    <!-- Botón flotante para abrir el menú -->
+    <button mat-fab class="menu-button" (click)="sidenav.open()">
+      <mat-icon>menu</mat-icon>
+    </button>
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

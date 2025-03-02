@@ -14,11 +14,8 @@ export class LoginService {
 
   // 🔑 Iniciar sesión
   login(request: JwtRequest) {
-    return this.http.post<{ token: string }>(`${environment.base}/login`, request);
+    return this.http.post(`${environment.base}/login`, request);
   }
-  
-  
-  
   
   // 🔍 Verificar si el usuario está autenticado
   verificar() {
