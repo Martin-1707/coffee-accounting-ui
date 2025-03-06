@@ -3,14 +3,13 @@
 }
 
 .sidenav {
-  background: #012a5b;
+  background: #b7cbe3;
   transition: all 0.5s ease;
   position: fixed;
   z-index: 1;
   top: 0;
   width: 250px;
   height: 100vh;
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
 }
 
 .sidenav-collapsed {
@@ -95,7 +94,6 @@
 
 .sidenav-nav .sidenav-nav-item:hover .sidenav-nav-link {
   background-color: #fff;
-  color: #ca2b2b;
 }
 
 .active {

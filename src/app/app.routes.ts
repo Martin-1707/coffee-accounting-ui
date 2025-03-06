@@ -16,6 +16,9 @@ import { HistorialEstadoVentaComponent } from './components/historial-estado-ven
 import { VentasProductoComponent } from './components/ventas-producto/ventas-producto.component';
 import { CrearabonoComponent } from './components/abono/crearabono/crearabono.component';
 import { ListarproductoComponent } from './components/producto/listarproducto/listarproducto.component';
+import { seguridadGuard } from './guard/seguridad.guard';
+import { CompraInsumoComponent } from './components/compra-insumo/compra-insumo.component';
+import { ListarrolComponent } from './components/rol/listarrol/listarrol.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +41,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [seguridadGuard],
   },
   {
     path: 'abono',
@@ -48,18 +52,22 @@ export const routes: Routes = [
         component:  CrearabonoComponent,
       },
     ],
+    canActivate: [seguridadGuard],
   },
   {
     path: 'compra-insumo',
-    component: CompraInsumo,
+    component: CompraInsumoComponent,
+    canActivate: [seguridadGuard],
   },
   {
     path: 'estado-venta',
     component: EstadoVentaComponent,
+    canActivate: [seguridadGuard],
   },
   {
     path: 'historial-estado-venta',
     component: HistorialEstadoVentaComponent,
+    canActivate: [seguridadGuard],
   },
   {
     path: 'producto',
@@ -70,26 +78,35 @@ export const routes: Routes = [
         component:  ListarproductoComponent,
       },
     ],
+    canActivate: [seguridadGuard],
   },
   {
-    path: 'rol ',
+    path: 'rol',
     component: RolComponent,
+    canActivate: [seguridadGuard],
+
   },
   {
     path: 'tipo-pago',
     component: TipoPagoComponent,
+    canActivate: [seguridadGuard],
+
   },
   {
     path: 'usuario',
     component: UsuarioComponent,
+    canActivate: [seguridadGuard],
+
   },
   {
     path: 'venta',
     component: VentaComponent,
+    canActivate: [seguridadGuard],
   },
   {
     path: 'ventas-producto',
     component: VentasProductoComponent,
+    canActivate: [seguridadGuard],
   },
 
   //{ path: '**',

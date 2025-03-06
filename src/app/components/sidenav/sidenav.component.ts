@@ -39,10 +39,10 @@ export class SidenavComponent implements OnInit {
     { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta' },
     { icon: 'history', label: 'Historial Estado de Venta', route: '/historial-estado-venta' },
     { icon: 'store', label: 'Producto', route: '/producto' },
-    { icon: 'admin_panel_settings', label: 'Rol', route: '/roles' },
+    { icon: 'admin_panel_settings', label: 'Rol', route: '/rol' },
     { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago' },
-    { icon: 'people', label: 'Usuario', route: '/usuarios' },
-    { icon: 'sell', label: 'Venta', route: '/ventas' },
+    { icon: 'people', label: 'Usuario', route: '/usuario' },
+    { icon: 'sell', label: 'Venta', route: '/venta' },
     { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto' }
   ];
 

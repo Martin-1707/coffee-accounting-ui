@@ -1,1 +1,4 @@
-<p>ventas-producto works!</p>
+<router-outlet></router-outlet>
+<div [hidden]="route.children.length !== 0">
+    <app-listarventasproducto></app-listarventasproducto>
+</div>
