@@ -1,30 +1,34 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [opened]="!isLeftSidebarCollapsed" class="sidenav" [ngClass]="{'sidenav-collapsed': isLeftSidebarCollapsed}">
+  <mat-sidenav
+    mode="side"
+    [opened]="!collapsed"
+    class="sidenav"
+    [ngClass]="collapsed ? 'sidenav-collapsed' : ''"
+  >
     <div class="logo-container">
-      <button class="logo" (click)="toggleCollapse()">
-        <i class="fal fa-bars"></i>
-      </button>
-      <div class="logo-text" *ngIf="!isLeftSidebarCollapsed">App</div>
-      <button class="btn-close" (click)="closeSidenav()" *ngIf="!isLeftSidebarCollapsed">
-        <i class="fal fa-times close-icon"></i>
+      <button class="logo" (click)="toggleCollapse()">M</button>
+      <div class="logo-text" *ngIf="collapsed">App</div>
+      <button class="btn-close" *ngIf="collapsed" (click)="closeSidenav()">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
-    <mat-nav-list>
-      <a mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route">
-        <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-        <span class="menu-label" *ngIf="!isLeftSidebarCollapsed">{{item.label}}</span>
-      </a>
+
+    <mat-nav-list class="sidenav-nav">
+      <li  class="sidenav-nav-item" *ngFor="let item of menuItems">
+      <a mat-list-item  class="sidenav-nav-link" [routerLink]="item.route">
+          <mat-icon  matListItemIcon class="sidenav-link-icon">{{ item.icon }}</mat-icon>
+          <span  class="sidenav-link-text" *ngIf="collapsed">{{ item.label }}</span>
+        </a>
+      </li>
+
       <button mat-button color="warn" (click)="logout()">
         <mat-icon>logout</mat-icon>
-        <span *ngIf="!isLeftSidebarCollapsed">Cerrar Sesión</span>
+        <span *ngIf="collapsed">Cerrar Sesión</span>
       </button>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
-    <!-- Botón flotante para abrir el menú -->
-    <button mat-fab class="menu-button" (click)="sidenav.open()">
-      <mat-icon>menu</mat-icon>
-    </button>
     <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

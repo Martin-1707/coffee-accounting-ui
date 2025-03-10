@@ -26,11 +26,19 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./sidenav.component.css'],
 })
 export class SidenavComponent implements OnInit {
-  @ViewChild('sidenav') sidenav!: MatSidenav;
-  @Input() isLeftSidebarCollapsed: boolean = false;
-  @Output() changeIsLeftSidebarCollapsed = new EventEmitter<boolean>();
+
   username: string = '';
   rol: string = '';
+//nuevo
+  collapsed= false;
+
+  toggleCollapse():void{
+    this.collapsed = !this.collapsed;
+  }
+
+  closeSidenav():void {
+    this.collapsed =false
+  }
 
   menuItems: any[] = [
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
@@ -49,7 +57,6 @@ export class SidenavComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
   ) {}
 
   isLoggedIn = computed(() => this.loginService.verificar());
@@ -57,16 +64,6 @@ export class SidenavComponent implements OnInit {
   ngOnInit() {
     this.username = this.loginService.showUser();
     this.rol = this.loginService.showRole();
-  }
-
-  toggleCollapse(): void {
-    this.sidenav.toggle();
-    this.changeIsLeftSidebarCollapsed.emit(this.sidenav.opened);
-  }
-
-  closeSidenav(): void {
-    this.sidenav.close();
-    this.changeIsLeftSidebarCollapsed.emit(false);
   }
 
   logout() {
