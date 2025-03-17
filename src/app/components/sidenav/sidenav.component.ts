@@ -30,14 +30,17 @@ export class SidenavComponent implements OnInit {
   username: string = '';
   rol: string = '';
 //nuevo
-  collapsed= false;
+  collapsed: boolean = false; // Por defecto expandido
+  mode: 'side'  | 'over' = 'side';
 
-  toggleCollapse():void{
+  // Alternar colapsado sin afectar si el sidenav está abierto
+  toggleCollapse(): void {
     this.collapsed = !this.collapsed;
+    localStorage.setItem('sidenavCollapsed', String(this.collapsed)); // Guardar en localStorage
   }
 
-  closeSidenav():void {
-    this.collapsed =false
+  closeSidenav():void{
+    this.collapsed = false;
   }
 
   menuItems: any[] = [
@@ -57,6 +60,7 @@ export class SidenavComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   isLoggedIn = computed(() => this.loginService.verificar());
@@ -64,6 +68,15 @@ export class SidenavComponent implements OnInit {
   ngOnInit() {
     this.username = this.loginService.showUser();
     this.rol = this.loginService.showRole();
+
+    // Detectar si la pantalla es pequeña para cambiar a modo 'over'
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      this.mode = result.matches ? 'over' : 'side';
+    });
+
+     // Recuperar estado del sidenav al cargar la app
+     const savedState = localStorage.getItem('sidenavCollapsed');
+     this.collapsed = savedState === 'true'; // Convierte string a boolean
   }
 
   logout() {

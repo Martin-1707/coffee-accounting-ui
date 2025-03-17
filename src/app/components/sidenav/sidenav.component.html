@@ -1,9 +1,9 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     mode="side"
-    [opened]="!collapsed"
+    [opened]="true"
     class="sidenav"
-    [ngClass]="collapsed ? 'sidenav-collapsed' : ''"
+    [ngClass]="collapsed ? 'sidenav-collapsed' : 'sidenav-expanded'"
   >
     <div class="logo-container">
       <button class="logo" (click)="toggleCollapse()">M</button>
