@@ -9,22 +9,27 @@ Desarrollado con **Angular**, integrado con un backend en **Java** y **PostgreSQ
 ```sh
 git clone https://github.com/tu-usuario/coffee-accounting-ui.git
 cd coffee-accounting-ui
+```
 
-### 2️⃣ Instalar dependencias
+### 2️⃣ Instalar dependencias  
+```sh
 npm install
+```
 
-### 3️⃣ Configurar el entorno
-Copia el archivo de ejemplo de configuración y renómbralo a environment.ts:
-
+### 3️⃣ Configurar el entorno  
+Copia el archivo de ejemplo de configuración y renómbralo a `environment.ts`:  
+```sh
 cp src/environments/environment.example.ts src/environments/environment.ts
-
-Edita src/environments/environment.ts y ajusta los valores según tu entorno:
-
+```
+Edita `src/environments/environment.ts` y ajusta los valores según tu entorno:  
+```ts
 export const environment = {
   production: false,
   base: "http://localhost:8083",
   dom: "localhost:8083"
 };
+```
 
-### 4️⃣ Ejecutar la aplicación
+### 4️⃣ Ejecutar la aplicación  
+```sh
 ng serve
