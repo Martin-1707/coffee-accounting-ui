@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-listarproducto',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

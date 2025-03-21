@@ -13,7 +13,6 @@ import { UsuarioService } from '../../../services/usuario.service';
   selector: 'app-listarusuario',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

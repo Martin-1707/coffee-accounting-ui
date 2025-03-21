@@ -13,7 +13,6 @@ import { TipoPagoService } from '../../../services/tipo-pago.service';
   selector: 'app-listartipopago',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

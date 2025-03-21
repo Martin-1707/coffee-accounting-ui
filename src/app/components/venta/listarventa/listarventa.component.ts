@@ -13,7 +13,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
   selector: 'app-listarventa',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

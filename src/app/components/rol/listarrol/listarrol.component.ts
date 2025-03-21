@@ -13,7 +13,6 @@ import { RolService } from '../../../services/rol.service';
   selector: 'app-listarrol',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

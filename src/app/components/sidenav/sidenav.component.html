@@ -1,34 +1,36 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" autosize>
+  <!-- Sidenav -->
   <mat-sidenav
-    mode="side"
-    [opened]="true"
+    #sidenav
+    [mode]="mode"
+    [opened]="isLargeScreen"
     class="sidenav"
     [ngClass]="collapsed ? 'sidenav-collapsed' : 'sidenav-expanded'"
   >
     <div class="logo-container">
       <button class="logo" (click)="toggleCollapse()">M</button>
       <div class="logo-text" *ngIf="collapsed">App</div>
-      <button class="btn-close" *ngIf="collapsed" (click)="closeSidenav()">
-        <mat-icon>close</mat-icon>
-      </button>
     </div>
 
     <mat-nav-list class="sidenav-nav">
-      <li  class="sidenav-nav-item" *ngFor="let item of menuItems">
-      <a mat-list-item  class="sidenav-nav-link" [routerLink]="item.route">
-          <mat-icon  matListItemIcon class="sidenav-link-icon">{{ item.icon }}</mat-icon>
-          <span  class="sidenav-link-text" *ngIf="collapsed">{{ item.label }}</span>
+      <li class="sidenav-nav-item" *ngFor="let item of menuItems">
+        <a mat-list-item class="sidenav-nav-link" [routerLink]="item.route" routerLinkActive="active">
+          <mat-icon matListItemIcon class="sidenav-link-icon">{{ item.icon }}</mat-icon>
+          <span class="sidenav-link-text" *ngIf="collapsed">{{ item.label }}</span>
         </a>
       </li>
 
-      <button mat-button color="warn" (click)="logout()">
+      <button mat-button color="warn" class="logout-button" (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span *ngIf="collapsed">Cerrar Sesión</span>
       </button>
     </mat-nav-list>
   </mat-sidenav>
 
+  <!-- Contenido Principal -->
   <mat-sidenav-content>
-    <ng-content></ng-content>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

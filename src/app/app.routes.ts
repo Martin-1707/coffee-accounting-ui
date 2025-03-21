@@ -19,6 +19,7 @@ import { ListarproductoComponent } from './components/producto/listarproducto/li
 import { seguridadGuard } from './guard/seguridad.guard';
 import { CompraInsumoComponent } from './components/compra-insumo/compra-insumo.component';
 import { ListarrolComponent } from './components/rol/listarrol/listarrol.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
 
 export const routes: Routes = [
   {
@@ -39,75 +40,82 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: '',
+    component: SidenavComponent,
+    canActivate: [seguridadGuard],
+    children: [
+      {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'abono',
-    component: AbonoComponent,
-    children: [
-      {
-        path: 'nuevo',
-        component:  CrearabonoComponent,
       },
-    ],
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'compra-insumo',
-    component: CompraInsumoComponent,
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'estado-venta',
-    component: EstadoVentaComponent,
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'historial-estado-venta',
-    component: HistorialEstadoVentaComponent,
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'producto',
-    component: ProductoComponent,
-    children: [
       {
-        path: 'nuevo',
-        component:  ListarproductoComponent,
+        path: 'abono',
+        component: AbonoComponent,
+        children: [
+          {
+            path: 'nuevo',
+            component:  CrearabonoComponent,
+          },
+        ],
+        canActivate: [seguridadGuard],
       },
-    ],
-    canActivate: [seguridadGuard],
+      {
+        path: 'compra-insumo',
+        component: CompraInsumoComponent,
+        canActivate: [seguridadGuard],
+      },
+      {
+        path: 'estado-venta',
+        component: EstadoVentaComponent,
+        canActivate: [seguridadGuard],
+      },
+      {
+        path: 'historial-estado-venta',
+        component: HistorialEstadoVentaComponent,
+        canActivate: [seguridadGuard],
+      },
+      {
+        path: 'producto',
+        component: ProductoComponent,
+        children: [
+          {
+            path: 'nuevo',
+            component:  ListarproductoComponent,
+          },
+        ],
+        canActivate: [seguridadGuard],
+      },
+      {
+        path: 'rol',
+        component: RolComponent,
+        canActivate: [seguridadGuard],
+    
+      },
+      {
+        path: 'tipo-pago',
+        component: TipoPagoComponent,
+        canActivate: [seguridadGuard],
+    
+      },
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        canActivate: [seguridadGuard],
+    
+      },
+      {
+        path: 'venta',
+        component: VentaComponent,
+        canActivate: [seguridadGuard],
+      },
+      {
+        path: 'ventas-producto',
+        component: VentasProductoComponent,
+        canActivate: [seguridadGuard],
+      },
+    ]
   },
-  {
-    path: 'rol',
-    component: RolComponent,
-    canActivate: [seguridadGuard],
-
-  },
-  {
-    path: 'tipo-pago',
-    component: TipoPagoComponent,
-    canActivate: [seguridadGuard],
-
-  },
-  {
-    path: 'usuario',
-    component: UsuarioComponent,
-    canActivate: [seguridadGuard],
-
-  },
-  {
-    path: 'venta',
-    component: VentaComponent,
-    canActivate: [seguridadGuard],
-  },
-  {
-    path: 'ventas-producto',
-    component: VentasProductoComponent,
-    canActivate: [seguridadGuard],
-  },
+  
 
   //{ path: '**',
   //component: NotFoundComponent

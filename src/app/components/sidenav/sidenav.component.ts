@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Output, EventEmitter, Input, computed } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, EventEmitter, Input, computed, HostBinding } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -21,6 +21,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatIconModule,
     MatButtonModule,
     MatListModule,
+    RouterModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css'],
@@ -29,26 +30,22 @@ export class SidenavComponent implements OnInit {
 
   username: string = '';
   rol: string = '';
-//nuevo
-  collapsed: boolean = false; // Por defecto expandido
-  mode: 'side'  | 'over' = 'side';
 
-  // Alternar colapsado sin afectar si el sidenav está abierto
-  toggleCollapse(): void {
-    this.collapsed = !this.collapsed;
-    localStorage.setItem('sidenavCollapsed', String(this.collapsed)); // Guardar en localStorage
+  collapsed = false;
+  isLargeScreen = window.innerWidth > 768; // Detecta si la pantalla es grande
+  mode: 'over' | 'side' = this.isLargeScreen ? 'side' : 'over';
+
+   // 📌 Esta propiedad permitirá cambiar la clase en `<mat-sidenav-content>`
+   @HostBinding('class.content-shifted') get contentShifted() {
+    return !this.collapsed && this.isLargeScreen;
   }
-
-  closeSidenav():void{
-    this.collapsed = false;
-  }
-
+   
   menuItems: any[] = [
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
     { icon: 'payments', label: 'Abono', route: '/abono' },
-    { icon: 'shopping_cart', label: 'Compra de Insumos', route: '/compra-insumo' },
+    { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo' },
     { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta' },
-    { icon: 'history', label: 'Historial Estado de Venta', route: '/historial-estado-venta' },
+    { icon: 'history', label: 'Historial', route: '/historial-estado-venta' },
     { icon: 'store', label: 'Producto', route: '/producto' },
     { icon: 'admin_panel_settings', label: 'Rol', route: '/rol' },
     { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago' },
@@ -61,26 +58,43 @@ export class SidenavComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private breakpointObserver: BreakpointObserver
-  ) {}
-
-  isLoggedIn = computed(() => this.loginService.verificar());
+  ) { }
 
   ngOnInit() {
     this.username = this.loginService.showUser();
     this.rol = this.loginService.showRole();
 
-    // Detectar si la pantalla es pequeña para cambiar a modo 'over'
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
-      this.mode = result.matches ? 'over' : 'side';
-    });
+      this.isLargeScreen = !result.matches;
+      this.mode = this.isLargeScreen ? 'side' : 'over';
 
-     // Recuperar estado del sidenav al cargar la app
-     const savedState = localStorage.getItem('sidenavCollapsed');
-     this.collapsed = savedState === 'true'; // Convierte string a boolean
+      if (!this.isLargeScreen) {
+        this.collapsed = true; // En móviles, siempre cerrado
+      } else {
+        const savedState = localStorage.getItem('sidenavCollapsed');
+        this.collapsed = savedState ? JSON.parse(savedState) : false;
+      }
+    });
+  }
+
+  // Alternar colapsado sin afectar si el sidenav está abierto
+  toggleCollapse(): void {
+    this.collapsed = !this.collapsed;
+
+    if (this.isLargeScreen) {
+      localStorage.setItem('sidenavCollapsed', JSON.stringify(this.collapsed));
+    }
+  }
+
+  closeSidenav() {
+    if (!this.isLargeScreen) {
+      this.collapsed = true;
+    }
   }
 
   logout() {
     this.loginService.logout();
     this.router.navigate(['/home']);
+    console.log("Cerrando sesión...");
   }
 }

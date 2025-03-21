@@ -17,7 +17,6 @@ import { AbonoService } from '../../../services/abono.service';
     RouterModule,
     MatSidenavModule,
     CommonModule,
-    SidenavComponent,
     MatPaginator,
 ],
   templateUrl: './listarabono.component.html',

@@ -18,7 +18,6 @@ import { MatPaginator } from '@angular/material/paginator';
       RouterModule,
       MatSidenavModule,
       CommonModule,
-      SidenavComponent,
       MatPaginator
     ],
   templateUrl: './listarestadoventa.component.html',

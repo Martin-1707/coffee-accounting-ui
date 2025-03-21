@@ -13,7 +13,6 @@ import { VentasProductoService } from '../../../services/ventas-producto.service
   selector: 'app-listarventasproducto',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
     MatTableModule,

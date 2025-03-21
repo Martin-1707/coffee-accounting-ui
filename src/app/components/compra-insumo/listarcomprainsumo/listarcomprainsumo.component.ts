@@ -18,7 +18,6 @@ import { SidenavComponent } from '../../sidenav/sidenav.component';
     RouterModule,
     MatSidenavModule,
     CommonModule,
-    SidenavComponent,
     MatPaginator,
   ],
   templateUrl: './listarcomprainsumo.component.html',

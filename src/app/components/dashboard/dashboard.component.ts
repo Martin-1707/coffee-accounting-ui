@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    SidenavComponent,
     MatSidenavModule,
     CommonModule,
   ],
