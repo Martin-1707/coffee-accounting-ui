@@ -1,1 +1,36 @@
-<p>creareditarrol works!</p>
+<div class="container">
+    <div class="form-container">
+      <h2>Crear Rol</h2>
+  
+      <form [formGroup]="rolForm" (ngSubmit)="guardarRol()">
+        <!-- Nombre del Rol (Obligatorio) -->
+        <mat-form-field class="full-width">
+          <mat-label>Nombre del Rol</mat-label>
+          <input matInput formControlName="nombre_rol" placeholder="Ej: Administrador">
+          <mat-error *ngIf="rolForm.get('nombre_rol')?.hasError('required')">
+            El nombre del rol es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="rolForm.get('nombre_rol')?.hasError('minlength')">
+            El nombre debe tener al menos 2 caracteres.
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Descripción (Opcional) -->
+        <mat-form-field class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="descripcion" placeholder="Ej: Tiene acceso total" rows="3"></textarea>
+        </mat-form-field>
+  
+        <!-- Botón Guardar -->
+        <button mat-flat-button color="primary" type="submit" [disabled]="rolForm.invalid">
+          Guardar
+        </button>
+      </form>
+  
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+  

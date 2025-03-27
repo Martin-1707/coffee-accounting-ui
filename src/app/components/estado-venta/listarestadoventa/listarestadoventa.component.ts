@@ -3,8 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterModule } from '@angular/router';
-import { SidenavComponent } from '../../sidenav/sidenav.component';
+import { Router, RouterModule } from '@angular/router';
 import { EstadoVenta } from '../../../models/estado-venta';
 import { EstadoVentaService } from '../../../services/estado-venta.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,7 +26,7 @@ export class ListarestadoventaComponent  implements OnInit {
   dataSource: MatTableDataSource<EstadoVenta> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2'];
 
-  constructor(private evS: EstadoVentaService) {}
+  constructor(private evS: EstadoVentaService, private router: Router) {}
 
   ngOnInit(): void {
     this.evS.list().subscribe((data) => {
@@ -42,5 +41,9 @@ export class ListarestadoventaComponent  implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  irACrearEstado() {
+    this.router.navigate(['/estado-venta/nuevo']);
   }
 }

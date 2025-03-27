@@ -1,1 +1,29 @@
-<p>creareditartipopago works!</p>
+<div class="container">
+    <h2>Registrar Tipo de Pago</h2>
+    
+    <form [formGroup]="tipoPagoForm" (ngSubmit)="guardarTipoPago()">
+      <!-- Nombre del Tipo de Pago -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ejemplo: Tarjeta" />
+        <mat-error *ngIf="tipoPagoForm.controls['nombre'].invalid && tipoPagoForm.controls['nombre'].touched">
+          El nombre es obligatorio y debe tener al menos 2 caracteres.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Descripción del Tipo de Pago -->
+      <mat-form-field appearance="outline">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="descripcion" placeholder="Ejemplo: Pago con tarjeta de débito o crédito" />
+        <mat-error *ngIf="tipoPagoForm.controls['descripcion'].invalid && tipoPagoForm.controls['descripcion'].touched">
+          La descripción es obligatoria.
+        </mat-error>
+      </mat-form-field>
+  
+      <!-- Botón Guardar -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="tipoPagoForm.invalid">
+        Guardar
+      </button>
+    </form>
+  </div>
+  

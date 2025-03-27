@@ -1,41 +1,39 @@
-    <div class="container">
-      <div>
-        <h1 class="title">Lista de Compras</h1>
-      </div>
-      <div class="alergia-table">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="c1">
-            <th mat-header-cell *matHeaderCellDef>idCompra</th>
-            <td mat-cell *matCellDef="let element">{{ element.idcompra }}</td>
-          </ng-container>
-    
-          <ng-container matColumnDef="c2">
-            <th mat-header-cell *matHeaderCellDef>Fecha inicial</th>
-            <td mat-cell *matCellDef="let element">{{ element.fecha_inicial }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="c3">
-            <th mat-header-cell *matHeaderCellDef>Fecha final</th>
-            <td mat-cell *matCellDef="let element">{{ element.fecha_final }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="c4">
-            <th mat-header-cell *matHeaderCellDef> Venta </th>
-            <td mat-cell *matCellDef="let element">{{ element.monto }}</td>
-          </ng-container>
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-  
-        <mat-paginator
-          [pageSizeOptions]="[5, 8, 10, 20, 30]"
-          showFirstLastButtons
-          aria-label="Selecciona la página"
-        >
-        </mat-paginator>
-        <br /><br />
-      </div>
-    </div>
-  
+<div class="container">
+  <div class="header-container">
+    <h1 class="title">Lista de Compras</h1>
+    <button mat-mini-fab color="primary" (click)="irACrearCompra()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div class="alergia-table">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="c1">
+        <th mat-header-cell *matHeaderCellDef>idCompra</th>
+        <td mat-cell *matCellDef="let element">{{ element.idcompra }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c2">
+        <th mat-header-cell *matHeaderCellDef>Fecha inicial</th>
+        <td mat-cell *matCellDef="let element">{{ element.fecha_inicial ? (element.fecha_inicial | date: 'dd/MM/yyyy') : '' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c3">
+        <th mat-header-cell *matHeaderCellDef>Fecha final</th>
+        <td mat-cell *matCellDef="let element">{{ element.fecha_final ? (element.fecha_final | date: 'dd/MM/yyyy') : '' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c4">
+        <th mat-header-cell *matHeaderCellDef> Venta </th>
+        <td mat-cell *matCellDef="let element">{{ element.monto }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 8, 10, 20, 30]" showFirstLastButtons aria-label="Selecciona la página">
+    </mat-paginator>
+    <br /><br />
+  </div>
+</div>

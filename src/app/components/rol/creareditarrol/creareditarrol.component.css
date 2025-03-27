@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #3E2522;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  button {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #B5835A;
+    color: #FFF2DF;
+  }
+  
+  button:hover {
+    background-color: #7A554D;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+  }
+  

@@ -4,7 +4,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { Rol } from '../../../models/rol';
 import { RolService } from '../../../services/rol.service';
@@ -27,7 +27,7 @@ export class ListarrolComponent implements OnInit {
   dataSource: MatTableDataSource<Rol> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3'];
 
-  constructor(private rS: RolService) {}
+  constructor(private rS: RolService, private router: Router) {}
 
   ngOnInit(): void {
     this.rS.list().subscribe((data) => {
@@ -42,5 +42,9 @@ export class ListarrolComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  irACrearRol() {
+    this.router.navigate(['/rol/nuevo']);
   }
 }

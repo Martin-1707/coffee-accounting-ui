@@ -4,7 +4,7 @@ import { CompraInsumoService } from '../../../services/compra-insumo.service';
 import { CompraInsumo } from '../../../models/compra-insumo';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidenavComponent } from '../../sidenav/sidenav.component';
@@ -27,7 +27,7 @@ export class ListarcomprainsumoComponent implements OnInit {
   dataSource: MatTableDataSource<CompraInsumo> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4'];
 
-  constructor(private ciS: CompraInsumoService) {}
+  constructor(private ciS: CompraInsumoService, private router:Router) {}
 
   ngOnInit(): void {
     this.ciS.list().subscribe((data) => {
@@ -42,5 +42,9 @@ export class ListarcomprainsumoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  irACrearCompra() {
+    this.router.navigate(['/compra-insumo/nuevo']);
   }
 }

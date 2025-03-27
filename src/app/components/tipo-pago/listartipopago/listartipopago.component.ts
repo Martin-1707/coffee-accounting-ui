@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SidenavComponent } from '../../sidenav/sidenav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { TipoPago } from '../../../models/tipo-pago';
 import { TipoPagoService } from '../../../services/tipo-pago.service';
@@ -27,7 +26,7 @@ export class ListartipopagoComponent implements OnInit {
   dataSource: MatTableDataSource<TipoPago> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'accion01', 'accion02'];
 
-  constructor(private tpS: TipoPagoService) {}
+  constructor(private tpS: TipoPagoService, private router:Router) {}
 
   ngOnInit(): void {
     this.tpS.list().subscribe((data) => {
@@ -49,6 +48,10 @@ export class ListartipopagoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  irACrearTipoPago() {
+    this.router.navigate(['/tipo-pago/nuevo']);
   }
 }
 

@@ -1,0 +1,140 @@
+/* Centrado del formulario */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+  padding: 1rem;
+}
+
+/* Contenedor del formulario con tamaño fijo */
+.form-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 500px; /* Altura mínima para evitar cambios bruscos */
+  transition: min-height 0.3s ease-in-out;
+}
+
+/* Estilos para títulos */
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* Inputs y campos de formulario */
+.form-container mat-form-field {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Estilos para la sección de productos */
+.productos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaciado uniforme entre productos */
+  margin-bottom: 1.5rem; /* Espaciado entre la sección de productos y el siguiente campo */
+}
+
+/* Fila de producto */
+.producto-row {
+  display: flex;
+  align-items: center; /* Asegura alineación vertical */
+  gap: 1rem; /* Espaciado uniforme */
+  flex-wrap: nowrap; /* Evita que los elementos salten de línea */
+  width: 100%;
+}
+
+/* Asegurar que los inputs de productos tengan un tamaño adecuado */
+.producto-row mat-form-field {
+  min-width: 150px; /* Evita que los inputs sean muy pequeños */
+  flex: 1; /* Se expanden dentro del espacio disponible */
+  display: flex;
+  align-items: center; /* Asegura alineación con el botón */
+  margin-bottom: 0; /* Elimina cualquier margen extra */
+  margin-block-end: 1rem; /* Espacio entre los inputs y el botón */
+}
+
+/* Corrección del botón de eliminar */
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+  align-self: flex-start; /* Asegura alineación con los inputs */
+  margin-top: 4px; /* Ajuste fino si es necesario */
+}
+
+.remove-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+/* Contenedor del botón "Agregar producto" */
+.add-product-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Botón "Agregar producto" */
+.add-product-btn {
+  width: 100%;
+  background: #1565c0;
+  color: white;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.add-product-btn:hover {
+  background: #0d47a1;
+}
+
+/* Checkbox con alineación */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+/* Botón general */
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background: #1976d2;
+  color: white;
+  transition: background 0.3s;
+  border: none;
+}
+
+button:hover {
+  background: #125a9b;
+}
+
+/* Botón deshabilitado */
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

@@ -1,1 +1,23 @@
-<p>creareditarestadoventa works!</p>
+<div class="container">
+    <div class="form-container">
+      <h2>Crear Estado de Venta</h2>
+  
+      <form [formGroup]="estadoVentaForm" (ngSubmit)="guardarEstadoVenta()">
+        <mat-form-field class="full-width">
+          <mat-label>Nombre del Estado</mat-label>
+          <input matInput formControlName="nombreestado" placeholder="Ej: Pagado">
+          <mat-error *ngIf="estadoVentaForm.get('nombreestado')?.hasError('required')">
+            El nombre es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="estadoVentaForm.get('nombreestado')?.hasError('pattern')">
+            Solo se permiten letras y espacios.
+          </mat-error>
+        </mat-form-field>
+  
+        <button mat-flat-button color="primary" type="submit" [disabled]="estadoVentaForm.invalid">
+          Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+  

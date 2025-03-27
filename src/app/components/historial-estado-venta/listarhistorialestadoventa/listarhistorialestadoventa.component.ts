@@ -30,6 +30,7 @@ export class ListarhistorialestadoventaComponent  implements OnInit {
 
   ngOnInit(): void {
     this.hevS.list().subscribe((data) => {
+      console.log(data); // Verifica si "usuarioCliente" aparece en cada "venta"
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
     });

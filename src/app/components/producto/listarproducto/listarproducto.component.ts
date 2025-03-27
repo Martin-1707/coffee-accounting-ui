@@ -3,7 +3,7 @@ import { SidenavComponent } from '../../sidenav/sidenav.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Producto } from '../../../models/producto';
 import { ProductoService } from '../../../services/producto.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -27,7 +27,7 @@ export class ListarproductoComponent implements OnInit {
   dataSource: MatTableDataSource<Producto> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'accion01', 'accion02'];
 
-  constructor(private pS: ProductoService) {}
+  constructor(private pS: ProductoService, private router:Router) {}
 
   ngOnInit(): void {
     this.pS.list().subscribe((data) => {
@@ -50,4 +50,9 @@ export class ListarproductoComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  irACrearProducto() {
+    this.router.navigate(['/producto/nuevo']);
+  }
+  
 }

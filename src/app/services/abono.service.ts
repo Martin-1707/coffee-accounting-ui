@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Abono } from '../models/abono';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 // 🔵 URL base de la API
 const base_url = environment.base;
@@ -17,7 +17,7 @@ export class AbonoService {
   // 🔵 Subject para manejar cambios en la lista de abonos
   private listaCambio = new Subject<Abono[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // 🟢 Listar todos los abonos
   list() {
@@ -29,17 +29,11 @@ export class AbonoService {
     return this.http.get<Abono>(`${this.url}/${id}`);
   }
 
-  // 🟠 Registrar un nuevo abono
-  registerAbono(ventaId: number, abono: number, tipoPagoId: number) {
-    return this.http.post(`${this.url}/registrarAbono`, null, {
-      params: {
-        ventaId: ventaId.toString(), // 🔹 Convertimos los valores a string para pasarlos como parámetros en la URL
-        abono: abono.toString(),
-        tipoPagoId: tipoPagoId.toString()
-      }
-    });
+  // 🟠 Registrar un nuevo abono (Usando `body` en lugar de `params`)
+  registerAbono(abonoData: any) {
+    // ✅ Asegurar que la API responde en texto
+    return this.http.post(`${this.url}/registrarAbono`, abonoData, { responseType: 'text' });
   }
-
 
   //get y set
   // 🔄 Obtener la lista actualizada de abonos

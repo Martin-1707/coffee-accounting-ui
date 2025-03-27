@@ -1,1 +1,97 @@
-<p>creareditarventa works!</p>
+<div class="container">
+  <div class="form-container">
+    <h2>Registrar Venta</h2>
+
+    <form [formGroup]="ventaForm" (ngSubmit)="guardarVenta()">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Cliente ID</mat-label>
+        <input matInput formControlName="clienteId" />
+        <mat-error *ngIf="ventaForm.get('clienteId')?.hasError('required') && ventaForm.get('clienteId')?.touched">
+          Cliente ID es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Vendedor ID</mat-label>
+        <input matInput formControlName="vendedorId" />
+        <mat-error *ngIf="ventaForm.get('vendedorId')?.hasError('required') && ventaForm.get('vendedorId')?.touched">
+          Vendedor ID es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <div class="checkbox-container">
+        <mat-checkbox formControlName="factura">Factura</mat-checkbox>
+        <mat-checkbox formControlName="especificarProducto">Desea especificar producto?</mat-checkbox>
+      </div>
+
+      <!-- Productos dinámicos -->
+      <div [ngClass]="{'productos-container activo': ventaForm.get('especificarProducto')?.value}">
+        <div formArrayName="productos" *ngIf="ventaForm.get('especificarProducto')?.value">
+          <div *ngFor="let producto of productos.controls; let i = index" [formGroupName]="i" class="producto-row">
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Producto</mat-label>
+              <input matInput formControlName="producto" />
+              <mat-error *ngIf="producto.get('producto')?.hasError('required') && producto.get('producto')?.touched">
+                El producto es obligatorio
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Cantidad</mat-label>
+              <input matInput type="number" formControlName="cantidad" />
+              <mat-error *ngIf="producto.get('cantidad')?.hasError('required') && producto.get('cantidad')?.touched">
+                La cantidad es obligatoria
+              </mat-error>
+              <mat-error *ngIf="producto.get('cantidad')?.hasError('min') && producto.get('cantidad')?.touched">
+                La cantidad debe ser mayor a 0
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeProducto(i)" class="remove-btn" *ngIf="i > 0">
+              ❌
+            </button>
+          </div>
+
+          <button mat-button color="primary" (click)="addProducto()" type="button" class="add-product-btn">
+            ➕ Agregar producto
+          </button>
+        </div>
+      </div>
+
+      <!-- Monto de Venta (Solo si NO se especifican productos) -->
+      <mat-form-field class="full-width" appearance="outline" *ngIf="!ventaForm.get('especificarProducto')?.value">
+        <mat-label>Monto de Venta</mat-label>
+        <input matInput formControlName="montoManual" type="number" />
+        <mat-error *ngIf="ventaForm.get('montoManual')?.hasError('required') && ventaForm.get('montoManual')?.touched">
+          El monto de venta es obligatorio
+        </mat-error>
+        <mat-error *ngIf="ventaForm.get('montoManual')?.hasError('min') && ventaForm.get('montoManual')?.touched">
+          El monto debe ser mayor a 0
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Abono</mat-label>
+        <input matInput formControlName="abono" type="number" />
+        <mat-error *ngIf="ventaForm.get('abono')?.hasError('required') && ventaForm.get('abono')?.touched">
+          El abono es obligatorio
+        </mat-error>
+        <mat-error *ngIf="ventaForm.get('abono')?.hasError('min') && ventaForm.get('abono')?.touched">
+          El abono debe ser mayor a 0
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Tipo de Pago</mat-label>
+        <input matInput formControlName="tipoPagoId" />
+        <mat-error *ngIf="ventaForm.get('tipoPagoId')?.hasError('required') && ventaForm.get('tipoPagoId')?.touched">
+          El tipo de pago es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="ventaForm.invalid">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>

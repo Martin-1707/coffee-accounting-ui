@@ -1,8 +1,12 @@
     <div class="container">
         
-        <div>
+        <div class="header-container">
            <h1 class="title">Lista de Roles</h1>
+            <button mat-mini-fab color="primary" (click)="irACrearRol()">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
+
         <div class="alergia-table">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                

@@ -1,1 +1,38 @@
-<p>creareditarcomprainsumo works!</p>
+<div class="container">
+  <div class="form-container">
+    <h2>Registrar Compra de Insumo</h2>
+
+    <form [formGroup]="compraInsumoForm" (ngSubmit)="guardarCompraInsumo()">
+      <mat-form-field class="full-width">
+        <mat-label>Rango de Fechas</mat-label>
+        <mat-date-range-input [formGroup]="compraInsumoForm" [rangePicker]="picker">
+          <input matStartDate formControlName="fecha_inicial" placeholder="Fecha Inicial (dd/MM/yyyy)" />
+          <input matEndDate formControlName="fecha_final" placeholder="Fecha Final (dd/MM/yyyy)" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error *ngIf="compraInsumoForm.get('fecha_inicial')?.hasError('required')">
+          La fecha inicial es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="compraInsumoForm.get('fecha_final')?.hasError('required')">
+          La fecha final es obligatoria.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Monto</mat-label>
+        <input matInput type="number" formControlName="monto" placeholder="Ingrese el monto" />
+        <mat-error *ngIf="compraInsumoForm.get('monto')?.hasError('required')">
+          El monto es obligatorio.
+        </mat-error>
+        <mat-error *ngIf="compraInsumoForm.get('monto')?.hasError('min')">
+          El monto debe ser mayor o igual a 0.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="compraInsumoForm.invalid">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>
