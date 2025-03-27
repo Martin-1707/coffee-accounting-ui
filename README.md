@@ -3,23 +3,33 @@
 Interfaz de usuario para la gestión de ventas y cuentas en un negocio de café.  
 Desarrollado con **Angular**, integrado con un backend en **Java** y **PostgreSQL**.  
 
-
 ## 🚀 Instalación  
 
 ### 1️⃣ Clonar el repositorio  
+```sh
 git clone https://github.com/tu-usuario/coffee-accounting-ui.git
 cd coffee-accounting-ui
+```
 
-### 2️⃣ Instalar dependencias
+### 2️⃣ Instalar dependencias  
+```sh
 npm install
+```
 
-### 3️⃣ Crear archivo de configuración  
-
-Crea un archivo `env.js` dentro de `src/assets/` con el siguiente contenido:  
-
-window["env"] = {
-    URL_BACK: "" // Dirección de tu backend
+### 3️⃣ Configurar el entorno  
+Copia el archivo de ejemplo de configuración y renómbralo a `environment.ts`:  
+```sh
+cp src/environments/environment.example.ts src/environments/environment.ts
+```
+Edita `src/environments/environment.ts` y ajusta los valores según tu entorno:  
+```ts
+export const environment = {
+  production: false,
+  base: "http://localhost:8083",
+  dom: "localhost:8083"
 };
+```
 
-### 4️⃣ Ejecutar la aplicación
+### 4️⃣ Ejecutar la aplicación  
+```sh
 ng serve
