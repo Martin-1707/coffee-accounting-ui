@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.historial-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.historial-card {
+  background: #F5EBFA;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.historial-card:hover {
+  transform: scale(1.02);
+}
+
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #6E3482;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background: #FFF;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+strong {
+  color: #3E2522;
+}

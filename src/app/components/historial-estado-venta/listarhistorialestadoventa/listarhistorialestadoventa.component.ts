@@ -7,40 +7,75 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
-import { SidenavComponent } from '../../sidenav/sidenav.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-listarhistorialestadoventa',
   standalone: true,
   imports: [
-      MatTableModule,
-      MatIconModule,
-      RouterModule,
-      MatSidenavModule,
-      CommonModule,
-      MatPaginator,],
+    MatTableModule,
+    MatIconModule,
+    RouterModule,
+    MatSidenavModule,
+    CommonModule,
+    MatPaginator,
+    MatCardModule,
+  ],
   templateUrl: './listarhistorialestadoventa.component.html',
-  styleUrl: './listarhistorialestadoventa.component.css'
+  styleUrl: './listarhistorialestadoventa.component.css',
 })
-export class ListarhistorialestadoventaComponent  implements OnInit {
-  dataSource: MatTableDataSource<HistorialEstadoVenta> = new MatTableDataSource();
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4'];
+export class ListarhistorialestadoventaComponent implements OnInit {
+  historialAgrupado: { [idventa: number]: HistorialEstadoVenta[] } = {};
+  paginatedGroups: { key: number; value: HistorialEstadoVenta[] }[] = [];
+  allGroups: { key: number; value: HistorialEstadoVenta[] }[] = [];
 
   constructor(private hevS: HistorialEstadoVentaService) {}
 
   ngOnInit(): void {
     this.hevS.list().subscribe((data) => {
-      console.log(data); // Verifica si "usuarioCliente" aparece en cada "venta"
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
+      this.agruparHistoriales(data);
+      this.updatePaginatedData();
     });
+
     this.hevS.getList().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
+      this.agruparHistoriales(data);
+      this.updatePaginatedData();
     });
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.paginator.page.subscribe(() => this.updatePaginatedData());
+      this.updatePaginatedData();
+    });
   }
-}
+
+  agruparHistoriales(historiales: HistorialEstadoVenta[]): void {
+      this.historialAgrupado = historiales.reduce((acc, historial) => {
+        const idventa = historial.venta.idventa;
+        if (!acc[idventa]) {
+          acc[idventa] = [];
+        }
+        acc[idventa].push(historial);
+        return acc;
+      }, {} as { [idventa: number]: HistorialEstadoVenta[] });
+  
+      // Convertir el objeto en una lista para la paginación
+      this.allGroups = Object.entries(this.historialAgrupado).map(([key, value]) => ({
+        key: Number(key),
+        value
+      }));
+    }
+  
+    updatePaginatedData() {
+      if (this.paginator) {
+        // Configurar la longitud total de los datos para el paginador
+        this.paginator.length = this.allGroups.length;
+  
+        const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+        const endIndex = startIndex + this.paginator.pageSize;
+        this.paginatedGroups = this.allGroups.slice(startIndex, endIndex);
+      }
+    }
+  }

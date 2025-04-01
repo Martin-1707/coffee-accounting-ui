@@ -1,42 +1,32 @@
-    <div class="container">
-      <div>
-        <h1 class="title">Lista de Historial de estado de venta</h1>
+      <div class="container">
+        <h1 class="title">Historial de Estado de Venta</h1>
+      
+        <div class="historial-cards-container">
+          <div *ngFor="let idventa of paginatedGroups">
+            <mat-card class="historial-card">
+              <mat-card-header>
+                <mat-card-title>
+                  Venta #{{ idventa.key }} - {{ idventa.value[0].venta.usuarioCliente.nombre }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                  Fecha de venta: {{ idventa.value[0].venta.fechaventa | date:'dd-MM-yyyy HH:mm' }}
+                </mat-card-subtitle>
+              </mat-card-header>
+              
+              <mat-card-content>
+                <ul>
+                  <li *ngFor="let historial of idventa.value">
+                    <strong>Estado:</strong> {{ historial.estadoVenta.nombreestado }} <br>
+                    <strong>Fecha de cambio:</strong> {{ historial.fechacambio | date:'dd-MM-yyyy HH:mm' }}
+                  </li>
+                </ul>
+              </mat-card-content>
+            </mat-card>
+          </div>
+      
+          <mat-paginator [pageSizeOptions]="[6, 9, 12]" showFirstLastButtons>
+          </mat-paginator>
+        </div>
       </div>
-      <div class="alergia-table">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-          <ng-container matColumnDef="c1">
-            <th mat-header-cell *matHeaderCellDef>idHistorial</th>
-            <td mat-cell *matCellDef="let element">{{ element.idhistorial }}</td>
-          </ng-container>
-    
-          <ng-container matColumnDef="c2">
-            <th mat-header-cell *matHeaderCellDef>Estado de Venta</th>
-            <td mat-cell *matCellDef="let element">{{ element.estadoVenta.nombreestado }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="c3">
-            <th mat-header-cell *matHeaderCellDef>Venta</th>
-            <td mat-cell *matCellDef="let element">{{  element.venta.usuarioCliente.nombre + ' ' + element.venta.fechaventa }}</td>
-          </ng-container>
-  
-          <ng-container matColumnDef="c4">
-            <th mat-header-cell *matHeaderCellDef> Fecha </th>
-            <td mat-cell *matCellDef="let element">{{ element.fechacambio | date:'dd-MM-yyyy HH:mm' }}</td>
-          </ng-container>
-          
-  
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-  
-        <mat-paginator
-          [pageSizeOptions]="[5, 8, 10, 20, 30]"
-          showFirstLastButtons
-          aria-label="Selecciona la página"
-        >
-        </mat-paginator>
-        <br /><br />
-      </div>
-    </div>
+      
   

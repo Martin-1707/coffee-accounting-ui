@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SidenavComponent } from '../../sidenav/sidenav.component';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,6 +7,7 @@ import { Producto } from '../../../models/producto';
 import { ProductoService } from '../../../services/producto.service';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-listarproducto',
@@ -19,40 +19,41 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     RouterModule,
     MatPaginator,
+    MatCardModule
   ],
   templateUrl: './listarproducto.component.html',
   styleUrl: './listarproducto.component.css',
 })
-export class ListarproductoComponent implements OnInit {
-  dataSource: MatTableDataSource<Producto> = new MatTableDataSource();
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'accion01', 'accion02'];
+export class ListarproductoComponent implements OnInit, AfterViewInit {
+  productos: Producto[] = []; // Lista completa de productos
+  productosPaginados: Producto[] = []; // Productos visibles en la página actual
+  length = 0; // Total de productos
 
-  constructor(private pS: ProductoService, private router:Router) {}
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(private pS: ProductoService, private router: Router) {}
 
   ngOnInit(): void {
     this.pS.list().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-    });
-    this.pS.getList().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
-    });
-  }
-  eliminar(id: number) {
-    this.pS.delete(id).subscribe((data) => {
-      this.pS.list().subscribe((data) => {
-        this.pS.setList(data);
-      });
+      this.productos = data;
+      this.length = data.length; // Asignar el total de productos
+      this.actualizarProductosPaginados();
     });
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  ngAfterViewInit(): void {
+    this.paginator.page.subscribe(() => {
+      this.actualizarProductosPaginados();
+    });
   }
 
-  irACrearProducto() {
+  actualizarProductosPaginados() {
+    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+    const endIndex = startIndex + this.paginator.pageSize;
+    this.productosPaginados = this.productos.slice(startIndex, endIndex);
+  }
+
+  irACrearProducto(){
     this.router.navigate(['/producto/nuevo']);
   }
-  
 }

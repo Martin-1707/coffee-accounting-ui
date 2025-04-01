@@ -22,27 +22,30 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './listarabono.component.css'
 })
 export class ListarabonoComponent implements OnInit {
-  dataSource: MatTableDataSource<Abono> = new MatTableDataSource();
-  displayedColumns: string[] = ['c1', 'c2', 'c3','c4','c5'];
-  abonosAgrupados: { [key: number]: Abono[] } = {};
+  abonosAgrupados: { [idventa: number]: Abono[] } = {};
+  paginatedGroups: { key: number; value: Abono[] }[] = [];
+  allGroups: { key: number; value: Abono[] }[] = [];
 
   constructor(private aS: AbonoService, private router:Router) {}
 
   ngOnInit(): void {
     this.aS.list().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
       this.agruparAbonos(data);
+      this.updatePaginatedData();
     });
+
     this.aS.getList().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
       this.agruparAbonos(data);
+      this.updatePaginatedData();
     });
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.paginator.page.subscribe(() => this.updatePaginatedData());
+      this.updatePaginatedData();
+    });
   }
 
   irACrearAbono() {
@@ -57,6 +60,23 @@ export class ListarabonoComponent implements OnInit {
       }
       acc[idventa].push(abono);
       return acc;
-    }, {} as { [key: number]: Abono[] });
+    }, {} as { [idventa: number]: Abono[] });
+
+    // Convertir el objeto en una lista para la paginación
+    this.allGroups = Object.entries(this.abonosAgrupados).map(([key, value]) => ({
+      key: Number(key),
+      value
+    }));
+  }
+
+  updatePaginatedData() {
+    if (this.paginator) {
+      // Configurar la longitud total de los datos para el paginador
+      this.paginator.length = this.allGroups.length;
+
+      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+      const endIndex = startIndex + this.paginator.pageSize;
+      this.paginatedGroups = this.allGroups.slice(startIndex, endIndex);
+    }
   }
 }

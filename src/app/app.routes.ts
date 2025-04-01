@@ -111,7 +111,7 @@ export const routes: Routes = [
             path: 'nuevo',
             component: CreareditarproductoComponent,
             canActivate: [seguridadGuard],
-            data: { roles: ['Administrador'] },
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
           },
         ],
       },

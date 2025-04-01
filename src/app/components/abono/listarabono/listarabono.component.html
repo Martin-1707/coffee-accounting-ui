@@ -7,7 +7,7 @@
   </div>
 
   <div class="abono-cards-container">
-    <div *ngFor="let idventa of abonosAgrupados | keyvalue">
+    <div *ngFor="let idventa of paginatedGroups">
       <mat-card class="abono-card">
         <mat-card-header>
           <mat-card-title>Venta #{{ idventa.key }}</mat-card-title>
@@ -23,9 +23,8 @@
         </mat-card-content>
       </mat-card>
     </div>
-
-    <mat-paginator [pageSizeOptions]="[5, 8, 10, 20, 30]" showFirstLastButtons aria-label="Selecciona la página">
-    </mat-paginator>
   </div>
-  
+
+  <mat-paginator [pageSizeOptions]="[2, 3, 5, 8, 10]" showFirstLastButtons>
+  </mat-paginator>
 </div>
