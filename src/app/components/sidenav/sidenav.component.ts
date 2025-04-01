@@ -28,30 +28,30 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class SidenavComponent implements OnInit {
 
-  username: string = '';
   rol: string = '';
+  username: string = '';
 
   collapsed = false;
   isLargeScreen = window.innerWidth > 768; // Detecta si la pantalla es grande
   mode: 'over' | 'side' = this.isLargeScreen ? 'side' : 'over';
 
-   // 📌 Esta propiedad permitirá cambiar la clase en `<mat-sidenav-content>`
-   @HostBinding('class.content-shifted') get contentShifted() {
+  // 📌 Esta propiedad permitirá cambiar la clase en `<mat-sidenav-content>`
+  @HostBinding('class.content-shifted') get contentShifted() {
     return !this.collapsed && this.isLargeScreen;
   }
-   
+
   menuItems: any[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard' },
-    { icon: 'payments', label: 'Abono', route: '/abono' },
-    { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo' },
-    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta' },
-    { icon: 'history', label: 'Historial', route: '/historial-estado-venta' },
-    { icon: 'store', label: 'Producto', route: '/producto' },
-    { icon: 'admin_panel_settings', label: 'Rol', route: '/rol' },
-    { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago' },
-    { icon: 'people', label: 'Usuario', route: '/usuario' },
-    { icon: 'sell', label: 'Venta', route: '/venta' },
-    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto' }
+    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'payments', label: 'Abono', route: '/abono', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo', roles: ['Administrador', 'Supervisor', 'Vendedor'] },
+    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador', 'Supervisor'] },
+    { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Supervisor', 'Cliente', 'Vendedor'] },
+    { icon: 'store', label: 'Producto', route: '/producto', roles: ['Administrador', 'Supervisor', 'Cliente', 'Vendedor'] },
+    { icon: 'admin_panel_settings', label: 'Rol', route: '/rol', roles: ['Administrador'] },
+    { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago', roles: ['Administrador'] },
+    { icon: 'people', label: 'Usuario', route: '/usuario', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'sell', label: 'Venta', route: '/venta', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] }
   ];
 
   constructor(
@@ -61,8 +61,11 @@ export class SidenavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.username = this.loginService.showUser();
-    this.rol = this.loginService.showRole();
+
+    this.rol = this.loginService.showRole() || '';
+    this.username = this.loginService.showUser() || '';
+
+    this.menuItems = this.menuItems.filter(item => item.roles.includes(this.rol));
 
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       this.isLargeScreen = !result.matches;
@@ -76,6 +79,7 @@ export class SidenavComponent implements OnInit {
       }
     });
   }
+
 
   // Alternar colapsado sin afectar si el sidenav está abierto
   toggleCollapse(): void {

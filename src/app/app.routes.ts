@@ -45,20 +45,25 @@ export const routes: Routes = [
     path: '',
     component: SidenavComponent,
     canActivate: [seguridadGuard],
+    data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
       },
       {
         path: 'abono',
         component: AbonoComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
         children: [
           {
             path: 'nuevo',
             component: CrearabonoComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
           },
         ],
       },
@@ -66,11 +71,13 @@ export const routes: Routes = [
         path: 'compra-insumo',
         component: CompraInsumoComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditarcomprainsumoComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
           },
         ],
       },
@@ -78,11 +85,13 @@ export const routes: Routes = [
         path: 'estado-venta',
         component: EstadoVentaComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditarestadoventaComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador'] },
           },
         ],
       },
@@ -90,16 +99,19 @@ export const routes: Routes = [
         path: 'historial-estado-venta',
         component: HistorialEstadoVentaComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
       },
       {
         path: 'producto',
         component: ProductoComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditarproductoComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador'] },
           },
         ],
       },
@@ -107,11 +119,13 @@ export const routes: Routes = [
         path: 'rol',
         component: RolComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditarrolComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador'] },
           },
         ],
       },
@@ -119,11 +133,13 @@ export const routes: Routes = [
         path: 'tipo-pago',
         component: TipoPagoComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditartipopagoComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador'] },
           },
         ],
       },
@@ -131,17 +147,19 @@ export const routes: Routes = [
         path: 'usuario',
         component: UsuarioComponent,
         canActivate: [seguridadGuard],
-
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
       },
       {
         path: 'venta',
         component: VentaComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
         children: [
           {
             path: 'nuevo',
             component: CreareditarventaComponent,
             canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
           },
         ],
       },
@@ -149,10 +167,10 @@ export const routes: Routes = [
         path: 'ventas-producto',
         component: VentasProductoComponent,
         canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
       },
     ]
   },
-
 
   //{ path: '**',
   //component: NotFoundComponent

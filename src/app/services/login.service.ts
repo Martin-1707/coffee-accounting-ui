@@ -10,6 +10,8 @@ import { environment } from '../../environments/environment';
 })
 export class LoginService {
 
+  private jwtHelper = new JwtHelperService(); // Evitamos instanciarlo en cada método
+
   constructor(private http: HttpClient, private router: Router) {}
 
   // 🔑 Iniciar sesión
@@ -18,72 +20,68 @@ export class LoginService {
   }
   
   // 🔍 Verificar si el usuario está autenticado
-  verificar() {
-    let token = sessionStorage.getItem('token');
-    return token != null;
+  verificar(): boolean {
+    const token = sessionStorage.getItem('token');
+    return !!token; // Devuelve true si hay token, false si no
   }
 
   // 🔐 Cerrar sesión con verificación del token
-logout() {
-  const token = sessionStorage.getItem('token');
-  const jwtHelper = new JwtHelperService();
-  
-  if (token) {
-    console.log('Token expirado:', jwtHelper.isTokenExpired(token));
-  }
-  
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('currentUser');
-  this.router.navigate(['/login']);
-}
-
-showRole() {
-  let token = sessionStorage.getItem('token');
-  
-  if (!token) {
-    console.error("⚠️ No hay token en sessionStorage");
-    return null; 
-  }
-
-  try {
-    const helper = new JwtHelperService();
-    const decodedToken = helper.decodeToken(token);
-    console.log("✅ Token decodificado:", decodedToken); // <-- Esto te ayuda a verificar si el token es correcto
-    return decodedToken?.role || 'Sin rol';
-  } catch (error) {
-    console.error("❌ Error al decodificar el token:", error);
-    return null;
-  }
-}
-
-  // 👤 Obtener el usuario autenticado
-  
-  showUser() {
-    let token = sessionStorage.getItem('token');
-    if (!token) {
-      // Manejar el caso en el que el token es nulo.
-      return null; // O cualquier otro valor predeterminado dependiendo del contexto.
+  logout(): void {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      console.log('Token expirado:', this.jwtHelper.isTokenExpired(token));
     }
-    const helper = new JwtHelperService();
-    const decodedToken = helper.decodeToken(token);
-    console.log(decodedToken)
-    return decodedToken?.sub;
+    
+    console.log('Cerrando sesión...');
+    sessionStorage.clear(); // Elimina todos los datos de sessionStorage de una vez
+    this.router.navigate(['/login']);
   }
+  
 
-  // 🔄 Obtener el usuario actual guardado en sessionStorage
-  getCurrentUser() {
-    const user = sessionStorage.getItem('currentUser');
-    return user ? JSON.parse(user) : null;
+  showRole(): string | null {
+    const decodedToken = this.decodeToken();
+    if (!decodedToken) {
+      console.warn("⚠️ No se pudo obtener el rol porque el token es inválido o no existe.");
+      return null;
+    }
+    console.log("✅ Rol obtenido:", decodedToken.role);
+    return decodedToken.role;
+  }
+  
+  // 👤 Obtener el nombre de usuario (username)
+  showUser(): string | null {
+    const decodedToken = this.decodeToken();
+    return decodedToken?.sub || null;
   }
 
   // 📛 Obtener nombre y apellido del usuario autenticado
   getNombre(): string {
-    const user = this.getCurrentUser();
-    return user ? user.nombre : 'Nombre';
+    return this.getCurrentUser()?.nombre || 'Nombre';
   }
 
   getApellido(): string {
-    const user = this.getCurrentUser();
-    return user ? user.apellido : 'Apellido';
+    return this.getCurrentUser()?.apellido || 'Apellido';
   }
-}
+
+  // 🔄 Obtener el usuario actual guardado en sessionStorage
+  getCurrentUser(): any {
+    const user = sessionStorage.getItem('currentUser');
+    return user ? JSON.parse(user) : null;
+  }
+
+  // 🕵️‍♂️ Método privado para decodificar el token
+  private decodeToken(): any {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No hay token disponible en sessionStorage.');
+      return null;
+    }
+
+    try {
+      return this.jwtHelper.decodeToken(token);
+    } catch (error) {
+      console.error('❌ Error al decodificar el token:', error);
+      return null;
+    }
+  }
+} 

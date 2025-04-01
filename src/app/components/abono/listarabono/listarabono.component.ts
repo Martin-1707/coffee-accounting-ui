@@ -6,6 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Abono } from '../../../models/abono';
 import { AbonoService } from '../../../services/abono.service';
+import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-listarabono',
   standalone: true,
@@ -15,6 +16,7 @@ import { AbonoService } from '../../../services/abono.service';
     RouterModule,
     CommonModule,
     MatPaginator,
+    MatCardModule
 ],
   templateUrl: './listarabono.component.html',
   styleUrl: './listarabono.component.css'
@@ -22,6 +24,7 @@ import { AbonoService } from '../../../services/abono.service';
 export class ListarabonoComponent implements OnInit {
   dataSource: MatTableDataSource<Abono> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3','c4','c5'];
+  abonosAgrupados: { [key: number]: Abono[] } = {};
 
   constructor(private aS: AbonoService, private router:Router) {}
 
@@ -29,9 +32,11 @@ export class ListarabonoComponent implements OnInit {
     this.aS.list().subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
+      this.agruparAbonos(data);
     });
     this.aS.getList().subscribe((data) => {
       this.dataSource = new MatTableDataSource(data);
+      this.agruparAbonos(data);
     });
   }
 
@@ -42,5 +47,16 @@ export class ListarabonoComponent implements OnInit {
 
   irACrearAbono() {
     this.router.navigate(['/abono/nuevo']);
+  }
+
+  agruparAbonos(abonos: Abono[]): void {
+    this.abonosAgrupados = abonos.reduce((acc, abono) => {
+      const idventa = abono.venta.idventa;
+      if (!acc[idventa]) {
+        acc[idventa] = [];
+      }
+      acc[idventa].push(abono);
+      return acc;
+    }, {} as { [key: number]: Abono[] });
   }
 }

@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { LoginService } from '../services/login.service';
 
 export const seguridadGuard = (
@@ -13,5 +13,17 @@ export const seguridadGuard = (
     router.navigate(['/login']);
     return false;
   }
-  return isAuthenticated;
+
+  // Obtener el rol del usuario
+  const userRole = loginService.showRole();
+
+  // Obtener los roles permitidos de la ruta
+  const allowedRoles = route.data['roles'] as string[];
+
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    router.navigate(['/dashboard']);
+    return false;
+  }
+
+  return true;
 };
