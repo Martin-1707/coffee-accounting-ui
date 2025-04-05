@@ -5,35 +5,22 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <div class="alergia-table">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="c1">
-        <th mat-header-cell *matHeaderCellDef>idCompra</th>
-        <td mat-cell *matCellDef="let element">{{ element.idcompra }}</td>
-      </ng-container>
 
-      <ng-container matColumnDef="c2">
-        <th mat-header-cell *matHeaderCellDef>Fecha inicial</th>
-        <td mat-cell *matCellDef="let element">{{ element.fecha_inicial ? (element.fecha_inicial | date: 'dd/MM/yyyy') : '' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="c3">
-        <th mat-header-cell *matHeaderCellDef>Fecha final</th>
-        <td mat-cell *matCellDef="let element">{{ element.fecha_final ? (element.fecha_final | date: 'dd/MM/yyyy') : '' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="c4">
-        <th mat-header-cell *matHeaderCellDef> Venta </th>
-        <td mat-cell *matCellDef="let element">{{ element.monto }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 8, 10, 20, 30]" showFirstLastButtons aria-label="Selecciona la página">
-    </mat-paginator>
-    <br /><br />
+  <div class="compra-cards-container">
+    <div *ngFor="let compra of paginatedCompras">
+      <mat-card class="compra-card">
+        <mat-card-header>
+          <mat-card-title>Compra #{{ compra.idcompra }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Fecha Inicial:</strong> {{ compra.fecha_inicial | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Fecha Final:</strong> {{ compra.fecha_final | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Monto:</strong> {{ compra.monto }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
+
+  <mat-paginator [pageSizeOptions]="[6, 9 , 12]" showFirstLastButtons>
+  </mat-paginator>
 </div>

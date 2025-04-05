@@ -1,7 +1,133 @@
+/* Contenedor principal */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Encabezado */
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
+  padding: 10px;
+  margin-bottom: 20px;
+  position: relative; /* Para posicionar el view-toggle */
+}
+
+.header-title {
+  display: flex;
+  flex-direction: row; /* Alinea el título y subtítulo horizontalmente */
+  align-items: center;/* Centra verticalmente los elementos */
+  justify-content: space-between;
   
+}
+
+.view-toggle {
+  position: absolute;
+  bottom: 0; /* Alineado al fondo del header-title */
+  right: 0; /* Alineado a la derecha */
+}
+
+.view-toggle button {
+  background-color: #E7DBEF; /* Morado 200 */
+  color: #3E2522;
+  margin-right: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.view-toggle button:hover {
+  background-color: #D3C2E0; /* Morado claro */
+  transform: translateY(-2px);
+}
+
+/* Botón flotante */
+button[mat-mini-fab] {
+  background-color: #6E3482; /* Morado 400 */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button[mat-mini-fab]:hover {
+  background-color: #A56ABD; /* Morado 300 */
+}
+
+/* Cards grid */
+.estado-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Tarjeta */
+.estado-card {
+  background: #E7DBEF; /* Morado 200 */
+  border-radius: 12px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.estado-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Encabezado de la tarjeta */
+mat-card-header {
+  background: #6E3482; /* Morado 400 */
+  color: white;
+  padding: 12px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Contenido de la tarjeta */
+mat-card-content {
+  padding: 16px;
+}
+
+mat-card-content p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: #3E2522;
+}
+
+/* Tabla */
+.estado-table-container {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #F5EBFA; /* Fondo claro */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background-color: #A56ABD; /* Morado 300 */
+  color: white;
+  text-align: left;
+  padding: 12px;
+  font-size: 1rem;
+}
+
+td {
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #3E2522;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #E7DBEF; /* Morado claro */
+}
+
+/* Paginador */
+mat-paginator {
+  margin-top: 20px;
+  background: #F5EBFA;
+  border-radius: 8px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto; /* Centra el paginador */
+}

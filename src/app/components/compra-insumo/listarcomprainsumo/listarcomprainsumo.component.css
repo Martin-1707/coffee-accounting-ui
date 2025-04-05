@@ -1,7 +1,73 @@
+/* Contenedor principal */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Encabezado con título y botón */
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; /* ← Se mantiene como pediste */
+  margin-bottom: 20px;
+}
+
+/* Botón */
+button[mat-mini-fab] {
+  background-color: #6E3482; /* Morado 400 */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button[mat-mini-fab]:hover {
+  background-color: #A56ABD; /* Morado 300 */
+}
+
+/* Cards grid */
+.compra-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Tarjeta */
+.compra-card {
+  background: #E7DBEF; /* Morado 200 */
+  border-radius: 12px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.compra-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Encabezado de la tarjeta */
+mat-card-header {
+  background: #6E3482; /* Morado 400 */
+  color: white;
+  padding: 12px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Contenido de la tarjeta */
+mat-card-content {
+  padding: 16px;
+}
+
+mat-card-content p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: #3E2522;
+}
+
+/* Paginador */
+mat-paginator {
+  margin-top: 20px;
+  background: #F5EBFA;
+  border-radius: 8px;
+}

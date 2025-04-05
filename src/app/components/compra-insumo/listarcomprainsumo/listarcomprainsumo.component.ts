@@ -8,6 +8,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidenavComponent } from '../../sidenav/sidenav.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-listarcomprainsumo',
@@ -19,32 +20,48 @@ import { SidenavComponent } from '../../sidenav/sidenav.component';
     MatSidenavModule,
     CommonModule,
     MatPaginator,
+    MatCardModule
   ],
   templateUrl: './listarcomprainsumo.component.html',
   styleUrl: './listarcomprainsumo.component.css',
 })
 export class ListarcomprainsumoComponent implements OnInit {
-  dataSource: MatTableDataSource<CompraInsumo> = new MatTableDataSource();
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4'];
+  compras: CompraInsumo[] = [];
+  paginatedCompras: CompraInsumo[] = [];
 
   constructor(private ciS: CompraInsumoService, private router:Router) {}
 
   ngOnInit(): void {
     this.ciS.list().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
+      this.compras = data;
+      this.updatePaginatedData();
     });
+
+    // Escuchar cambios para actualizar la lista en tiempo real
     this.ciS.getList().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
+      this.compras = data;
+      this.updatePaginatedData();
     });
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.paginator.page.subscribe(() => this.updatePaginatedData());
+      this.updatePaginatedData();
+    });
   }
 
   irACrearCompra() {
     this.router.navigate(['/compra-insumo/nuevo']);
+  }
+
+  updatePaginatedData() {
+    if (this.paginator) {
+      this.paginator.length = this.compras.length;
+      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+      const endIndex = startIndex + this.paginator.pageSize;
+      this.paginatedCompras = this.compras.slice(startIndex, endIndex);
+    }
   }
 }
