@@ -4,7 +4,7 @@
   position: fixed;
   z-index: 1;
   top: 0;
-  width: 6rem;
+  width: 5rem;
   height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
   box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
   overflow: hidden;

@@ -51,7 +51,8 @@ export class SidenavComponent implements OnInit {
     { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago', roles: ['Administrador'] },
     { icon: 'people', label: 'Usuario', route: '/usuario', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'sell', label: 'Venta', route: '/venta', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] }
+    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'history', label: 'Historial-Precio-Producto', route: '/historial-precio-producto', roles: ['Administrador', 'Supervisor', 'Vendedor'] }
   ];
 
   constructor(
