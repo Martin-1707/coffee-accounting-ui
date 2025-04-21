@@ -11,15 +11,15 @@ const base_url = environment.base;
   providedIn: 'root'
 })
 export class HistorialEstadoVentaService {
-    // 🔵 Endpoint de historial de estado de ventas
-    private url = `${base_url}/historialventa`;
-  
-    // 🔵 Subject para manejar cambios en la lista de historial de estados de venta
-    private listaCambio = new Subject<HistorialEstadoVenta[]>();
-  
-    constructor(private http: HttpClient) {}
-   // 🟢 Listar todo el historial de estados de venta
-   list() {
+  // 🔵 Endpoint de historial de estado de ventas
+  private url = `${base_url}/historialventa`;
+
+  // 🔵 Subject para manejar cambios en la lista de historial de estados de venta
+  private listaCambio = new Subject<HistorialEstadoVenta[]>();
+
+  constructor(private http: HttpClient) { }
+  // 🟢 Listar todo el historial de estados de venta
+  list() {
     return this.http.get<HistorialEstadoVenta[]>(this.url);
   }
 
