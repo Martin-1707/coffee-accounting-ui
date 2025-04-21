@@ -1,0 +1,103 @@
+.container {
+    padding: 2rem;
+    background-color: #ecf0f1;
+    min-height: 100%;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .header-title .title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .view-toggle button {
+    margin-left: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .view-toggle button:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .rol-cards-container {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .ventaproducto-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ventaproducto-card mat-card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  
+  .ventaproducto-card mat-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .ventaproducto-card mat-card-content ul {
+    padding-left: 1rem;
+    list-style-type: none;
+    margin: 0;
+  }
+  
+  .ventaproducto-card mat-card-content li {
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #ddd;
+    font-size: 0.95rem;
+  }
+  
+  .ventaproducto-card mat-card-content li:last-child {
+    border-bottom: none;
+  }
+  
+  .ventaproducto-table-container h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #2c3e50;
+  }
+  
+  table.mat-elevation-z8 {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+    margin-bottom: 2rem;
+  }
+  
+  table th {
+    background-color: #f4f6f8;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  table td, table th {
+    text-align: left;
+    padding: 12px;
+  }
+  
+  mat-paginator {
+    margin-top: 2rem;
+  }
+  

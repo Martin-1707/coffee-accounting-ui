@@ -1,7 +1,122 @@
+/* Contenedor principal */
+.ventas-container {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* Header general */
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Título */
+.header-title .title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* Botones de vista */
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-toggle button {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.view-toggle button:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo de cada card */
+.venta-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.venta-card:hover {
+  transform: translateY(-5px);
+}
+
+.venta-card mat-card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.venta-card mat-card-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.venta-card mat-card-content p {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.venta-card mat-expansion-panel {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.venta-card mat-list-item {
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.venta-card mat-list-item:last-child {
+  border-bottom: none;
+}
+
+/* Títulos para agrupación en tabla */
+.ventaproducto-table-container h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+/* Tabla */
+table.mat-elevation-z8 {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+table th {
+  background-color: #f4f6f8;
+  font-weight: bold;
+  color: #333;
+}
+
+table td,
+table th {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Espaciado para los paginadores */
+mat-paginator {
+  margin-top: 2rem;
+}

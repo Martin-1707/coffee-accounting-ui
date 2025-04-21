@@ -42,6 +42,8 @@ export class ListarventaComponent implements OnInit {
   historialEstados: HistorialEstadoVenta[] = [];
   ventasProductos: VentasProducto[] = [];
 
+  modoTarjeta: boolean = false;
+
   constructor(private vS: VentaService, private hevS: HistorialEstadoVentaService, private vpS: VentasProductoService, private router: Router, private loginService: LoginService) { }
 
 
@@ -124,6 +126,10 @@ export class ListarventaComponent implements OnInit {
       case 'Sin pagar': return 'red';
       default: return 'gray';
     }
+  }
+
+  obtenerProductosDeVenta(idVenta: number): VentasProducto[] {
+    return this.ventasProductos.filter(p => p.venta.idventa === idVenta);
   }
 
 }

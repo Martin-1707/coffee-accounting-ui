@@ -1,7 +1,86 @@
+.container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
+  padding: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.view-toggle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.view-toggle button {
+  background-color: #E7DBEF;
+  color: #3E2522;
+  margin-right: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.view-toggle button:hover {
+  background-color: #D3C2E0;
+  transform: translateY(-2px);
+}
+
+.rol-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.rol-card {
+  background-color: #F5EBFA;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rol-card mat-card-header mat-card-title {
+  font-weight: 600;
+  color: #6E3482;
+}
+
+.rol-card mat-card-content p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #3E2522;
+}
+
+.rol-table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+th {
+  background-color: #E7DBEF;
+  color: #49225B;
+  font-weight: bold;
+}
+
+td,
+th {
+  padding: 0.75rem;
+  text-align: left;
+}
+
+mat-paginator {
+  margin-top: 1.5rem;
+}
