@@ -1,7 +1,7 @@
 <div class="container">
     <div class="form-container">
-      <h2>Registrar Producto</h2>
-      <form [formGroup]="productoForm" (ngSubmit)="registrarProducto()">
+      <h2>{{ modoEdicion ? 'Editar Producto' : 'Registrar Producto' }}</h2>
+      <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
         <mat-form-field class="full-width">
           <mat-label>Nombre del Producto</mat-label>
           <input matInput formControlName="nombre" placeholder="Ingrese el nombre" />
@@ -25,7 +25,7 @@
         </mat-form-field>
   
         <button mat-flat-button color="primary" type="submit" [disabled]="productoForm.invalid">
-          Registrar
+          {{ modoEdicion ? 'Actualizar' : 'Registrar' }}
         </button>
       </form>
     </div>

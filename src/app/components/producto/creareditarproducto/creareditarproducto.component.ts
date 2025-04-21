@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ProductoService } from '../../../services/producto.service';
 import { Producto } from '../../../models/producto';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -28,40 +28,71 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class CreareditarproductoComponent implements OnInit {
   productoForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private productoService: ProductoService, private router: Router, private snackBar: MatSnackBar) {}
+  idProducto: number = 0;
+  modoEdicion: boolean = false;
+
+  constructor(private fb: FormBuilder, private productoService: ProductoService, private router: Router, private snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.productoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       precio_lista: ['', [Validators.required, Validators.min(0)]]
     });
+  
+    this.route.params.subscribe(params => {
+      this.idProducto = params['id'];
+      this.modoEdicion = !!this.idProducto;
+  
+      if (this.modoEdicion) {
+        this.productoService.getById(this.idProducto).subscribe(data => {
+          this.productoForm.patchValue({
+            nombre: data.nombre,
+            precio_lista: data.precio_lista
+          });
+        });
+      }
+    });
   }
 
-
-  registrarProducto(): void {
+  guardarProducto(): void {
     if (this.productoForm.valid) {
-      const nuevoProducto: Producto = this.productoForm.value;
-
-      this.productoService.insert(nuevoProducto).subscribe(() => {
-        this.productoService.list().subscribe((data) => {
-          this.productoService.setList(data); // 🔄 Actualiza la lista para que se refleje en el listado
-        });
+      const producto: Producto = this.productoForm.value;
   
-        this.snackBar.open('✅ Producto registrado con éxito', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'bottom',
-          horizontalPosition: 'center',
+      if (this.modoEdicion) {
+        producto.idproducto = this.idProducto;
+      
+        console.log('🟡 Enviando a actualizarPrecioProducto:', {
+          idProducto: this.idProducto,
+          nuevoPrecio: Number(producto.precio_lista)
         });
-
-          this.router.navigate(['/producto']); // Redirigir a lista de productos
-        
-      });
+      
+        this.productoService.actualizarPrecioProducto(
+          this.idProducto,
+          Number(producto.precio_lista)
+        ).subscribe(() => {
+          this.snackBar.open('✏️ Producto actualizado con éxito', 'Cerrar', {
+            duration: 3000,
+          });
+          this.router.navigate(['/producto']);
+        });
+      }
+       else {
+        // ✅ Crear nuevo producto
+        this.productoService.insert(producto).subscribe(() => {
+          this.snackBar.open('✅ Producto registrado con éxito', 'Cerrar', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'center',
+          });
+          this.router.navigate(['/producto']);
+        });
+      }
     } else {
       this.productoForm.markAllAsTouched();
       this.snackBar.open('⚠️ Completa los campos correctamente', 'Cerrar', {
         duration: 3000,
-        verticalPosition: 'bottom', // 🔽 Inferior
-        horizontalPosition: 'center', // ⬅️➡️ Centrado
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
       });
     }
   }

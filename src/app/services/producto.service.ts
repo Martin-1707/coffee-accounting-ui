@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Producto } from '../models/producto';
 import { HttpClient } from '@angular/common/http';
 
@@ -35,14 +35,13 @@ export class ProductoService {
   }
 
   // 🔵 Actualizar un producto
-  update(producto: Producto) {
-    return this.http.put(this.url, producto);
+  actualizarPrecioProducto(idProducto: number, nuevoPrecio: number): Observable<any> {
+    return this.http.put(`${this.url}/actualizarPrecio`, {
+      idProducto,
+      nuevoPrecio
+    }, { responseType: 'text' }); // 👈 esto es clave
   }
-
-  // 🔴 Eliminar un producto por ID
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
-  }
+  
 
   // 🔄 Obtener la lista actualizada de productos
   getList() {
