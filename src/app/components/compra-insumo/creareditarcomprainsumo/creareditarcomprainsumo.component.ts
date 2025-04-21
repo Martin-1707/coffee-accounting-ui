@@ -13,6 +13,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } f
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { UsuarioService } from '../../../services/usuario.service';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 // Definir el formato de fecha en DD/MM/YYYY
 export const MY_DATE_FORMATS = {
@@ -40,6 +41,7 @@ export const MY_DATE_FORMATS = {
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule
   ],
   templateUrl: './creareditarcomprainsumo.component.html',
   styleUrl: './creareditarcomprainsumo.component.css',
@@ -49,6 +51,7 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
 })
+
 export class CreareditarcomprainsumoComponent {
   compraInsumoForm!: FormGroup;
   esVendedor: boolean = false; // Variable para controlar la edición del campo
