@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { VentaService } from '../../../services/venta.service';
 import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { UsuarioService } from '../../../services/usuario.service';
+import { TipoPagoService } from '../../../services/tipo-pago.service';
+import { ProductoService } from '../../../services/producto.service';
 
 @Component({
   selector: 'app-creareditarventa',
@@ -26,26 +29,75 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   templateUrl: './creareditarventa.component.html',
   styleUrl: './creareditarventa.component.css'
 })
-export class CreareditarventaComponent implements OnInit{
+export class CreareditarventaComponent implements OnInit {
   ventaForm!: FormGroup;
+
+  esVendedor: boolean = false; // Variable para controlar la edición del campo
+  usuario: any = null; // 🔹 Nueva variable para almacenar el usuario autenticado
+  listaUsuarios: any[] = []; // 🔹 Nueva variable para almacenar la lista de usuarios
+  tiposPago: any[] = [];
+  listaClientes: any[] = [];
+  listarProductos: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private ventaService: VentaService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private uS: UsuarioService, // Inyectar el servicio de usuario
+    private tipoPagoService: TipoPagoService,
+    private pS: ProductoService // Inyectar el servicio de producto
+
+  ) { }
 
   ngOnInit(): void {
+
+     // Cargar clientes
+    this.uS.listClientes().subscribe({
+      next: (data) => this.listaClientes = data,
+      error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
+    });
+
+     // Cargar productos
+    this.pS.list().subscribe({
+      next: (data) => this.listarProductos = data, // Asegúrate de que 'data' contiene 'idproducto' y 'nombre'
+      error: () => this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 })
+    });
+
+    // Cargar tipos de pago
+    this.tipoPagoService.list().subscribe({
+      next: (data) => this.tiposPago = data,
+      error: () => this.snackBar.open('Error al cargar tipos de pago', 'Cerrar', { duration: 3000 })
+    });
+
+    // 1) Crea el formulario
     this.ventaForm = this.fb.group({
       clienteId: ['', Validators.required],
-      vendedorId: ['', Validators.required],
+      vendedorId: ['', Validators.required], // Inicialmente habilitado
       factura: [false],
       especificarProducto: [false],
       productos: this.fb.array([]),
       montoManual: [{ value: '', disabled: false }, Validators.required],
       abono: ['', Validators.required],
-      tipoPagoId: [{ value: '', disabled: true }, Validators.required] // Inicialmente deshabilitado
+      tipoPagoId: [{ value: '', disabled: true }, Validators.required]
+    });
+
+    // 🔹 Obtiene el usuario autenticado desde el servicio
+    this.uS.list().subscribe((usuarios) => {
+      if (usuarios.length > 0) {
+        this.usuario = usuarios[0]; // Guarda el usuario autenticado
+        this.esVendedor = this.usuario.rol.nombre_rol === 'Vendedor';
+
+        if (this.usuario.rol.nombre_rol === 'Administrador') {
+          // 🔹 Filtra solo los usuarios con el rol "Vendedor"
+          this.listaUsuarios = usuarios.filter(u => u.rol.nombre_rol === 'Vendedor');
+          // No deshabilitar el campo
+        } else {
+          // 🔹 Si no es administrador, solo muestra su propio ID y deshabilita el campo
+          this.ventaForm.patchValue({ vendedorId: this.usuario.vendedorId });
+          this.ventaForm.get('vendedorId')?.disable();
+        }
+      }
     });
 
     // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
@@ -67,10 +119,19 @@ export class CreareditarventaComponent implements OnInit{
         this.clearProductos();
       }
     });
+
+    
   }
 
   get productos(): FormArray {
     return this.ventaForm.get('productos') as FormArray;
+  }
+
+  getProductosDisponibles(index: number): any[] {
+    const seleccionados = this.productos.controls
+      .map((control, i) => i !== index ? control.get('producto')?.value : null)
+      .filter(value => value !== null);
+    return this.listarProductos.filter(product => !seleccionados.includes(product.idproducto));
   }
 
   addProducto(): void {
@@ -101,7 +162,7 @@ export class CreareditarventaComponent implements OnInit{
     if (formData.especificarProducto) {
       const ventaData = {
         clienteId: Number(formData.clienteId),
-        vendedorId: Number(formData.vendedorId),
+        vendedorId: this.esVendedor ? this.usuario.idusuario : this.ventaForm.get('vendedorId')?.value,
         factura: formData.factura,
         abono: Number(formData.abono),
         productos: formData.productos.map((p: any) => ({
@@ -123,7 +184,7 @@ export class CreareditarventaComponent implements OnInit{
     } else {
       const ventaSimpleData = {
         clienteId: Number(formData.clienteId),
-        vendedorId: Number(formData.vendedorId),
+        vendedorId: this.esVendedor ? this.usuario.idusuario : this.ventaForm.get('vendedorId')?.value,
         factura: formData.factura,
         montoManual: Number(formData.montoManual),
         abono: Number(formData.abono),
@@ -141,7 +202,7 @@ export class CreareditarventaComponent implements OnInit{
       });
     }
   }
-  
+
   postRegistro(mensaje: string) {
     this.ventaService.list().subscribe((data) => {
       this.ventaService.setList(data);

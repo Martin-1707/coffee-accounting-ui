@@ -3,17 +3,32 @@
     <h2>Registrar Venta</h2>
 
     <form [formGroup]="ventaForm" (ngSubmit)="guardarVenta()">
+
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Cliente ID</mat-label>
-        <input matInput formControlName="clienteId" />
+        <mat-select formControlName="clienteId" placeholder="Seleccione un cliente">
+          <mat-option *ngFor="let u of listaClientes" [value]="u.idusuario">
+            {{ u.nombre }}
+          </mat-option>
+        </mat-select>
         <mat-error *ngIf="ventaForm.get('clienteId')?.hasError('required') && ventaForm.get('clienteId')?.touched">
-          Cliente ID es obligatorio
+          Cliente es obligatorio
         </mat-error>
       </mat-form-field>
 
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Vendedor ID</mat-label>
-        <input matInput formControlName="vendedorId" />
+
+        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador'; else soloLectura">
+          <mat-select formControlName="vendedorId">
+            <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
+              {{ u.nombre }}
+            </mat-option>
+          </mat-select>
+        </ng-container>
+        <ng-template #soloLectura>
+          <input matInput [value]="usuario?.nombre" disabled />
+        </ng-template>
         <mat-error *ngIf="ventaForm.get('vendedorId')?.hasError('required') && ventaForm.get('vendedorId')?.touched">
           Vendedor ID es obligatorio
         </mat-error>
@@ -30,7 +45,11 @@
           <div *ngFor="let producto of productos.controls; let i = index" [formGroupName]="i" class="producto-row">
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Producto</mat-label>
-              <input matInput formControlName="producto" />
+              <mat-select formControlName="producto" placeholder="Seleccione un producto">
+                <mat-option *ngFor="let product of getProductosDisponibles(i)" [value]="product.idproducto">
+                  {{ product.nombre }}
+                </mat-option>
+              </mat-select>
               <mat-error *ngIf="producto.get('producto')?.hasError('required') && producto.get('producto')?.touched">
                 El producto es obligatorio
               </mat-error>
@@ -47,7 +66,7 @@
               </mat-error>
             </mat-form-field>
 
-            <button mat-icon-button color="warn" (click)="removeProducto(i)" class="remove-btn" *ngIf="i > 0">
+            <button mat-icon-button color="warn" (click)="removeProducto(i)" class="remove-btn" type="button" *ngIf="i > 0">
               ❌
             </button>
           </div>
@@ -81,11 +100,16 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width" appearance="outline">
+      <!-- Tipo de Pago -->
+      <mat-form-field class="full-width">
         <mat-label>Tipo de Pago</mat-label>
-        <input matInput formControlName="tipoPagoId" />
-        <mat-error *ngIf="ventaForm.get('tipoPagoId')?.hasError('required') && ventaForm.get('tipoPagoId')?.touched">
-          El tipo de pago es obligatorio
+        <mat-select formControlName="tipoPagoId" placeholder="Seleccione el tipo de pago">
+          <mat-option *ngFor="let tipo of tiposPago" [value]="tipo.idtipopago">
+            {{ tipo.nombre }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="ventaForm.get('tipoPagoId')?.hasError('required')">
+          Seleccione un tipo de pago.
         </mat-error>
       </mat-form-field>
 

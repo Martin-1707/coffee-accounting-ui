@@ -24,6 +24,11 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.url);
   }
 
+  //Listar usuarios clientes
+  listClientes() {
+    return this.http.get<Usuario[]>(`${this.url}/clientes`);
+  }
+
   // 🔵 Obtener un usuario por ID
   getById(id: number) {
     return this.http.get<Usuario>(`${this.url}/${id}`);
