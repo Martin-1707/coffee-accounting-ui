@@ -1,0 +1,57 @@
+h1 {
+    margin: 0;
+    padding: 16px;
+    font-size: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    background-color: #fff8e1;
+    color: #3E2522;
+    text-align: center;
+  }
+  
+/* Elimina márgenes y hace que todo ocupe el 100% */
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* Estilo del contenedor principal del dashboard */
+  .dashboard-container {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Cada tile (cuadro) */
+  .tile-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .tile-box:hover {
+    transform: scale(1.03);
+  }
+  
+  /* Contenido dentro del cuadro */
+  .tile-content {
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .tile-content h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .tile-content p {
+    margin-top: 4px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
