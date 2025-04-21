@@ -6,13 +6,17 @@
         
         <!-- ID de la Venta -->
         <mat-form-field class="full-width">
-          <mat-label>ID de Venta</mat-label>
-          <input matInput type="number" formControlName="ventaId" placeholder="Ingrese el ID de la venta" />
+          <mat-label>Venta</mat-label>
+          <mat-select formControlName="ventaId" placeholder="Seleccione la venta">
+            <mat-option *ngFor="let venta of ventas" [value]="venta.idventa">
+              Venta #{{ venta.idventa }} -
+              {{ venta.usuarioCliente?.nombre || 'Sin cliente' }} -
+              {{ venta.fechaventa | date: 'dd/MM/yyyy' }} -
+              Saldo: {{ venta.saldopendiente | currency:'PEN':'symbol':'1.2-2' }}
+            </mat-option>
+          </mat-select>
           <mat-error *ngIf="abonoForm.get('ventaId')?.hasError('required')">
             El ID de la venta es obligatorio.
-          </mat-error>
-          <mat-error *ngIf="abonoForm.get('ventaId')?.hasError('min')">
-            El ID debe ser un número positivo.
           </mat-error>
         </mat-form-field>
   
@@ -31,12 +35,11 @@
         <!-- Tipo de Pago -->
         <mat-form-field class="full-width">
           <mat-label>Tipo de Pago</mat-label>
-          <input matInput type="number" formControlName="tipoPagoId" placeholder="Ingrese el Tipo de Pago" />
-          <!--<mat-select formControlName="tipoPagoId">
-            <mat-option *ngFor="let tipo of tiposPago" [value]="tipo.id">
+          <mat-select formControlName="tipoPagoId" placeholder="Seleccione el tipo de pago">
+            <mat-option *ngFor="let tipo of tiposPago" [value]="tipo.idtipopago">
               {{ tipo.nombre }}
             </mat-option>
-          </mat-select>-->
+          </mat-select>
           <mat-error *ngIf="abonoForm.get('tipoPagoId')?.hasError('required')">
             Seleccione un tipo de pago.
           </mat-error>
@@ -49,4 +52,3 @@
       </form>
     </div>
   </div>
-  

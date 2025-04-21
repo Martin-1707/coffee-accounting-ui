@@ -22,6 +22,7 @@ import { CreareditarestadoventaComponent } from './components/estado-venta/crear
 import { CreareditarrolComponent } from './components/rol/creareditarrol/creareditarrol.component';
 import { CreareditartipopagoComponent } from './components/tipo-pago/creareditartipopago/creareditartipopago.component';
 import { CreareditarventaComponent } from './components/venta/creareditarventa/creareditarventa.component';
+import { HistorialPrecioProductoComponent } from './components/historial-precio-producto/historial-precio-producto.component';
 
 export const routes: Routes = [
   {
@@ -113,6 +114,12 @@ export const routes: Routes = [
             canActivate: [seguridadGuard],
             data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
           },
+          {
+            path: 'editar/:id',
+            component: CreareditarproductoComponent,
+            canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] }
+          },
         ],
       },
       {
@@ -168,6 +175,12 @@ export const routes: Routes = [
         component: VentasProductoComponent,
         canActivate: [seguridadGuard],
         data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+      },
+      {
+        path: 'historial-precio-producto',
+        component: HistorialPrecioProductoComponent,
+        canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
       },
     ]
   },
