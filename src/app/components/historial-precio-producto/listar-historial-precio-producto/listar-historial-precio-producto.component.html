@@ -1,0 +1,32 @@
+<div class="container">
+    <h1 class="title">Historial de Precio de Productos</h1>
+  
+    <div class="historial-cards-container">
+      <div *ngFor="let grupo of paginatedGroups">
+        <mat-card class="historial-card">
+          <mat-card-header>
+            <mat-card-title>
+              Producto: {{ grupo.value[0].producto.nombre }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              Precio actual: S/ {{ grupo.value[0].producto.precio_lista | number:'1.2-2' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+  
+          <mat-card-content>
+            <ul>
+              <li *ngFor="let historial of grupo.value">
+                <strong>Precio anterior:</strong> S/ {{ historial.precio_anterior | number:'1.2-2' }}<br>
+                <strong>Nuevo precio:</strong> S/ {{ historial.precio_nuevo | number:'1.2-2' }}<br>
+                <strong>Fecha:</strong> {{ historial.fecha_cambio  | date:'dd-MM-yyyy' }}<br>
+                <strong>Modificado por:</strong> {{ historial.usuario.nombre }}
+              </li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+  
+      <mat-paginator [pageSizeOptions]="[4, 6, 9, 12]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+  
