@@ -8,9 +8,6 @@
 node_modules/
 dist/
 
-# 🔐 Ignorar archivos sensibles
-src/environments/environment.ts
-
 # 🛑 Archivos innecesarios de Node
 npm-debug.log
 yarn-error.log
