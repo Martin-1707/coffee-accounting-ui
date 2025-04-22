@@ -4,15 +4,13 @@
   "scripts": {
     "ng": "ng",
     "config": "ts-node ./src/config-env.ts",
-    "start-vercel": "npm run config -- --environment=dev && ng serve",
-    "build-vercel": "npm run config -- --environment=prod && ng build",
     "start": "ng serve",
-    "prebuild": "ts-node set-env.ts",
+    "prebuild": "ts-node --project tsconfig.set-env.json set-env.ts",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:coffee-accounting-ui": "node dist/coffee-accounting-ui/server/server.mjs",
     "set-env": "ts-node --project tsconfig.set-env.json set-env.ts",
-    "build": "npm run set-env && ng build"
+    "build": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {
