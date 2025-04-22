@@ -8,11 +8,11 @@
     "build-vercel": "npm run config -- --environment=prod && ng build",
     "start": "ng serve",
     "prebuild": "ts-node set-env.ts",
-    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:coffee-accounting-ui": "node dist/coffee-accounting-ui/server/server.mjs",
-    "set-env": "ts-node --project tsconfig.set-env.json set-env.ts"
+    "set-env": "ts-node --project tsconfig.set-env.json set-env.ts",
+    "build": "npm run set-env && ng build"
   },
   "private": true,
   "dependencies": {
