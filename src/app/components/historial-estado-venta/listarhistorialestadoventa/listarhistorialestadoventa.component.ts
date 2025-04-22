@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { HistorialEstadoVenta } from '../../../models/historial-estado-venta';
 import { HistorialEstadoVentaService } from '../../../services/historial-estado-venta.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
@@ -16,7 +15,6 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatIconModule,
     RouterModule,
-    MatSidenavModule,
     CommonModule,
     MatPaginator,
     MatCardModule,

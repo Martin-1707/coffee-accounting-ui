@@ -1,7 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { Component } from "@angular/core";
 import { NavbarComponent } from "../navbar/navbar.component";
 
 @Component({

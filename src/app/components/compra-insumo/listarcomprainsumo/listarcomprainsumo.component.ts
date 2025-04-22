@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { CompraInsumoService } from '../../../services/compra-insumo.service';
 import { CompraInsumo } from '../../../models/compra-insumo';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
-import { SidenavComponent } from '../../sidenav/sidenav.component';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -17,7 +15,6 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatIconModule,
     RouterModule,
-    MatSidenavModule,
     CommonModule,
     MatPaginator,
     MatCardModule

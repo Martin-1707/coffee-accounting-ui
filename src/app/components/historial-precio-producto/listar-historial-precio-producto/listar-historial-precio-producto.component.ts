@@ -3,7 +3,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { HistorialPrecioProducto } from '../../../models/historial-precio-producto';
@@ -16,7 +15,6 @@ import { HistorialPrecioProductoService } from '../../../services/historial-prec
     MatTableModule,
     MatIconModule,
     RouterModule,
-    MatSidenavModule,
     CommonModule,
     MatPaginator,
     MatCardModule,],
