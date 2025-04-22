@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
-    base: "http://localhost:8083",
-    dom: "localhost:8083"
+    production: true,
+    base: process.env['NG_APP_API_BASE_URL'],
+    dom: process.env['NG_APP_API_BASE_URL_DOM'], 
 }
