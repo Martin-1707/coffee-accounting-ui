@@ -54,15 +54,6 @@ export class LoginService {
     return decodedToken?.sub || null;
   }
 
-  // 📛 Obtener nombre y apellido del usuario autenticado
-  getNombre(): string {
-    return this.getCurrentUser()?.nombre || 'Nombre';
-  }
-
-  getApellido(): string {
-    return this.getCurrentUser()?.apellido || 'Apellido';
-  }
-
   // 🔄 Obtener el usuario actual guardado en sessionStorage
   getCurrentUser(): any {
     const user = sessionStorage.getItem('currentUser');

@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { UsuarioService } from '../../../services/usuario.service';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { LoginService } from '../../../services/login.service';
 
 // Definir el formato de fecha en DD/MM/YYYY
 export const MY_DATE_FORMATS = {
@@ -58,32 +59,47 @@ export class CreareditarcomprainsumoComponent {
   usuario: any = null; // 🔹 Nueva variable para almacenar el usuario autenticado
   listaUsuarios: any[] = []; // 🔹 Nueva variable para almacenar la lista de usuarios
 
-  constructor(private fb: FormBuilder, private ciS: CompraInsumoService, private uS: UsuarioService, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(
+    private fb: FormBuilder,
+    private ciS: CompraInsumoService,
+    private uS: UsuarioService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private loginservice: LoginService // Inyectar el servicio de login
+  ) { }
 
   ngOnInit(): void {
     this.compraInsumoForm = this.fb.group({
       fecha_inicial: ['', Validators.required],
       fecha_final: ['', Validators.required],
       monto: ['', [Validators.required, Validators.min(0)]],
-      idusuario: new FormControl({ value: '', disabled: true }, Validators.required) // Inicialmente vacío
+      idusuario: new FormControl({ value: '', disabled: true }, Validators.required)
     });
 
-    // 🔹 Obtiene el usuario autenticado desde el servicio
-    this.uS.list().subscribe((usuarios) => {
-      if (usuarios.length > 0) {
-        this.usuario = usuarios[0]; // Guarda el usuario autenticado
-        this.esVendedor = this.usuario.rol.nombre_rol === 'Vendedor';
+    const username = this.loginservice.showUser(); // "martin"
+    const rol = this.loginservice.showRole(); // "Administrador"
+
+    if (username && rol) {
+      this.uS.list().subscribe((usuarios) => {
+        const usuarioEncontrado = usuarios.find(u => u.nombre === username);
+        
+        if (usuarioEncontrado) {
+          this.usuario = usuarioEncontrado;
+          this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
   
-        if (this.usuario.rol.nombre_rol === 'Administrador') {
-          // 🔹 Filtra solo los usuarios con el rol "Vendedor"
-          this.listaUsuarios = usuarios.filter(u => u.rol.nombre_rol === 'Vendedor');
-          this.compraInsumoForm.get('idusuario')?.enable();
+          if (rol === 'Administrador') {
+            this.listaUsuarios = usuarios.filter(u => u.rol.nombre_rol === 'Vendedor');
+            this.compraInsumoForm.get('idusuario')?.enable();
+          } else {
+            this.compraInsumoForm.patchValue({ idusuario: usuarioEncontrado.idusuario });
+          }
         } else {
-          // 🔹 Si no es administrador, solo muestra su propio ID
-          this.compraInsumoForm.patchValue({ idusuario: this.usuario.idusuario });
+          console.warn("❗ Usuario autenticado no encontrado en la lista de usuarios.");
         }
-      }
-    });
+      });
+    } else {
+      console.warn("❗ No se pudo obtener usuario o rol desde el token.");
+    }
   }
 
   guardarCompraInsumo() {

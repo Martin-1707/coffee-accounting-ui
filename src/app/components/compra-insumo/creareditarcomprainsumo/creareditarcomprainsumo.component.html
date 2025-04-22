@@ -34,7 +34,7 @@
         <mat-label>Usuario</mat-label>
         <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador'; else soloLectura">
           <mat-select formControlName="idusuario">
-            + <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
+            <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
               {{ u.nombre }}
             </mat-option>
           </mat-select>
