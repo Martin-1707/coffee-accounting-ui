@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UsuarioService } from '../../../services/usuario.service';
 import { TipoPagoService } from '../../../services/tipo-pago.service';
 import { ProductoService } from '../../../services/producto.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-creareditarventa',
@@ -46,82 +47,97 @@ export class CreareditarventaComponent implements OnInit {
     private router: Router,
     private uS: UsuarioService, // Inyectar el servicio de usuario
     private tipoPagoService: TipoPagoService,
-    private pS: ProductoService // Inyectar el servicio de producto
-
+    private pS: ProductoService, // Inyectar el servicio de producto
+    private loginservice: LoginService // Inyectar el servicio de login
   ) { }
 
   ngOnInit(): void {
 
-     // Cargar clientes
-    this.uS.listClientes().subscribe({
-      next: (data) => this.listaClientes = data,
-      error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
-    });
+    // Cargar clientes
+   this.uS.listClientes().subscribe({
+     next: (data) => this.listaClientes = data,
+     error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
+   });
 
-     // Cargar productos
-    this.pS.list().subscribe({
-      next: (data) => this.listarProductos = data, // Asegúrate de que 'data' contiene 'idproducto' y 'nombre'
-      error: () => this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 })
-    });
+    // Cargar productos
+   this.pS.list().subscribe({
+     next: (data) => this.listarProductos = data, // Asegúrate de que 'data' contiene 'idproducto' y 'nombre'
+     error: () => this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 })
+   });
 
-    // Cargar tipos de pago
-    this.tipoPagoService.list().subscribe({
-      next: (data) => this.tiposPago = data,
-      error: () => this.snackBar.open('Error al cargar tipos de pago', 'Cerrar', { duration: 3000 })
-    });
+   // Cargar tipos de pago
+   this.tipoPagoService.list().subscribe({
+     next: (data) => this.tiposPago = data,
+     error: () => this.snackBar.open('Error al cargar tipos de pago', 'Cerrar', { duration: 3000 })
+   });
 
-    // 1) Crea el formulario
-    this.ventaForm = this.fb.group({
-      clienteId: ['', Validators.required],
-      vendedorId: ['', Validators.required], // Inicialmente habilitado
-      factura: [false],
-      especificarProducto: [false],
-      productos: this.fb.array([]),
-      montoManual: [{ value: '', disabled: false }, Validators.required],
-      abono: ['', Validators.required],
-      tipoPagoId: [{ value: '', disabled: true }, Validators.required]
-    });
+   // 1) Crea el formulario
+   this.ventaForm = this.fb.group({
+     clienteId: ['', Validators.required],
+     vendedorId: [{ value: '', disabled: false }, Validators.required], // Asegúrate de usar 'vendedorId'
+     factura: [false],
+     especificarProducto: [false],
+     productos: this.fb.array([]),
+     montoManual: [{ value: '', disabled: false }, Validators.required],
+     abono: ['', Validators.required],
+     tipoPagoId: [{ value: '', disabled: true }, Validators.required]
+   });
 
-    // 🔹 Obtiene el usuario autenticado desde el servicio
-    this.uS.list().subscribe((usuarios) => {
-      if (usuarios.length > 0) {
-        this.usuario = usuarios[0]; // Guarda el usuario autenticado
-        this.esVendedor = this.usuario.rol.nombre_rol === 'Vendedor';
+   const username = this.loginservice.showUser(); // "martin"
+   const rol = this.loginservice.showRole(); // "Administrador"
 
-        if (this.usuario.rol.nombre_rol === 'Administrador') {
-          // 🔹 Filtra solo los usuarios con el rol "Vendedor"
-          this.listaUsuarios = usuarios.filter(u => u.rol.nombre_rol === 'Vendedor');
-          // No deshabilitar el campo
-        } else {
-          // 🔹 Si no es administrador, solo muestra su propio ID y deshabilita el campo
-          this.ventaForm.patchValue({ vendedorId: this.usuario.vendedorId });
-          this.ventaForm.get('vendedorId')?.disable();
-        }
-      }
-    });
+   //
+   if (username && rol) {
+     this.uS.list().subscribe((usuarios) => {
+       console.log('👉 usuarios:', usuarios);
+       console.log('🔍 username token:', username);
+       const usuarioEncontrado = usuarios.find(u => u.username === username);
 
-    // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
-    this.ventaForm.get('abono')!.valueChanges.subscribe(value => {
-      if (value && Number(value) > 0) {
-        this.ventaForm.get('tipoPagoId')!.enable();
-      } else {
-        this.ventaForm.get('tipoPagoId')!.disable();
-        this.ventaForm.get('tipoPagoId')!.setValue(''); // Resetea si se deshabilita
-      }
-    });
+       if (usuarioEncontrado) {
+         this.usuario = usuarioEncontrado;
+         this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
 
-    this.ventaForm.get('especificarProducto')!.valueChanges.subscribe(value => {
-      if (value) {
-        this.ventaForm.get('montoManual')!.disable();
-        this.addProducto();
-      } else {
-        this.ventaForm.get('montoManual')!.enable();
-        this.clearProductos();
-      }
-    });
+         if (rol === 'Administrador') {
+           this.listaUsuarios = usuarios.filter(
+             (u) => u.rol.nombre_rol === 'Vendedor'
+           );
+           this.ventaForm.get('vendedorId')?.enable();
+         } else {
+           this.ventaForm.get('vendedorId')?.setValue(usuarioEncontrado.idusuario);
+           this.ventaForm.get('vendedorId')?.disable();
+         }
+       } else {
+         console.warn(
+           '❗ Usuario autenticado no encontrado en la lista de usuarios.'
+         );
+       }
+     });
+   } else {
+     console.warn('❗ No se pudo obtener usuario o rol desde el token.');
+   }
 
-    
-  }
+   // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
+   this.ventaForm.get('abono')!.valueChanges.subscribe(value => {
+     if (value && Number(value) > 0) {
+       this.ventaForm.get('tipoPagoId')!.enable();
+     } else {
+       this.ventaForm.get('tipoPagoId')!.disable();
+       this.ventaForm.get('tipoPagoId')!.setValue(''); // Resetea si se deshabilita
+     }
+   });
+
+   this.ventaForm.get('especificarProducto')!.valueChanges.subscribe(value => {
+     if (value) {
+       this.ventaForm.get('montoManual')!.disable();
+       this.addProducto();
+     } else {
+       this.ventaForm.get('montoManual')!.enable();
+       this.clearProductos();
+     }
+   });
+
+   
+ }
 
   get productos(): FormArray {
     return this.ventaForm.get('productos') as FormArray;

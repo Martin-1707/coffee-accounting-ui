@@ -73,7 +73,10 @@ export class CreareditarcomprainsumoComponent {
       fecha_inicial: ['', Validators.required],
       fecha_final: ['', Validators.required],
       monto: ['', [Validators.required, Validators.min(0)]],
-      idusuario: new FormControl({ value: '', disabled: true }, Validators.required)
+      idusuario: new FormControl(
+        { value: '', disabled: true },
+        Validators.required
+      ),
     });
 
     const username = this.loginservice.showUser(); // "martin"
@@ -81,24 +84,38 @@ export class CreareditarcomprainsumoComponent {
 
     if (username && rol) {
       this.uS.list().subscribe((usuarios) => {
-        const usuarioEncontrado = usuarios.find(u => u.nombre === username);
-        
+        console.log('👉 usuarios:', usuarios);
+        console.log('🔍 username token:', username);
+        const usuarioEncontrado = usuarios.find(u => u.username === username);
+
         if (usuarioEncontrado) {
           this.usuario = usuarioEncontrado;
           this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
-  
+
           if (rol === 'Administrador') {
-            this.listaUsuarios = usuarios.filter(u => u.rol.nombre_rol === 'Vendedor');
+            this.listaUsuarios = usuarios.filter(
+              (u) => u.rol.nombre_rol === 'Vendedor'
+            );
             this.compraInsumoForm.get('idusuario')?.enable();
           } else {
-            this.compraInsumoForm.patchValue({ idusuario: usuarioEncontrado.idusuario });
+            this.compraInsumoForm.get('idusuario')?.enable();
+            this.compraInsumoForm.patchValue({
+              idusuario: usuarioEncontrado.idusuario,
+            });
+            console.log(
+              'Usuario seteado:',
+              this.compraInsumoForm.get('idusuario')?.value
+            );
+            this.compraInsumoForm.get('idusuario')?.disable(); // Deshabilitar el campo si no es administrador
           }
         } else {
-          console.warn("❗ Usuario autenticado no encontrado en la lista de usuarios.");
+          console.warn(
+            '❗ Usuario autenticado no encontrado en la lista de usuarios.'
+          );
         }
       });
     } else {
-      console.warn("❗ No se pudo obtener usuario o rol desde el token.");
+      console.warn('❗ No se pudo obtener usuario o rol desde el token.');
     }
   }
 
