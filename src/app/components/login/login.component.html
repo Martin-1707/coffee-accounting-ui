@@ -1,6 +1,13 @@
+<!-- Overlay con spinner -->
+<div class="spinner-overlay" *ngIf="isLoading">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+
+<!-- Contenedor de login -->
 <div class="login-container">
   <h2>Iniciar Sesión</h2>
   <form (ngSubmit)="login()">
+    <!-- Campos -->
     <mat-form-field appearance="outline" class="input-group">
       <mat-label>Usuario</mat-label>
       <input matInput [(ngModel)]="username" name="username" required />
@@ -15,20 +22,18 @@
         name="password"
         required
       />
-      
       <button mat-icon-button matSuffix (click)="clickEvent($event)" type="button">
         <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
       </button>
-      
     </mat-form-field>
 
     <button
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="!username || !password"
+      [disabled]="!username || !password || isLoading"
     >
-      Ingresar
+      {{ isLoading ? 'Cargando...' : 'Ingresar' }}
     </button>
   </form>
 </div>

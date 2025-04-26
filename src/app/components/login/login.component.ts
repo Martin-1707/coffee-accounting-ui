@@ -8,24 +8,29 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginService } from '../../services/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtRequest } from '../../models/jwt-request';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     MatFormFieldModule,
     FormsModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
   hide = signal(true);
-  
+  isLoading = false;
+
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
@@ -41,18 +46,20 @@ export class LoginComponent implements OnInit {
   password: string = '';
   mensaje: string = '';
 
-  ngOnInit():void {}
+  ngOnInit(): void {}
 
   login() {
+    this.isLoading = true;
+  
     let request = new JwtRequest();
-
     request.username = this.username;
     request.password = this.password;
-
+  
     this.loginService.login(request).subscribe(
       (data: any) => {
+        this.isLoading = false;
         if (data.jwttoken) {
-          sessionStorage.setItem('token', data.jwttoken); // 🔥 Guarda el token correctamente
+          sessionStorage.setItem('token', data.jwttoken);
           console.log("✅ Token guardado:", data.jwttoken);
           this.router.navigate(['dashboard']);
         } else {
@@ -61,10 +68,10 @@ export class LoginComponent implements OnInit {
         }
       },
       () => {
+        this.isLoading = false;
         this.mensaje = 'Credenciales incorrectas';
         this.snackBar.open(this.mensaje, 'Cerrar', { duration: 2000 });
       }
     );
-  }
-
+  }  
 }
