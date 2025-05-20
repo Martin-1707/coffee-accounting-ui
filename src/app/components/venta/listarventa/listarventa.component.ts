@@ -49,7 +49,6 @@ export class ListarventaComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.cargarHistorialEstados();
     this.cargarProductosVenta();
 
     this.usuarioAutenticado = this.loginService.showUser() || '';
@@ -98,33 +97,19 @@ export class ListarventaComponent implements OnInit {
     this.router.navigate(['/venta/nuevo']);
   }
 
-  cargarHistorialEstados() {
-    this.hevS.list().subscribe((data: HistorialEstadoVenta[]) => {
-      this.historialEstados = data;
-    });
-  }
-  
   cargarProductosVenta() {
     this.vpS.list().subscribe((data: VentasProducto[]) => {
       this.ventasProductos = data;
     });
   }
 
-  obtenerEstadoVenta(idVenta: number): string {
-    let historialVenta = this.historialEstados
-      .filter(h => h.venta.idventa === idVenta)
-      .sort((a, b) => new Date(b.fechacambio).getTime() - new Date(a.fechacambio).getTime());
-  
-    return historialVenta.length > 0 ? historialVenta[0].estadoVenta.nombreestado : 'Desconocido';
-  }
-
-  obtenerColorEstado(idVenta: number): string {
-    let estado = this.obtenerEstadoVenta(idVenta);
-    switch (estado) {
-      case 'Pagando': return 'orange';
-      case 'Pagado': return 'green';
-      case 'Sin pagar': return 'red';
-      default: return 'gray';
+  getEstadoVenta(venta: Venta): { texto: string; color: string } {
+    if (venta.saldopendiente === 0) {
+      return { texto: 'Pagado', color: 'green' };
+    } else if (venta.saldopendiente < venta.monto) {
+      return { texto: 'Pagando', color: 'orange' };
+    } else {
+      return { texto: 'Sin pagar', color: 'red' };
     }
   }
 

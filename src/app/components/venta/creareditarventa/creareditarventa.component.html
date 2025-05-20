@@ -19,7 +19,7 @@
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Vendedor ID</mat-label>
 
-        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador'; else soloLectura">
+        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador' || 'Supervisor'; else soloLectura">
           <mat-select formControlName="vendedorId">
             <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
               {{ u.nombre }}
@@ -66,7 +66,8 @@
               </mat-error>
             </mat-form-field>
 
-            <button mat-icon-button color="warn" (click)="removeProducto(i)" class="remove-btn" type="button" *ngIf="i > 0">
+            <button mat-icon-button color="warn" (click)="removeProducto(i)" class="remove-btn" type="button"
+              *ngIf="i > 0">
               ❌
             </button>
           </div>
@@ -75,6 +76,18 @@
             ➕ Agregar producto
           </button>
         </div>
+      </div>
+
+      <!-- CHECKLIST PARA FECHA -->
+      <div class="fecha-section" style="display: flex; align-items: center; gap: 1rem; margin: 1rem 0;">
+        <mat-checkbox formControlName="especificarFecha">
+          Especificar fecha de venta
+        </mat-checkbox>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Venta</mat-label>
+          <input matInput type="date" formControlName="fechaVenta" />
+        </mat-form-field>
       </div>
 
       <!-- Monto de Venta (Solo si NO se especifican productos) -->

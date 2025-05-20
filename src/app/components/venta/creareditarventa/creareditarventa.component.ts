@@ -40,6 +40,8 @@ export class CreareditarventaComponent implements OnInit {
   listaClientes: any[] = [];
   listarProductos: any[] = [];
 
+  fechaActual: Date = new Date();
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -54,90 +56,105 @@ export class CreareditarventaComponent implements OnInit {
   ngOnInit(): void {
 
     // Cargar clientes
-   this.uS.listClientes().subscribe({
-     next: (data) => this.listaClientes = data,
-     error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
-   });
+    this.uS.listClientes().subscribe({
+      next: (data) => this.listaClientes = data,
+      error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
+    });
 
     // Cargar productos
-   this.pS.list().subscribe({
-     next: (data) => this.listarProductos = data, // Asegúrate de que 'data' contiene 'idproducto' y 'nombre'
-     error: () => this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 })
-   });
+    this.pS.list().subscribe({
+      next: (data) => this.listarProductos = data, // Asegúrate de que 'data' contiene 'idproducto' y 'nombre'
+      error: () => this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 })
+    });
 
-   // Cargar tipos de pago
-   this.tipoPagoService.list().subscribe({
-     next: (data) => this.tiposPago = data,
-     error: () => this.snackBar.open('Error al cargar tipos de pago', 'Cerrar', { duration: 3000 })
-   });
+    // Cargar tipos de pago
+    this.tipoPagoService.list().subscribe({
+      next: (data) => this.tiposPago = data,
+      error: () => this.snackBar.open('Error al cargar tipos de pago', 'Cerrar', { duration: 3000 })
+    });
 
-   // 1) Crea el formulario
-   this.ventaForm = this.fb.group({
-     clienteId: ['', Validators.required],
-     vendedorId: [{ value: '', disabled: false }, Validators.required], // Asegúrate de usar 'vendedorId'
-     factura: [false],
-     especificarProducto: [false],
-     productos: this.fb.array([]),
-     montoManual: [{ value: '', disabled: false }, Validators.required],
-     abono: ['', Validators.required],
-     tipoPagoId: [{ value: '', disabled: true }, Validators.required]
-   });
+    // 1) Crea el formulario
+    this.ventaForm = this.fb.group({
+      clienteId: ['', Validators.required],
+      vendedorId: [{ value: '', disabled: false }, Validators.required], // Asegúrate de usar 'vendedorId'
+      factura: [false],
+      especificarProducto: [false],
+      productos: this.fb.array([]),
+      fechaVenta: [{ value: this.fechaActual, disabled: true }],
+      montoManual: [{ value: '', disabled: false }, Validators.required],
+      abono: ['', Validators.required],
+      tipoPagoId: [{ value: '', disabled: true }, Validators.required]
+    });
 
-   const username = this.loginservice.showUser(); // "martin"
-   const rol = this.loginservice.showRole(); // "Administrador"
+    const username = this.loginservice.showUser(); // "martin"
+    const rol = this.loginservice.showRole(); // "Administrador"
 
-   //
-   if (username && rol) {
-     this.uS.list().subscribe((usuarios) => {
-       console.log('👉 usuarios:', usuarios);
-       console.log('🔍 username token:', username);
-       const usuarioEncontrado = usuarios.find(u => u.username === username);
+    //
+    if (username && rol) {
+      this.uS.list().subscribe((usuarios) => {
+        console.log('👉 usuarios:', usuarios);
+        console.log('🔍 username token:', username);
+        const usuarioEncontrado = usuarios.find(u => u.username === username);
 
-       if (usuarioEncontrado) {
-         this.usuario = usuarioEncontrado;
-         this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
+        if (usuarioEncontrado) {
+          this.usuario = usuarioEncontrado;
+          this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
 
-         if (rol === 'Administrador') {
-           this.listaUsuarios = usuarios.filter(
-             (u) => u.rol.nombre_rol === 'Vendedor'
-           );
-           this.ventaForm.get('vendedorId')?.enable();
-         } else {
-           this.ventaForm.get('vendedorId')?.setValue(usuarioEncontrado.idusuario);
-           this.ventaForm.get('vendedorId')?.disable();
-         }
-       } else {
-         console.warn(
-           '❗ Usuario autenticado no encontrado en la lista de usuarios.'
-         );
-       }
-     });
-   } else {
-     console.warn('❗ No se pudo obtener usuario o rol desde el token.');
-   }
+          if (rol === 'Administrador' || rol === 'Supervisor') {
+            this.listaUsuarios = usuarios.filter(
+              (u) => u.rol.nombre_rol === 'Vendedor'
+            );
+            this.ventaForm.get('vendedorId')?.enable();
+          } else {
+            this.ventaForm.get('vendedorId')?.setValue(usuarioEncontrado.idusuario);
+            this.ventaForm.get('vendedorId')?.disable();
+          }
+        } else {
+          console.warn(
+            '❗ Usuario autenticado no encontrado en la lista de usuarios.'
+          );
+        }
+      });
+    } else {
+      console.warn('❗ No se pudo obtener usuario o rol desde el token.');
+    }
 
-   // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
-   this.ventaForm.get('abono')!.valueChanges.subscribe(value => {
-     if (value && Number(value) > 0) {
-       this.ventaForm.get('tipoPagoId')!.enable();
-     } else {
-       this.ventaForm.get('tipoPagoId')!.disable();
-       this.ventaForm.get('tipoPagoId')!.setValue(''); // Resetea si se deshabilita
-     }
-   });
+    // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
+    this.ventaForm.get('abono')!.valueChanges.subscribe(value => {
+      if (value && Number(value) > 0) {
+        this.ventaForm.get('tipoPagoId')!.enable();
+      } else {
+        this.ventaForm.get('tipoPagoId')!.disable();
+        this.ventaForm.get('tipoPagoId')!.setValue(''); // Resetea si se deshabilita
+      }
+    });
 
-   this.ventaForm.get('especificarProducto')!.valueChanges.subscribe(value => {
-     if (value) {
-       this.ventaForm.get('montoManual')!.disable();
-       this.addProducto();
-     } else {
-       this.ventaForm.get('montoManual')!.enable();
-       this.clearProductos();
-     }
-   });
+    // 👉 Activar o desactivar controles según "especificarProducto"
+    this.ventaForm.get('especificarProducto')?.valueChanges.subscribe((valor) => {
+      const montoManualCtrl = this.ventaForm.get('montoManual');
+      const productosCtrl = this.ventaForm.get('productos') as FormArray;
 
-   
- }
+      if (valor) {
+        montoManualCtrl?.disable();
+        if (productosCtrl.length === 0) this.addProducto(); // al menos 1 por defecto
+      } else {
+        montoManualCtrl?.enable();
+        productosCtrl.clear();
+      }
+    });
+
+    // 👉 Activar o desactivar control de fecha
+    this.ventaForm.addControl('especificarFecha', new FormControl(false));
+    this.ventaForm.get('especificarFecha')?.valueChanges.subscribe((valor) => {
+      const fechaCtrl = this.ventaForm.get('fechaVenta');
+      if (valor) {
+        fechaCtrl?.enable();
+      } else {
+        fechaCtrl?.disable();
+        fechaCtrl?.setValue(this.fechaActual); // volver a fecha actual
+      }
+    });
+  }
 
   get productos(): FormArray {
     return this.ventaForm.get('productos') as FormArray;
@@ -175,6 +192,7 @@ export class CreareditarventaComponent implements OnInit {
     const formData = this.ventaForm.value;
     console.log('📤 Datos enviados:', formData);
 
+
     if (formData.especificarProducto) {
       const ventaData = {
         clienteId: Number(formData.clienteId),
@@ -185,8 +203,10 @@ export class CreareditarventaComponent implements OnInit {
           id: Number(p.producto),
           cantidad: Number(p.cantidad)
         })),
-        tipoPagoId: Number(formData.tipoPagoId)
+        tipoPagoId: Number(formData.tipoPagoId),
+        fechaVenta: formData.fechaVenta  // ✅ Aquí se incluye correctamente
       };
+
 
       console.log('🛒 Venta con productos:', ventaData);
 
@@ -198,7 +218,7 @@ export class CreareditarventaComponent implements OnInit {
         }
       });
     } else {
-      const ventaSimpleData = {
+      const ventaSimpleData: any = {
         clienteId: Number(formData.clienteId),
         vendedorId: this.esVendedor ? this.usuario.idusuario : this.ventaForm.get('vendedorId')?.value,
         factura: formData.factura,
@@ -206,6 +226,10 @@ export class CreareditarventaComponent implements OnInit {
         abono: Number(formData.abono),
         tipoPagoId: Number(formData.tipoPagoId)
       };
+
+      if (formData.especificarFecha) {
+        ventaSimpleData.fechaVenta = formData.fechaVenta;
+      }
 
       console.log('📦 Venta simple sin productos:', ventaSimpleData);
 

@@ -74,11 +74,12 @@
       </mat-card-header>
 
       <mat-card-content>
-        <p>📜 <strong>Estado:</strong>
-          <span [style.color]="obtenerColorEstado(venta.idventa)">
-            {{ obtenerEstadoVenta(venta.idventa) }}
+        <p>
+          🧾 <b>Estado:</b>
+          <span [ngStyle]="{ color: getEstadoVenta(venta).color }">
+            {{ getEstadoVenta(venta).texto }}
           </span>
-        </p>
+        </p>        
         <p>📅 <strong>Fecha:</strong> {{ venta.fechaventa | date:'dd/MM/yyyy HH:mm' }}</p>
         <p>💰 <strong>Monto:</strong> S/{{ venta.monto }}</p>
         <p>💳 <strong>Saldo Pendiente:</strong> S/{{ venta.saldopendiente }}</p>
