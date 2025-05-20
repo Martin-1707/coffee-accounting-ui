@@ -43,15 +43,15 @@ export class SidenavComponent implements OnInit {
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'payments', label: 'Abono', route: '/abono', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo', roles: ['Administrador', 'Supervisor', 'Vendedor'] },
-    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador', 'Supervisor'] },
-    { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Supervisor', 'Cliente', 'Vendedor'] },
+    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador'] },
+    { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Cliente', 'Vendedor'] },
     { icon: 'store', label: 'Producto', route: '/producto', roles: ['Administrador', 'Supervisor', 'Cliente', 'Vendedor'] },
     { icon: 'admin_panel_settings', label: 'Rol', route: '/rol', roles: ['Administrador'] },
     { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago', roles: ['Administrador'] },
     { icon: 'people', label: 'Usuario', route: '/usuario', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'sell', label: 'Venta', route: '/venta', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'history', label: 'Historial-Precio-Producto', route: '/historial-precio-producto', roles: ['Administrador', 'Supervisor', 'Vendedor'] }
+    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Vendedor', 'Cliente'] },
+    { icon: 'history', label: 'Historial-Precio-Producto', route: '/historial-precio-producto', roles: ['Administrador', 'Vendedor'] }
   ];
 
   constructor(
