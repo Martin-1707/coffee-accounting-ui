@@ -16,6 +16,7 @@
           <p><strong>Fecha Inicial:</strong> {{ compra.fecha_inicial | date: 'dd/MM/yyyy' }}</p>
           <p><strong>Fecha Final:</strong> {{ compra.fecha_final | date: 'dd/MM/yyyy' }}</p>
           <p><strong>Monto:</strong> {{ compra.monto }}</p>
+          <p><strong>Vendedor:</strong> {{ compra.usuario.nombre }}</p>
         </mat-card-content>
       </mat-card>
     </div>

@@ -32,7 +32,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Usuario</mat-label>
-        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador'; else soloLectura">
+        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador' ||  'Supervisor' ; else soloLectura">
           <mat-select formControlName="idusuario">
             <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
               {{ u.nombre }}

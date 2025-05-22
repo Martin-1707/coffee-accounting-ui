@@ -15,6 +15,7 @@ import { HistorialEstadoVenta } from '../../../models/historial-estado-venta';
 import { VentasProducto } from '../../../models/ventas-producto';
 import { HistorialEstadoVentaService } from '../../../services/historial-estado-venta.service';
 import { VentasProductoService } from '../../../services/ventas-producto.service';
+import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-listarventa',
   standalone: true,
@@ -28,6 +29,7 @@ import { VentasProductoService } from '../../../services/ventas-producto.service
     MatCardModule,
     MatExpansionModule,
     MatListModule,
+    MatMenuModule
   ],
   templateUrl: './listarventa.component.html',
   styleUrl: './listarventa.component.css',
@@ -42,7 +44,7 @@ export class ListarventaComponent implements OnInit {
   historialEstados: HistorialEstadoVenta[] = [];
   ventasProductos: VentasProducto[] = [];
 
-  modoTarjeta: boolean = false;
+  modoTarjeta: boolean = true;
 
   constructor(private vS: VentaService, private hevS: HistorialEstadoVentaService, private vpS: VentasProductoService, private router: Router, private loginService: LoginService) { }
 
@@ -117,4 +119,12 @@ export class ListarventaComponent implements OnInit {
     return this.ventasProductos.filter(p => p.venta.idventa === idVenta);
   }
 
+  agregarAbono(venta: Venta) {
+    // Aquí puedes redirigir a un componente o abrir un diálogo para agregar abono
+    this.router.navigate(['/abonos/nuevo'], { queryParams: { idVenta: venta.idventa } });
+  }
+
+  verAbonos(venta: Venta) {
+  this.router.navigate(['/abonos/venta', venta.idventa]);
+}
 }

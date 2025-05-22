@@ -67,10 +67,27 @@
   <!-- Cards de Ventas -->
   <div class="ventas-container" *ngIf="modoTarjeta">
     <mat-card class="venta-card" *ngFor="let venta of dataSource.data">
-      <mat-card-header>
+      <mat-card-header class="header-con-opciones">
+        <!-- Título -->
         <mat-card-title>
           🛒 {{ venta.usuarioCliente.nombre }} #{{ venta.idventa }}
         </mat-card-title>
+
+        <!-- Menu de tres puntos -->
+        <button mat-icon-button [matMenuTriggerFor]="menuVenta" aria-label="Opciones de abonos" class="boton-kebab">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menuVenta="matMenu">
+          <button *ngIf="venta.saldopendiente > 0" mat-menu-item (click)="agregarAbono(venta)">
+            <mat-icon>add</mat-icon>
+            <span>Agregar abono</span>
+          </button>
+          <button *ngIf="venta.saldopendiente < venta.monto" mat-menu-item (click)="verAbonos(venta)">
+            <mat-icon>receipt</mat-icon>
+            <span>Ver abonos</span>
+          </button>
+        </mat-menu>
       </mat-card-header>
 
       <mat-card-content>
@@ -79,7 +96,7 @@
           <span [ngStyle]="{ color: getEstadoVenta(venta).color }">
             {{ getEstadoVenta(venta).texto }}
           </span>
-        </p>        
+        </p>
         <p>📅 <strong>Fecha:</strong> {{ venta.fechaventa | date:'dd/MM/yyyy HH:mm' }}</p>
         <p>💰 <strong>Monto:</strong> S/{{ venta.monto }}</p>
         <p>💳 <strong>Saldo Pendiente:</strong> S/{{ venta.saldopendiente }}</p>
@@ -95,7 +112,7 @@
           <ng-container *ngIf="obtenerProductosDeVenta(venta.idventa).length > 0; else noProductos">
             <mat-list>
               <mat-list-item *ngFor="let producto of obtenerProductosDeVenta(venta.idventa)">
-                {{ producto.producto.nombre }} - Cant: {{ producto.cantidad }} - Precio: S/{{ producto.precio }}
+                {{ producto.producto.nombre }} - Cant: {{ producto.cantidad }} Kg - Precio: S/{{ producto.precio }}
               </mat-list-item>
             </mat-list>
           </ng-container>

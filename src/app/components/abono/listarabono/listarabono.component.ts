@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Abono } from '../../../models/abono';
 import { AbonoService } from '../../../services/abono.service';
@@ -16,8 +16,8 @@ import { MatCardModule } from '@angular/material/card';
     RouterModule,
     CommonModule,
     MatPaginator,
-    MatCardModule
-],
+    MatCardModule,
+  ],
   templateUrl: './listarabono.component.html',
   styleUrl: './listarabono.component.css'
 })
@@ -26,30 +26,46 @@ export class ListarabonoComponent implements OnInit {
   paginatedGroups: { key: number; value: Abono[] }[] = [];
   allGroups: { key: number; value: Abono[] }[] = [];
 
-  constructor(private aS: AbonoService, private router:Router) {}
+  esVistaVentaEspecifica = false;
+
+  constructor(private aS: AbonoService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.aS.list().subscribe((data) => {
-      this.agruparAbonos(data);
-      this.updatePaginatedData();
-    });
+    const idventaParam = this.route.snapshot.paramMap.get('idventa');
 
-    this.aS.getList().subscribe((data) => {
-      this.agruparAbonos(data);
-      this.updatePaginatedData();
-    });
+    this.esVistaVentaEspecifica = !!idventaParam; // true si existe idventa
+
+    if (idventaParam) {
+      const idventa = parseInt(idventaParam, 10);
+      this.aS.getAbonosPorVenta(idventa).subscribe((data) => {
+        this.agruparAbonos(data);
+        this.updatePaginatedData();
+      });
+    } else {
+      this.aS.list().subscribe((data) => {
+        this.agruparAbonos(data);
+        this.updatePaginatedData();
+      });
+
+      this.aS.getList().subscribe((data) => {
+        this.agruparAbonos(data);
+        this.updatePaginatedData();
+      });
+    }
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.paginator.page.subscribe(() => this.updatePaginatedData());
-      this.updatePaginatedData();
-    });
+    if (!this.esVistaVentaEspecifica) {
+      setTimeout(() => {
+        this.paginator.page.subscribe(() => this.updatePaginatedData());
+        this.updatePaginatedData();
+      });
+    }
   }
 
   irACrearAbono() {
-    this.router.navigate(['/abono/nuevo']);
+    this.router.navigate(['/abonos/nuevo']);
   }
 
   agruparAbonos(abonos: Abono[]): void {
@@ -70,13 +86,20 @@ export class ListarabonoComponent implements OnInit {
   }
 
   updatePaginatedData() {
-    if (this.paginator) {
-      // Configurar la longitud total de los datos para el paginador
+    if (this.esVistaVentaEspecifica) {
+      // Mostrar todos sin paginar
+      this.paginatedGroups = this.allGroups;
+    } else if (this.paginator) {
       this.paginator.length = this.allGroups.length;
-
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       const endIndex = startIndex + this.paginator.pageSize;
       this.paginatedGroups = this.allGroups.slice(startIndex, endIndex);
     }
   }
+
+
+  volverAVentas() {
+    this.router.navigate(['/venta']);
+  }
+
 }

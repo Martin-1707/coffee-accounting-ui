@@ -92,7 +92,7 @@ export class CreareditarcomprainsumoComponent {
           this.usuario = usuarioEncontrado;
           this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
 
-          if (rol === 'Administrador') {
+          if (rol === 'Administrador' ||  rol === 'Supervisor') {
             this.listaUsuarios = usuarios.filter(
               (u) => u.rol.nombre_rol === 'Vendedor'
             );

@@ -120,3 +120,27 @@ table th {
 mat-paginator {
   margin-top: 2rem;
 }
+.boton-kebab {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  min-width: auto;
+  width: auto;
+  height: auto;
+}
+
+.boton-kebab:hover,
+.boton-kebab:focus {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.boton-kebab mat-icon {
+  font-size: 1.6rem;
+  color: #444; /* O el color que desees */
+}

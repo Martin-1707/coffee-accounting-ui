@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header-container">
     <h1 class="title">Lista de Abonos</h1>
-    <button mat-mini-fab color="primary" (click)="irACrearAbono()">
+    <button *ngIf="!esVistaVentaEspecifica" mat-mini-fab color="primary" (click)="irACrearAbono()">
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -25,6 +25,14 @@
     </div>
   </div>
 
-  <mat-paginator [pageSizeOptions]="[2, 3, 5, 8, 10]" showFirstLastButtons>
+  <div *ngIf="esVistaVentaEspecifica" class="volver-button-container">
+    <button mat-raised-button color="primary" (click)="volverAVentas()">
+      <mat-icon class="icon-align">arrow_back</mat-icon>
+      Volver al listado de ventas
+    </button>
+  </div>
+
+  <mat-paginator *ngIf="!esVistaVentaEspecifica" [pageSizeOptions]="[2, 3, 5, 8, 10]" showFirstLastButtons>
   </mat-paginator>
+
 </div>

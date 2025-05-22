@@ -41,7 +41,7 @@ export class SidenavComponent implements OnInit {
 
   menuItems: any[] = [
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'payments', label: 'Abono', route: '/abono', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'payments', label: 'Abono', route: '/abonos', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo', roles: ['Administrador', 'Supervisor', 'Vendedor'] },
     { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador'] },
     { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Cliente', 'Vendedor'] },

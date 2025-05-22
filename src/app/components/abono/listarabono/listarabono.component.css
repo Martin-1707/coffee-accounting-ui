@@ -13,6 +13,8 @@
   align-items: center;
   width: 100%;
   max-width: 900px;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 /* Título */
@@ -57,7 +59,7 @@ mat-card-title {
 ul {
   list-style: none;
   padding: 0;
-  margin: 0; /* Elimina márgenes que puedan causar desbordamiento */
+  margin: 0;
 }
 
 li {
@@ -72,7 +74,7 @@ strong {
   color: #3E2522;
 }
 
-/* Botón flotante */
+/* Botón flotante (crear abono) */
 .floating-button {
   position: fixed;
   bottom: 20px;
@@ -94,6 +96,53 @@ strong {
   background: #125a9b;
 }
 
+/* Contenedor del botón */
+.volver-button-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Botón estilizado */
+.volver-button-container button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, #6E3482, #8E44AD);
+  color: white;
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 12px rgba(110, 52, 130, 0.3);
+  transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+/* Hover */
+.volver-button-container button:hover {
+  background: linear-gradient(135deg, #5a2c6f, #732d91);
+  box-shadow: 0 6px 16px rgba(110, 52, 130, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Ícono bien alineado */
+.volver-button-container .icon-align {
+  font-size: 20px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Paginador */
+mat-paginator {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 900px;
+}
+
 /* Responsivo */
 @media (max-width: 600px) {
   .container {
@@ -112,5 +161,12 @@ strong {
   .abono-cards-container {
     padding: 0.5rem;
   }
-}
 
+  .volver-button-container {
+    justify-content: center;
+  }
+
+  .volver-button-container button {
+    width: 100%;
+  }
+}

@@ -23,6 +23,7 @@ import { CreareditarrolComponent } from './components/rol/creareditarrol/creared
 import { CreareditartipopagoComponent } from './components/tipo-pago/creareditartipopago/creareditartipopago.component';
 import { CreareditarventaComponent } from './components/venta/creareditarventa/creareditarventa.component';
 import { HistorialPrecioProductoComponent } from './components/historial-precio-producto/historial-precio-producto.component';
+import { ListarabonoComponent } from './components/abono/listarabono/listarabono.component';
 
 export const routes: Routes = [
   {
@@ -55,7 +56,7 @@ export const routes: Routes = [
         data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
       },
       {
-        path: 'abono',
+        path: 'abonos',
         component: AbonoComponent,
         canActivate: [seguridadGuard],
         data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
@@ -65,6 +66,12 @@ export const routes: Routes = [
             component: CrearabonoComponent,
             canActivate: [seguridadGuard],
             data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
+          },
+          {
+            path: 'venta/:idventa',
+            component: ListarabonoComponent, // 👈 esta es la nueva ruta
+            canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
           },
         ],
       },

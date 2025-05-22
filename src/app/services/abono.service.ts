@@ -35,6 +35,11 @@ export class AbonoService {
     return this.http.post(`${this.url}/registrarAbono`, abonoData, { responseType: 'text' });
   }
 
+  // 🔵 Listar abonos por ID de venta
+  getAbonosPorVenta(ventaId: number): Observable<Abono[]> {
+    return this.http.get<Abono[]>(`${this.url}/venta/${ventaId}`);
+  }
+
   //get y set
   // 🔄 Obtener la lista actualizada de abonos
   getList() {
