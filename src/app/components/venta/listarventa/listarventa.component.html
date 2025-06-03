@@ -1,16 +1,62 @@
 <div class="container">
-  <div class="header-container">
-    <h1 class="title">Lista de ventas</h1>
+  <!-- NUEVO CONTENEDOR UNIFICADO -->
+  <div class="header-filtros-container">
 
-    <div class="acciones-header">
-      <button mat-mini-fab color="primary" (click)="irACrearVenta()">
-        <mat-icon>add</mat-icon>
-      </button>
+    <!-- Título y Acciones -->
+    <div class="header-acciones">
+      <h1 class="title">Lista de ventas</h1>
 
-      <!-- Botón toggle -->
-      <button mat-icon-button (click)="modoTarjeta = !modoTarjeta" matTooltip="Cambiar vista">
-        <mat-icon>{{ modoTarjeta ? 'table_view' : 'view_module' }}</mat-icon>
-      </button>
+      <div class="acciones-header">
+        <button mat-mini-fab color="primary" (click)="irACrearVenta()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="modoTarjeta = !modoTarjeta" matTooltip="Cambiar vista">
+          <mat-icon>{{ modoTarjeta ? 'table_view' : 'view_module' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Estado de venta</mat-label>
+        <mat-select [(ngModel)]="estadoSeleccionado">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let estado of estadosVenta" [value]="estado">{{ estado }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cliente</mat-label>
+        <mat-select [(ngModel)]="clienteSeleccionado">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let cliente of clientesUnicos" [value]="cliente">{{ cliente }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+        <mat-datepicker #pickerInicio></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
+
+      <div class="botones-filtro">
+        <button mat-raised-button color="primary" (click)="aplicarFiltros()">
+          <mat-icon>filter_alt</mat-icon> Filtrar
+        </button>
+        <button mat-raised-button color="warn" (click)="limpiarFiltros()">
+          <mat-icon>close</mat-icon> Limpiar
+        </button>
+      </div>
     </div>
   </div>
 

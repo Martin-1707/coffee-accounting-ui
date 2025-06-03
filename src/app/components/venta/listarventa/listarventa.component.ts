@@ -16,6 +16,12 @@ import { VentasProducto } from '../../../models/ventas-producto';
 import { HistorialEstadoVentaService } from '../../../services/historial-estado-venta.service';
 import { VentasProductoService } from '../../../services/ventas-producto.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-listarventa',
   standalone: true,
@@ -29,7 +35,13 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCardModule,
     MatExpansionModule,
     MatListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule,
   ],
   templateUrl: './listarventa.component.html',
   styleUrl: './listarventa.component.css',
@@ -46,8 +58,22 @@ export class ListarventaComponent implements OnInit {
 
   modoTarjeta: boolean = true;
 
-  constructor(private vS: VentaService, private hevS: HistorialEstadoVentaService, private vpS: VentasProductoService, private router: Router, private loginService: LoginService) { }
+  // Filtros para la tabla
+  estadosVenta: string[] = ['Pagado', 'Pagando', 'Sin pagar']; // o los estados que uses en tu sistema
 
+  // Filtros seleccionados
+  estadoSeleccionado: string = '';
+  clienteSeleccionado: string = '';
+  fechaInicio: Date | null = null;
+  fechaFin: Date | null = null;
+
+  // Lista de clientes únicos para el filtro
+  clientesUnicos: string[] = [];
+
+  // Backup original para aplicar filtros sin perder datos
+  todasLasVentas: Venta[] = [];
+
+  constructor(private vS: VentaService, private hevS: HistorialEstadoVentaService, private vpS: VentasProductoService, private router: Router, private loginService: LoginService) { }
 
   ngOnInit(): void {
 
@@ -57,21 +83,24 @@ export class ListarventaComponent implements OnInit {
     this.rolUsuario = this.loginService.showRole() || '';
 
     this.vS.list().subscribe((data) => {
+      let ventasFiltradas: Venta[] = [];
+
       if (this.rolUsuario === 'Cliente') {
-        // Filtrar ventas donde el usuario autenticado sea el usuarioCliente
-        this.dataSource = new MatTableDataSource(
-          data.filter((venta) => venta.usuarioCliente.username === this.usuarioAutenticado)
-        );
+        ventasFiltradas = data.filter((venta) => venta.usuarioCliente.username === this.usuarioAutenticado);
       } else if (this.rolUsuario === 'Vendedor') {
-        // Filtrar ventas donde el usuario autenticado sea el usuarioVendedor
-        this.dataSource = new MatTableDataSource(
-          data.filter((venta) => venta.usuarioVendedor.username === this.usuarioAutenticado)
-        );
+        ventasFiltradas = data.filter((venta) => venta.usuarioVendedor.username === this.usuarioAutenticado);
       } else {
-        // Administrador y Supervisor ven todo
-        this.dataSource = new MatTableDataSource(data);
+        ventasFiltradas = data;
       }
+
+      this.todasLasVentas = ventasFiltradas; // Guardamos para filtros
+      this.dataSource = new MatTableDataSource(ventasFiltradas);
       this.dataSource.paginator = this.paginator;
+
+      // Extraer clientes únicos para el filtro
+      this.clientesUnicos = Array.from(
+        new Set(ventasFiltradas.map(v => v.usuarioCliente.username))
+      );
     });
 
     this.vS.getList().subscribe((data) => {
@@ -125,6 +154,53 @@ export class ListarventaComponent implements OnInit {
   }
 
   verAbonos(venta: Venta) {
-  this.router.navigate(['/abonos/venta', venta.idventa]);
-}
+    this.router.navigate(['/abonos/venta', venta.idventa]);
+  }
+
+  aplicarFiltros(): void {
+    let ventasFiltradas = [...this.todasLasVentas];
+
+    // Filtro por estado
+    if (this.estadoSeleccionado) {
+      ventasFiltradas = ventasFiltradas.filter(v => {
+        const estado = this.getEstadoVenta(v).texto;
+        return estado === this.estadoSeleccionado;
+      });
+    }
+
+    // Filtro por cliente
+    if (this.clienteSeleccionado) {
+      ventasFiltradas = ventasFiltradas.filter(v =>
+        v.usuarioCliente.username === this.clienteSeleccionado
+      );
+    }
+
+    // Filtro por rango de fechas
+    if (this.fechaInicio && this.fechaFin) {
+      ventasFiltradas = ventasFiltradas.filter(v => {
+        const fechaVenta = new Date(v.fechaventa); // Asegúrate que `fechaventa` es una fecha válida
+        return fechaVenta >= this.fechaInicio! && fechaVenta <= this.fechaFin!;
+      });
+    }
+
+    // Aplicar resultado filtrado
+    this.dataSource = new MatTableDataSource(ventasFiltradas);
+    this.dataSource.paginator = this.paginator;
+  }
+
+  onCambioFiltro(): void {
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros(): void {
+    this.estadoSeleccionado = '';
+    this.clienteSeleccionado = '';
+    this.fechaInicio = null;
+    this.fechaFin = null;
+
+    // Restaurar ventas originales sin filtros
+    this.dataSource = new MatTableDataSource(this.todasLasVentas);
+    this.dataSource.paginator = this.paginator;
+  }
+
 }
