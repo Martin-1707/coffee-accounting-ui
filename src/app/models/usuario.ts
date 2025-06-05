@@ -10,4 +10,5 @@ export class Usuario {
   fecha_creacion: Date = new Date(Date.now());
   enabled: boolean = true;
   rol: Rol = new Rol();
+  subordinados?: Usuario[];
 }

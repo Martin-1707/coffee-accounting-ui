@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { HttpClient } from '@angular/common/http';
 
@@ -17,7 +17,7 @@ export class UsuarioService {
   // 🔵 Subject para manejar cambios en la lista de usuarios
   private listaCambio = new Subject<Usuario[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // 🟢 Listar todos los usuarios
   list() {
@@ -62,5 +62,45 @@ export class UsuarioService {
   // 🔄 Actualizar la lista y notificar cambios
   setList(listaNueva: Usuario[]) {
     this.listaCambio.next(listaNueva);
+  }
+
+  // 🔵 Nuevos métodos jerárquicos´
+
+  // Obtener subordinados de un usuario por ID
+  listSubordinadosPorUsuario(idUsuario: number) {
+    return this.http.get<Usuario[]>(`${this.url}/${idUsuario}/subordinados`);
+  }
+
+  // Obtener clientes por vendedor
+  listClientesPorVendedor(idVendedor: number) {
+    return this.http.get<Usuario[]>(`${this.url}/vendedor/${idVendedor}/clientes`);
+  }
+
+  // Obtener vendedores por asesor
+  listVendedoresPorAsesor(idAsesor: number) {
+    return this.http.get<Usuario[]>(`${this.url}/asesor/${idAsesor}/vendedores`);
+  }
+
+  // Obtener asesores por administrador
+  listAsesoresPorAdmin(idAdmin: number) {
+    return this.http.get<Usuario[]>(`${this.url}/admin/${idAdmin}/asesores`);
+  }
+
+  getVisibles(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.url}/visibles`);
+  }
+
+  getJerarquia(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.url}/jerarquia`);
+  }
+
+  // 🔵 Obtener información del usuario actual
+  getCurrentUser(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.url}/me`);
+  }
+
+  // 🔵 Obtener superior jerárquico del usuario actual
+  getSuperior(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.url}/superior`);
   }
 }

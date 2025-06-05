@@ -7,6 +7,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
+import { MatCardModule } from '@angular/material/card';
+import { LoginService } from '../../../services/login.service';
+import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
 
 @Component({
   selector: 'app-listarusuario',
@@ -17,38 +21,88 @@ import { UsuarioService } from '../../../services/usuario.service';
     MatTableModule,
     MatIconModule,
     RouterModule,
-    MatPaginator,
+    MatCardModule,
+    MatTreeModule
   ],
   templateUrl: './listarusuario.component.html',
   styleUrl: './listarusuario.component.css',
 })
 export class ListarusuarioComponent implements OnInit {
+  // ── Pestaña de tabla (la mantengo, pero la ocultaremos) ──────────────────────────
   dataSource: MatTableDataSource<Usuario> = new MatTableDataSource();
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
 
-  constructor(private uS: UsuarioService) {}
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  // ── Datos del usuario autenticado y jerarquía ─────────────────────────────────
+  usuarioLogeado: Usuario | null = null;
+  supervisador: Usuario | null = null;
+  hijos: Usuario[] = [];
+  descendientes: Usuario[] = [];
+
+  // ── Configuración del árbol ───────────────────────────────────────────────────
+  treeControl = new NestedTreeControl<Usuario>(node => node.subordinados!);
+  treeDataSource = new MatTreeNestedDataSource<Usuario>();
+
+  // Determina si un nodo tiene hijos:
+  hasChild = (_: number, node: Usuario) => !!node.subordinados && node.subordinados.length > 0;
+
+
+  constructor(private uS: UsuarioService, private lS: LoginService) { }
 
   ngOnInit(): void {
-    this.uS.list().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
+    // Obtener la jerarquía del usuario logeado
+    this.uS.getJerarquia().subscribe({
+      next: (rootUser: Usuario) => {
+        this.usuarioLogeado = rootUser;
+        this.hijos = rootUser.subordinados || [];
+        this.descendientes = this.getDescendientesPlanos(rootUser);
+        this.treeDataSource.data = rootUser.subordinados || [];
+        console.log('Jerarquía recibida:', JSON.stringify(rootUser, null, 2));
+      },
+      error: err => {
+        console.error('Error al obtener jerarquía:', err);
+      }
     });
-    this.uS.getList().subscribe((data) => {
-      this.dataSource = new MatTableDataSource(data);
+
+    // Obtener información del usuario actual
+    this.uS.getCurrentUser().subscribe({
+      next: (currentUser: Usuario) => {
+        this.usuarioLogeado = currentUser;
+        console.log('Usuario logeado:', JSON.stringify(currentUser, null, 2));
+      },
+      error: err => {
+        console.error('Error al obtener información del usuario actual:', err);
+      }
     });
-  }
-  eliminar(id: number) {
-    this.uS.delete(id).subscribe((data) => {
-      this.uS.list().subscribe((data) => {
-        this.uS.setList(data);
-      });
+    // Obtener información del superior del usuario actual
+    this.uS.getSuperior().subscribe({
+      next: (currentUser: Usuario) => {
+        this.supervisador = currentUser;
+        console.log('Superior:', JSON.stringify(currentUser, null, 2));
+      },
+      error: err => {
+        console.error('Error al obtener información del Superior:', err);
+      }
     });
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
+    // paginador de la tabla (aunque vamos a ocultar la tabla en el HTML)
     this.dataSource.paginator = this.paginator;
   }
+
+  /** Si deseas calcular todos los descendientes de forma “plana” */
+  private getDescendientesPlanos(root: Usuario): Usuario[] {
+    const lista: Usuario[] = [];
+    function recorrer(u: Usuario) {
+      if (!u.subordinados) return;
+      for (const hijo of u.subordinados) {
+        lista.push(hijo);
+        recorrer(hijo);
+      }
+    }
+    recorrer(root);
+    return lista;
+  }
 }
-
-

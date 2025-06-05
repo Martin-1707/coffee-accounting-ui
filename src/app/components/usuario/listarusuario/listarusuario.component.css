@@ -1,0 +1,87 @@
+.container {
+  padding: 30px;
+  background-color: #e0e0e0; /* opcional */
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.usuario-card-layout {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.usuario-avatar {
+  flex: 1 1 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar-box {
+  width: 180px;
+  height: 180px;
+  background-color: #f0e5e5;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 64px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.usuario-datos {
+  flex: 2 1 400px;
+  padding-left: 30px;
+}
+
+.usuario-datos p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* Árbol */
+
+.invisible-button {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.example-tree {
+    background-color: transparent;
+    margin: 20px;
+}
+
+.mat-tree-node {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.tree-children {
+    padding-left: 40px;
+}
+
+button[mat-icon-button] {
+    background-color: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    box-shadow: none;
+    padding: 0;
+    margin-right: 4px;
+}
+
+mat-tree-node {
+    padding-left: 0 !important;
+}
