@@ -17,10 +17,14 @@
       <p><strong>Apellido:</strong> {{ usuarioLogeado?.apellido }}</p>
       <p><strong>Email:</strong> {{ usuarioLogeado?.email }}</p>
       <p><strong>Rol:</strong> {{ usuarioLogeado?.rol?.nombre_rol }}</p>
-      <p><strong>Supervisado por:</strong> {{ supervisador?.nombre }} {{ supervisador?.apellido }} - {{ supervisador?.rol?.nombre_rol }}</p>
 
-      <p><strong>Supervisa a:</strong></p>
-      <mat-tree [dataSource]="treeDataSource" [treeControl]="treeControl" class="example-tree">
+      <!-- Mostrar "Supervisado por" solo si hay un supervisor -->
+      <p *ngIf="supervisador"><strong>Supervisado por:</strong> {{ supervisador.nombre }} {{ supervisador.apellido }} - {{ supervisador.rol.nombre_rol  }}</p>
+
+      <!-- Mostrar "Supervisa a" solo si hay subordinados -->
+      <p *ngIf="hijos.length > 0"><strong>Supervisa a:</strong></p>
+      <mat-tree *ngIf="hijos.length > 0" [dataSource]="treeDataSource" [treeControl]="treeControl" class="example-tree">
+        <!-- Nodo hoja -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
           <button mat-icon-button disabled class="invisible-button"></button>
           <mat-icon>person</mat-icon>

@@ -95,12 +95,12 @@ export class UsuarioService {
   }
 
   // 🔵 Obtener información del usuario actual
-  getCurrentUser(): Observable<Usuario> {
+  getCurrentUser(){
     return this.http.get<Usuario>(`${this.url}/me`);
   }
 
   // 🔵 Obtener superior jerárquico del usuario actual
-  getSuperior(): Observable<Usuario> {
+  getSuperior() {
     return this.http.get<Usuario>(`${this.url}/superior`);
   }
 }
