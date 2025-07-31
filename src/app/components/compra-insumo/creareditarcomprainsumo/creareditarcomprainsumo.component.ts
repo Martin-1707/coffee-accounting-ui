@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -58,6 +58,7 @@ export class CreareditarcomprainsumoComponent {
   esVendedor: boolean = false; // Variable para controlar la edición del campo
   usuario: any = null; // 🔹 Nueva variable para almacenar el usuario autenticado
   listaUsuarios: any[] = []; // 🔹 Nueva variable para almacenar la lista de usuarios
+  hoy: Date = new Date(); // Esto te da la fecha actual
 
   constructor(
     private fb: FormBuilder,
@@ -70,13 +71,10 @@ export class CreareditarcomprainsumoComponent {
 
   ngOnInit(): void {
     this.compraInsumoForm = this.fb.group({
-      fecha_inicial: ['', Validators.required],
-      fecha_final: ['', Validators.required],
+      fecha_inicial: ['', [Validators.required, this.noFechaFuturaValidator.bind(this)]],
+      fecha_final: ['', [Validators.required, this.noFechaFuturaValidator.bind(this)]],
       monto: ['', [Validators.required, Validators.min(0)]],
-      idusuario: new FormControl(
-        { value: '', disabled: true },
-        Validators.required
-      ),
+      idusuario: ['', Validators.required]
     });
 
     const username = this.loginservice.showUser(); // "martin"
@@ -92,13 +90,14 @@ export class CreareditarcomprainsumoComponent {
           this.usuario = usuarioEncontrado;
           this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
 
-          if (rol === 'Administrador' ||  rol === 'Supervisor') {
+          if (rol === 'Administrador' || rol === 'Supervisor') {
             this.listaUsuarios = usuarios.filter(
               (u) => u.rol.nombre_rol === 'Vendedor'
             );
             this.compraInsumoForm.get('idusuario')?.enable();
           } else {
-            this.compraInsumoForm.get('idusuario')?.enable();
+            this.listaUsuarios = [usuarioEncontrado];
+            this.compraInsumoForm.get('idusuario')?.disable();
             this.compraInsumoForm.patchValue({
               idusuario: usuarioEncontrado.idusuario,
             });
@@ -148,4 +147,20 @@ export class CreareditarcomprainsumoComponent {
       });
     }
   }
+  noFechaFuturaValidator(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value;
+    if (!valor) return null;
+    const fecha = new Date(valor);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Comparar solo la fecha
+    return fecha > hoy ? { fechaFutura: true } : null;
+  }
+  filtrarFechasPasadas = (date: Date | null): boolean => {
+  if (!date) return false; // Si no hay fecha, no permitir
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0); // Asegúrate de comparar solo la fecha
+  date.setHours(0, 0, 0, 0);
+  return date <= hoy; // Solo permite fechas hasta hoy
+};
+
 }

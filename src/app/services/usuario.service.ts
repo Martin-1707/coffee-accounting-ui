@@ -66,21 +66,6 @@ export class UsuarioService {
 
   // 🔵 Nuevos métodos jerárquicos´
 
-  // Obtener subordinados de un usuario por ID
-  listSubordinadosPorUsuario(idUsuario: number) {
-    return this.http.get<Usuario[]>(`${this.url}/${idUsuario}/subordinados`);
-  }
-
-  // Obtener clientes por vendedor
-  listClientesPorVendedor(idVendedor: number) {
-    return this.http.get<Usuario[]>(`${this.url}/vendedor/${idVendedor}/clientes`);
-  }
-
-  // Obtener vendedores por asesor
-  listVendedoresPorAsesor(idAsesor: number) {
-    return this.http.get<Usuario[]>(`${this.url}/asesor/${idAsesor}/vendedores`);
-  }
-
   // Obtener asesores por administrador
   listAsesoresPorAdmin(idAdmin: number) {
     return this.http.get<Usuario[]>(`${this.url}/admin/${idAdmin}/asesores`);

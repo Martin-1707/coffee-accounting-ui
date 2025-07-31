@@ -5,24 +5,11 @@
     <form [formGroup]="ventaForm" (ngSubmit)="guardarVenta()">
 
       <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Cliente ID</mat-label>
-        <mat-select formControlName="clienteId" placeholder="Seleccione un cliente">
-          <mat-option *ngFor="let u of listaClientes" [value]="u.idusuario">
-            {{ u.nombre }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="ventaForm.get('clienteId')?.hasError('required') && ventaForm.get('clienteId')?.touched">
-          Cliente es obligatorio
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width" appearance="outline">
         <mat-label>Vendedor ID</mat-label>
-
         <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador' || 'Supervisor'; else soloLectura">
           <mat-select formControlName="vendedorId">
             <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
-              {{ u.nombre }}
+              {{ u.nombre }} {{ u.apellido }}
             </mat-option>
           </mat-select>
         </ng-container>
@@ -31,6 +18,17 @@
         </ng-template>
         <mat-error *ngIf="ventaForm.get('vendedorId')?.hasError('required') && ventaForm.get('vendedorId')?.touched">
           Vendedor ID es obligatorio
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Cliente ID</mat-label>
+        <mat-select formControlName="clienteId" placeholder="Seleccione un cliente">
+          <mat-option *ngFor="let u of listaClientes" [value]="u.idusuario">
+            {{ u.nombre }} {{ u.apellido }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="ventaForm.get('clienteId')?.hasError('required') && ventaForm.get('clienteId')?.touched">
+          Cliente es obligatorio
         </mat-error>
       </mat-form-field>
 
