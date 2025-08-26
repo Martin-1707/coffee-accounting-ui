@@ -53,13 +53,20 @@ export class CreareditarventaComponent implements OnInit {
     private loginservice: LoginService // Inyectar el servicio de login
   ) { }
 
+  private formatDate(date: Date): string {
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
+
   ngOnInit(): void {
 
-    // Cargar clientes
-    this.uS.listClientes().subscribe({
-      next: (data) => this.listaClientes = data,
-      error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
-    });
+    // ❌ ya no cargamos todos los clientes
+    // this.uS.listClientes().subscribe({
+    //   next: (data) => this.listaClientes = data,
+    //   error: () => this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 })
+    // });
 
     // Cargar productos
     this.pS.list().subscribe({
@@ -75,14 +82,15 @@ export class CreareditarventaComponent implements OnInit {
 
     // 1) Crea el formulario
     this.ventaForm = this.fb.group({
-      clienteId: ['', Validators.required],
+      clienteId: [{ value: '', disabled: true }, Validators.required], // <-- inicia deshabilitado
       vendedorId: [{ value: '', disabled: false }, Validators.required], // Asegúrate de usar 'vendedorId'
       factura: [false],
       especificarProducto: [false],
       productos: this.fb.array([]),
-      fechaVenta: [{ value: this.fechaActual, disabled: true }],
+      fechaVenta: [{ value: this.formatDate(this.fechaActual), disabled: true }],
       montoManual: [{ value: '', disabled: false }, Validators.required],
-      abono: ['', Validators.required],
+      habilitarAbono: [false], // <--- nuevo control para el checkbox
+      abono: [{ value: 0, disabled: true }, [Validators.required, Validators.min(1)]],
       tipoPagoId: [{ value: '', disabled: true }, Validators.required]
     });
 
@@ -91,7 +99,7 @@ export class CreareditarventaComponent implements OnInit {
 
     //
     if (username && rol) {
-      this.uS.list().subscribe((usuarios) => {
+      this.uS.getVisibles().subscribe((usuarios) => {
         console.log('👉 usuarios:', usuarios);
         console.log('🔍 username token:', username);
         const usuarioEncontrado = usuarios.find(u => u.username === username);
@@ -101,31 +109,61 @@ export class CreareditarventaComponent implements OnInit {
           this.esVendedor = usuarioEncontrado.rol.nombre_rol === 'Vendedor';
 
           if (rol === 'Administrador' || rol === 'Supervisor') {
+            // 👉 El admin/supervisor selecciona vendedor y luego clientes
             this.listaUsuarios = usuarios.filter(
               (u) => u.rol.nombre_rol === 'Vendedor'
             );
             this.ventaForm.get('vendedorId')?.enable();
+
+            // 🔍 Escuchar cambios en vendedorId
+            this.ventaForm.get('vendedorId')?.valueChanges.subscribe((vendedorId) => {
+              const clienteCtrl = this.ventaForm.get('clienteId');
+              if (vendedorId) {
+                clienteCtrl?.enable(); // Habilita clienteId
+                this.uS.listClientesPorVendedor(vendedorId).subscribe({
+                  next: (clientes) => this.listaClientes = clientes,
+                  error: () => this.snackBar.open('Error al cargar clientes del vendedor', 'Cerrar', { duration: 3000 })
+                });
+              } else {
+                clienteCtrl?.disable(); // Deshabilita clienteId
+                clienteCtrl?.setValue('');
+                this.listaClientes = [];
+              }
+            });
           } else {
+            // 👉 Vendedor autenticado: carga sus propios clientes
             this.ventaForm.get('vendedorId')?.setValue(usuarioEncontrado.idusuario);
             this.ventaForm.get('vendedorId')?.disable();
+            this.ventaForm.get('clienteId')?.enable(); // Habilita clienteId para vendedor
+
+            this.uS.listMisClientes().subscribe({
+              next: (clientes) => this.listaClientes = clientes,
+              error: () => this.snackBar.open('Error al cargar mis clientes', 'Cerrar', { duration: 3000 })
+            });
           }
-        } else {
-          console.warn(
-            '❗ Usuario autenticado no encontrado en la lista de usuarios.'
-          );
         }
       });
-    } else {
-      console.warn('❗ No se pudo obtener usuario o rol desde el token.');
     }
 
-    // Escuchar cambios en "abono" y habilitar/deshabilitar "tipoPagoId"
+    // Escuchar cambios en el checkbox de abono
+    this.ventaForm.get('habilitarAbono')?.valueChanges.subscribe((habilitar) => {
+      const abonoCtrl = this.ventaForm.get('abono');
+      if (habilitar) {
+        abonoCtrl?.enable();
+        abonoCtrl?.setValue('');
+      } else {
+        abonoCtrl?.disable();
+        abonoCtrl?.setValue(0);
+      }
+    });
+
+    // Ajusta también la lógica de tipoPagoId para que dependa de abono > 0
     this.ventaForm.get('abono')!.valueChanges.subscribe(value => {
       if (value && Number(value) > 0) {
         this.ventaForm.get('tipoPagoId')!.enable();
       } else {
         this.ventaForm.get('tipoPagoId')!.disable();
-        this.ventaForm.get('tipoPagoId')!.setValue(''); // Resetea si se deshabilita
+        this.ventaForm.get('tipoPagoId')!.setValue('');
       }
     });
 
@@ -151,7 +189,7 @@ export class CreareditarventaComponent implements OnInit {
         fechaCtrl?.enable();
       } else {
         fechaCtrl?.disable();
-        fechaCtrl?.setValue(this.fechaActual); // volver a fecha actual
+        fechaCtrl?.setValue(this.formatDate(this.fechaActual)); // <-- aquí el formato correcto
       }
     });
   }
@@ -190,21 +228,22 @@ export class CreareditarventaComponent implements OnInit {
     }
 
     const formData = this.ventaForm.value;
-    console.log('📤 Datos enviados:', formData);
-
+    // 👇 Asegura que abono sea 0 si está vacío, null o NaN
+    const abonoValue = Number(formData.abono);
+    const abono = isNaN(abonoValue) ? 0 : abonoValue;
 
     if (formData.especificarProducto) {
       const ventaData = {
         clienteId: Number(formData.clienteId),
         vendedorId: this.esVendedor ? this.usuario.idusuario : this.ventaForm.get('vendedorId')?.value,
         factura: formData.factura,
-        abono: Number(formData.abono),
+        abono: abono,
         productos: formData.productos.map((p: any) => ({
           id: Number(p.producto),
           cantidad: Number(p.cantidad)
         })),
         tipoPagoId: Number(formData.tipoPagoId),
-        fechaVenta: formData.fechaVenta  // ✅ Aquí se incluye correctamente
+        fechaVenta: formData.fechaVenta
       };
 
 
@@ -223,7 +262,7 @@ export class CreareditarventaComponent implements OnInit {
         vendedorId: this.esVendedor ? this.usuario.idusuario : this.ventaForm.get('vendedorId')?.value,
         factura: formData.factura,
         montoManual: Number(formData.montoManual),
-        abono: Number(formData.abono),
+        abono: abono, // 👈 aquí siempre será 0 o el valor correcto
         tipoPagoId: Number(formData.tipoPagoId)
       };
 

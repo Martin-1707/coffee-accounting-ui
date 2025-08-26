@@ -6,7 +6,8 @@
 
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Vendedor ID</mat-label>
-        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador' || 'Supervisor'; else soloLectura">
+        <ng-container
+          *ngIf="usuario?.rol.nombre_rol === 'Administrador' || usuario?.rol.nombre_rol === 'Supervisor'; else soloLectura">
           <mat-select formControlName="vendedorId">
             <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
               {{ u.nombre }} {{ u.apellido }}
@@ -31,7 +32,7 @@
           Cliente es obligatorio
         </mat-error>
       </mat-form-field>
-
+      
       <div class="checkbox-container">
         <mat-checkbox formControlName="factura">Factura</mat-checkbox>
         <mat-checkbox formControlName="especificarProducto">Desea especificar producto?</mat-checkbox>
@@ -77,7 +78,7 @@
       </div>
 
       <!-- CHECKLIST PARA FECHA -->
-      <div class="fecha-section" style="display: flex; align-items: center; gap: 1rem; margin: 1rem 0;">
+      <div class="fecha-section">
         <mat-checkbox formControlName="especificarFecha">
           Especificar fecha de venta
         </mat-checkbox>
@@ -100,16 +101,19 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Abono</mat-label>
-        <input matInput formControlName="abono" type="number" />
-        <mat-error *ngIf="ventaForm.get('abono')?.hasError('required') && ventaForm.get('abono')?.touched">
-          El abono es obligatorio
-        </mat-error>
-        <mat-error *ngIf="ventaForm.get('abono')?.hasError('min') && ventaForm.get('abono')?.touched">
-          El abono debe ser mayor a 0
-        </mat-error>
-      </mat-form-field>
+      <div class="abono-row">
+        <mat-checkbox formControlName="habilitarAbono">Abono</mat-checkbox>
+        <mat-form-field appearance="outline" class="abono-field">
+          <mat-label>Abono</mat-label>
+          <input matInput formControlName="abono" type="number" />
+          <mat-error *ngIf="ventaForm.get('abono')?.hasError('required') && ventaForm.get('abono')?.touched">
+            El abono es obligatorio
+          </mat-error>
+          <mat-error *ngIf="ventaForm.get('abono')?.hasError('min') && ventaForm.get('abono')?.touched">
+            El abono debe ser mayor a 0
+          </mat-error>
+        </mat-form-field>
+      </div>
 
       <!-- Tipo de Pago -->
       <mat-form-field class="full-width">

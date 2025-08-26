@@ -24,9 +24,14 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.url);
   }
 
-  //Listar usuarios clientes
-  listClientes() {
-    return this.http.get<Usuario[]>(`${this.url}/clientes`);
+  //Listar mis clientes (cuando es Vendedor autenticado)
+  listMisClientes(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.url}/mis-clientes`);
+  }
+
+  //Listar clientes por vendedorId (cuando es Admin/Supervisor)
+  listClientesPorVendedor(vendedorId: number): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.url}/clientes/${vendedorId}`);
   }
 
   //Listar usuarios vendedores
@@ -80,7 +85,7 @@ export class UsuarioService {
   }
 
   // 🔵 Obtener información del usuario actual
-  getCurrentUser(){
+  getCurrentUser() {
     return this.http.get<Usuario>(`${this.url}/me`);
   }
 

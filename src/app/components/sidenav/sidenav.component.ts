@@ -41,7 +41,6 @@ export class SidenavComponent implements OnInit {
 
   menuItems: any[] = [
     { icon: 'dashboard', label: 'Inicio', route: '/dashboard', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'payments', label: 'Abono', route: '/abonos', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo', roles: ['Administrador', 'Supervisor', 'Vendedor'] },
     { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador'] },
     { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Cliente', 'Vendedor'] },
@@ -50,6 +49,7 @@ export class SidenavComponent implements OnInit {
     { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago', roles: ['Administrador'] },
     { icon: 'people', label: 'Usuario', route: '/usuario', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'sell', label: 'Venta', route: '/venta', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
+    { icon: 'payments', label: 'Abono', route: '/abonos', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
     { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Vendedor', 'Cliente'] },
     { icon: 'history', label: 'Historial-Precio-Producto', route: '/historial-precio-producto', roles: ['Administrador', 'Vendedor'] }
   ];
