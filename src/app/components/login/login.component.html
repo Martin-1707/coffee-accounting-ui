@@ -3,37 +3,54 @@
   <mat-spinner diameter="50"></mat-spinner>
 </div>
 
-<!-- Contenedor de login -->
-<div class="login-container">
-  <h2>Iniciar Sesión</h2>
-  <form (ngSubmit)="login()">
-    <!-- Campos -->
-    <mat-form-field appearance="outline" class="input-group">
-      <mat-label>Usuario</mat-label>
-      <input matInput [(ngModel)]="username" name="username" required />
-    </mat-form-field>
+<!-- Fondo y centrado -->
+<div class="login-bg">
+  <mat-card class="login-card" appearance="outlined">
+    <mat-card-header class="login-card__header">
+      <div class="brand-icon">
+        <mat-icon>local_cafe</mat-icon>
+      </div>
+      <div class="header-text">
+        <div class="title">Sistema ERP - Coffee Business</div>
+        <div class="subtitle">Ingrese sus credenciales para acceder al sistema</div>
+      </div>
+    </mat-card-header>
 
-    <mat-form-field appearance="outline" class="input-group">
-      <mat-label>Contraseña</mat-label>
-      <input
-        matInput
-        [type]="hide() ? 'password' : 'text'"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-      <button mat-icon-button matSuffix (click)="clickEvent($event)" type="button">
-        <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
-      </button>
-    </mat-form-field>
+    <mat-card-content class="login-card__content">
+      <div class="alert" *ngIf="mensaje">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ mensaje }}</span>
+      </div>
 
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!username || !password || isLoading"
-    >
-      {{ isLoading ? 'Cargando...' : 'Ingresar' }}
-    </button>
-  </form>
+      <form (ngSubmit)="login()" class="form">
+        <mat-form-field appearance="outline" class="input-group">
+          <mat-label>Usuario</mat-label>
+          <input matInput [(ngModel)]="username" name="username" [disabled]="isLoading" required
+            placeholder="usuario_admin" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="input-group">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="password" name="password"
+            [disabled]="isLoading" required placeholder="••••••••" />
+          <button mat-icon-button matSuffix (click)="clickEvent($event)" type="button" [disabled]="isLoading">
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" class="btn-primary"
+            [disabled]="!username || !password || isLoading">
+            {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+          </button>
+
+          <button mat-stroked-button type="button" class="btn-outline" (click)="goHome()" [disabled]="isLoading">
+            Volver al Inicio
+          </button>
+        </div>
+
+        <div class="demo-note">Demo: use cualquier username y contraseña</div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtRequest } from '../../models/jwt-request';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     RouterModule,
     MatProgressSpinnerModule,
+    MatCardModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -40,21 +42,21 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   username: string = '';
   password: string = '';
   mensaje: string = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   login() {
     this.isLoading = true;
-  
+
     let request = new JwtRequest();
     request.username = this.username;
     request.password = this.password;
-  
+
     this.loginService.login(request).subscribe(
       (data: any) => {
         this.isLoading = false;
@@ -73,5 +75,10 @@ export class LoginComponent implements OnInit {
         this.snackBar.open(this.mensaje, 'Cerrar', { duration: 2000 });
       }
     );
-  }  
+  }
+  
+  goHome() {
+    this.router.navigate(['/']);
+  }
+  // ...
 }
