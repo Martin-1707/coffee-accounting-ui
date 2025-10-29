@@ -1,63 +1,169 @@
-/* --- Estilos generales --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Raleway', sans-serif;
+/* ===== Header ===== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  /* card con transparencia */
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(111, 78, 55, 0.15);
+  /* border */
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ===== Brand ===== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand__logo {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  border-radius: 0.625rem;
+  /* radius-lg */
+  overflow: hidden;
+  background: #6F4E37;
+  /* primary */
+}
+
+.brand__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand__name {
+  font-size: 18px;
+  color: #3E2723;
+  /* foreground */
+}
+
+/* ===== Nav ===== */
+.nav .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #6B5D54;
+  /* muted-foreground */
+  font-size: 14px;
+  transition: color 0.15s ease;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: #6F4E37;
+  /* primary */
+}
+
+/* ===== Botón de login ===== */
+.login-button .btn-login {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 0.625rem;
+  /* radius-lg */
+  border: 1px solid rgba(111, 78, 55, 0.15);
+  /* border */
+  background: #6F4E37;
+  /* primary */
+  color: #ffffff;
+  /* primary-foreground */
+  cursor: pointer;
+  font-size: 14px;
+  transition: box-shadow 0.15s ease, transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.login-button .btn-login:hover {
+  box-shadow: 0 6px 16px rgba(160, 130, 109, 0.35);
+  /* ring */
+}
+
+.login-button .btn-login:active {
+  transform: translateY(1px);
+}
+
+/* ===== Accesibilidad focus ===== */
+.nav a:focus-visible,
+.login-button .btn-login:focus-visible,
+.brand__logo:focus-visible {
+  outline: 2px solid rgba(160, 130, 109, 0.7);
+  /* ring */
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* separa “Ir al sistema” de “Cerrar/Iniciar” */
+}
+
+.btn-outline {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(111, 78, 55, 0.25);
+  background: transparent;
+  color: #3E2723;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(111, 78, 55, 0.06);
+  border-color: rgba(111, 78, 55, 0.35);
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* separa “Ir al sistema” de “Cerrar/Iniciar” */
+}
+
+.btn-outline {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(111, 78, 55, 0.25);
+  background: transparent;
+  color: #3E2723;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(111, 78, 55, 0.06);
+  border-color: rgba(111, 78, 55, 0.35);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .brand__name {
+    display: none;
   }
-  
-  body {
-    background: #FFF2DF;
-    color: #3E2522;
-  }
-  
-  ul {
-    list-style: none;
-  }
-  
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  /* --- Header y navegación --- */
-  header {
-    background: #B5835A;
-    padding: 15px 20px;
-  }
-  
-  .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links a {
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .nav-links a:hover {
-    color: #7A554D;
-  }
-  
-  /* --- Botón de login --- */
-  .btn-login {
-    background: #7A554D;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: background 0.3s;
-  }
-  
-  .btn-login:hover {
-    background: #5A3A33;
-  }
-  
+}

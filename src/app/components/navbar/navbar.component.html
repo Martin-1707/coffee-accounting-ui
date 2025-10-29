@@ -1,24 +1,32 @@
-<header>
-    <div class="container">
-      <div>
-        <a routerLink="/" class="logo-button">
-          <!-- <img src="assets/logo.png" alt="Logo del negocio" /> -->
-        </a>
-      </div>
-      
-      <nav>
-        <ul class="nav-links">
-          <li><a routerLink="/home">Inicio</a></li>
-          <li><a routerLink="/nosotros">Nosotros</a></li>
-        </ul>
-      </nav>
-  
-      <div class="login-button">
-        <button (click)="handleLogin()" class="btn-login">
-          {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
-        </button>
-      </div>
-
+<header class="site-header">
+  <div class="container">
+    <!-- Brand -->
+    <div class="brand">
+      <a routerLink="/" class="brand__logo">
+        <img src="assets/logo_MO.ico" alt="Logo del negocio">
+      </a>
+      <span class="brand__name">Coffee Business</span>
     </div>
-  </header>
-  
+
+    <!-- Nav -->
+    <nav class="nav">
+      <ul class="nav-links">
+        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Inicio</a></li>
+        <li><a routerLink="/nosotros" routerLinkActive="active">Nosotros</a></li>
+      </ul>
+    </nav>
+
+    <!-- Acciones -->
+    <div class="login-button">
+      <!-- Ir al sistema -->
+      <button *ngIf="showGoToSystem" (click)="goToApp()" class="btn-outline">
+        Ir al sistema
+      </button>
+
+      <!-- Login / Logout -->
+      <button (click)="handleLogin()" class="btn-login">
+        {{ isLoggedIn ? 'Cerrar Sesión' : 'Iniciar Sesión' }}
+      </button>
+    </div>
+  </div>
+</header>
