@@ -1,146 +1,156 @@
-/* --- Estilos generales --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Raleway', sans-serif;
-  }
-  
-  body {
-    background: #cc9138;
-    color: #3E2522;
-  }
-  
-  ul {
-    list-style: none;
-  }
-  
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  /* --- Header y navegación --- */
-  header {
-    background: #B5835A;
-    padding: 15px 20px;
-  }
-  
-  .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links a {
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .nav-links a:hover {
-    color: #7A554D;
-  }
-  
-  /* --- Botón de login --- */
-  .btn-login {
-    background: #7A554D;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: background 0.3s;
-  }
-  
-  .btn-login:hover {
-    background: #5A3A33;
-  }
-  
-  /* --- Menú Hamburguesa --- */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-  }
-  
-  .hamburger .bar {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    margin: 5px 0;
-    transition: 0.4s;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .nav-links {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background: #B5835A;
-      padding: 10px;
-      border-radius: 5px;
-    }
-  
-    .nav-links.show {
-      display: flex;
-    }
-  
-    .hamburger {
-      display: flex;
-    }
-  }
-  
-  /* --- Sección de bienvenida --- */
-  .landing-section {
-    text-align: center;
-    padding: 50px 20px;
-  }
-  
-  .cta-button {
-    display: inline-block;
-    background: #B5835A;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 15px;
-  }
-  
-  .cta-button:hover {
-    background: #7A554D;
-  }
-  
-  /* --- Sección "Sobre Nosotros" --- */
-  .about-section {
-    text-align: center;
-    padding: 50px 20px;
-    background: #FFE0B2;
-  }
-  
-  .about-button {
-    display: inline-block;
-    background: #3E2522;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-  }
-  
-  
-  /* --- Footer --- */
-  .footer {
-    background: #3E2522;
-    color: white;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .footer-section {
-    margin-bottom: 10px;
-  }
-  
+/* ===== Hero ===== */
+.hero {
+  text-align: center;
+  padding: 5rem 1rem;
+  background: #FAFAF8;           /* background */
+  color: #3E2723;                /* foreground */
+}
+
+.hero__badge {
+  display: inline-block;
+  background: #C17817;           /* accent */
+  color: #ffffff;                /* accent-foreground */
+  border-radius: 0.625rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.hero__title {
+  font-size: 3rem;
+  color: #3E2723;                /* foreground */
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.hero__description {
+  color: #6B5D54;                /* muted-foreground */
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  font-size: 1.1rem;
+}
+
+.hero__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* ===== Botones ===== */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #6F4E37;          /* primary */
+  color: #ffffff;               /* primary-foreground */
+}
+.btn-primary:hover {
+  background: #8A634B;          /* slightly lighter shade */
+}
+
+.btn-outline {
+  border: 1px solid rgba(111, 78, 55, 0.15);  /* border */
+  color: #3E2723;              /* foreground */
+  background: transparent;
+}
+.btn-outline:hover {
+  border-color: #6F4E37;       /* primary */
+  color: #6F4E37;
+}
+
+/* ===== Features ===== */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 3rem auto 0;
+}
+
+.feature-card {
+  background: #ffffff;          /* card */
+  border: 1px solid rgba(111, 78, 55, 0.15); /* border */
+  border-radius: 0.625rem;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #6F4E37;              /* primary */
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: #3E2723;          /* sidebar */
+  color: #F5F1ED;               /* sidebar-foreground */
+  padding: 3rem 1.5rem;
+}
+
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.footer-icon {
+  background: #C17817;          /* accent */
+  color: #ffffff;               /* accent-foreground */
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.footer-section h4 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+  color: #F5F1ED;              /* sidebar-foreground */
+  font-size: 0.95rem;
+}
+
+.footer-section ul a {
+  text-decoration: none;
+  color: #F5F1ED;
+  transition: color 0.2s ease;
+}
+
+.footer-section ul a:hover {
+  color: #C17817;              /* accent */
+}
+
+.footer-copy {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #A89B91;
+}
