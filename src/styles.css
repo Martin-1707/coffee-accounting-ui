@@ -1,11 +1,191 @@
-/* You can add global styles to this file, and also import other style files */
-
+/* ========== Reset básico ========== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body { 
-    position: relative;
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
+
+/* =======================
+   🎨 Coffee ERP Variables
+   ======================= */
+:root {
+    --font-size: 16px;
+    --background: #FAFAF8;
+    --foreground: #3E2723;
+    --card: #ffffff;
+    --card-foreground: #3E2723;
+    --popover: #ffffff;
+    --popover-foreground: #3E2723;
+    --primary: #6F4E37;
+    --primary-foreground: #ffffff;
+    --primary-hover: #7A554D;
+    /* ← nuevo para hover */
+    --secondary: #F5F1ED;
+    --secondary-foreground: #3E2723;
+    --muted: #E8E3DD;
+    --muted-foreground: #6B5D54;
+    --accent: #C17817;
+    --accent-foreground: #ffffff;
+    --destructive: #C1440E;
+    --destructive-foreground: #ffffff;
+    --border: rgba(111, 78, 55, 0.15);
+    --input: transparent;
+    --input-background: #F5F1ED;
+    --switch-background: #D4C4B0;
+    --ring: #A0826D;
+    --chart-1: #6F4E37;
+    --chart-2: #C17817;
+    --chart-3: #4A7C59;
+    --chart-4: #8B7355;
+    --chart-5: #D4A574;
+    --radius: 0.625rem;
+    --sidebar: #3E2723;
+    --sidebar-foreground: #F5F1ED;
+    --sidebar-primary: #C17817;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #4D342F;
+    --sidebar-accent-foreground: #F5F1ED;
+    --sidebar-border: #5D4037;
+    --sidebar-ring: #A0826D;
+    --success: #4A7C59;
+    --success-foreground: #ffffff;
+    --warning: #D4A574;
+    --warning-foreground: #3E2723;
+    --info: #6F87A6;
+    --info-foreground: #ffffff;
+}
+
+/* 🌙 Modo oscuro */
+.dark {
+    --background: #1C1410;
+    --foreground: #F5F1ED;
+    --card: #2A1F1A;
+    --card-foreground: #F5F1ED;
+    --popover: #2A1F1A;
+    --popover-foreground: #F5F1ED;
+    --primary: #C17817;
+    --primary-foreground: #ffffff;
+    --primary-hover: #D08C3A;
+    --secondary: #3E2723;
+    --secondary-foreground: #F5F1ED;
+    --muted: #3E2723;
+    --muted-foreground: #E8E3DD; /* más claro para iconos y texto de búsqueda */
+    --accent: #8B7355;
+    --accent-foreground: #fff8f1;
+    --border: rgba(160, 130, 109, 0.2);
+    --input-background: #3E2723;
+    --table-header: #fff8f1; /* encabezado tabla más claro y fuerte */
+    --table-header-bold: #fff8f1; /* para negrita */
+    --id-bold: #FFD180; /* color destacado para el id */
+    --paginator-selected: #FFD180; /* color visible para número seleccionado */
+    --ring: #A0826D;
+    --chart-1: #C17817;
+    --chart-2: #4A7C59;
+    --chart-3: #D4A574;
+    --chart-4: #8B7355;
+    --chart-5: #6F87A6;
+    --sidebar: #1C1410;
+    --sidebar-foreground: #F5F1ED;
+    --sidebar-primary: #C17817;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #3E2723;
+    --sidebar-accent-foreground: #F5F1ED;
+    --sidebar-border: #3E2723;
+    --sidebar-ring: #A0826D;
+    --success: #4A7C59;
+    --success-foreground: #ffffff;
+    --warning: #D4A574;
+    --warning-foreground: #1C1410;
+    --info: #6F87A6;
+    --info-foreground: #ffffff;
+}
+
+/* =======================
+   🔤 Tipografía base
+   ======================= */
+html {
+    font-size: var(--font-size);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Raleway", sans-serif;
+    /* ← elige Raleway o Roboto, no ambos */
+    margin: 0;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* =======================
+   🧩 Elementos comunes
+   ======================= */
+.card {
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.btn {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    padding: 10px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--primary-hover);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
+    border-color: color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+.input {
+    background: var(--input-background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    color: var(--foreground);
+}
+
+.input::placeholder {
+    color: var(--muted-foreground);
+}
+
+.input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--ring) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
+}
+
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+    padding: 12px 20px;
+}
+
+/* ====== Personalización global del modal de Compra ====== */
+.purchase-backdrop {
+    background: rgba(62, 39, 35, 0.35) !important;
+}
+
+.purchase-dialog .mat-mdc-dialog-surface {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(62, 39, 35, 0.2);
+    padding: 0;
+    overflow: visible;
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
 }
