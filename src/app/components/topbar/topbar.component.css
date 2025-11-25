@@ -1,0 +1,111 @@
+.topbar{
+  position: sticky; top:0; z-index:50; height:64px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px; padding: 0 16px;
+  color: var(--card-foreground);
+}
+
+/* Buscador */
+.search{
+  display: flex; align-items: center; gap: 6px;
+  background: var(--input-background); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0 8px; height: 38px; min-width: 280px;
+}
+.search input{ background: transparent; border: none; color: var(--foreground); }
+
+/* Botones */
+.btn-outline{ border-color: var(--border); color: var(--foreground); }
+.btn-outline:hover{ border-color: var(--primary); color: var(--primary); }
+
+.user-btn {
+  text-transform: none;
+  color: var(--foreground);
+  padding: 0 8px;
+  height: 48px;
+}
+
+/* Contenido interno en fila */
+.user-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar redondo */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+
+/* Info de usuario a la derecha, en columna */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.1;
+  text-align: left;
+  min-width: 80px;
+}
+
+.user-name {
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.user-role {
+  font-size: .78rem;
+  color: var(--muted-foreground);
+}
+
+.avatar{
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: grid;
+  place-items: center;
+  font-weight: 600;
+}
+.user-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.1;
+  text-align: left;
+  min-width: 80px;
+}
+.user-name{
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.user-role{
+  font-size: .78rem;
+  color: var(--muted-foreground);
+}
+
+.menu-header{ padding: 10px 16px 8px; }
+.menu-name{ font-weight: 600; }
+.menu-email{ font-size: .8rem; color: var(--muted-foreground); }
+
+.spacer{ flex: 1; }
+
+/* Responsive */
+.only-sm{ display: none; }
+@media (max-width: 992px){
+  .only-sm{ display: inline-flex; }
+  .hide-sm{ display: none; }
+}
+@media (max-width: 600px){
+  .hide-xs{ display: none; }
+  .search{ min-width: 0; }
+}

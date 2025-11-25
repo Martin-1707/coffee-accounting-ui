@@ -1,0 +1,69 @@
+<mat-toolbar class="topbar">
+  <button mat-icon-button class="only-sm" aria-label="Menú">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="search">
+    <mat-icon>search</mat-icon>
+    <input matInput placeholder="Buscar en el sistema..." [(ngModel)]="searchQuery" />
+  </div>
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button (click)="toggleTheme()" >
+    <mat-icon>{{ iconTheme() }}</mat-icon>
+  </button>
+
+  <button mat-stroked-button class="btn-outline" [matMenuTriggerFor]="newMenu">
+    <mat-icon>add</mat-icon>
+    <span class="hide-xs">Nuevo</span>
+  </button>
+  
+  <mat-menu #newMenu="matMenu">
+    <button mat-menu-item [routerLink]="['/venta','nuevo']">
+      <mat-icon>point_of_sale</mat-icon> Nueva Venta
+    </button>
+    <button mat-menu-item [routerLink]="['/producto','nuevo']">
+      <mat-icon>inventory_2</mat-icon> Nuevo Producto
+    </button>
+    <button mat-menu-item [routerLink]="['/compra-insumo','nuevo']">
+      <mat-icon>assignment</mat-icon> Nueva Orden de Compra
+    </button>
+    <button mat-menu-item [routerLink]="['/usuario']">
+      <mat-icon>person_add</mat-icon> Nuevo Usuario
+    </button>
+  </mat-menu>
+
+  <button mat-icon-button aria-label="Ayuda">
+    <mat-icon>help_outline</mat-icon>
+  </button>
+
+  <button mat-icon-button matBadge="3" matBadgeColor="warn" aria-label="Notificaciones">
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn" aria-label="Usuario">
+    <div class="user-content">
+      <div class="avatar">{{ initials() }}</div>
+      <div class="user-info hide-sm">
+        <div class="user-name">{{ userName }}</div>
+        <div class="user-role">{{ userRole }}</div>
+      </div>
+    </div>
+  </button>
+
+
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <div class="menu-header">
+      <div class="menu-name">{{ userName }}</div>
+      <div class="menu-email" *ngIf="userRole">{{ userRole }}</div>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="goProfile()"><mat-icon> person</mat-icon> Perfil</button>
+    <button mat-menu-item (click)="goSettings()"><mat-icon>settings</mat-icon> Configuración</button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon color="warn">logout</mat-icon> Cerrar Sesión
+    </button>
+  </mat-menu>
+</mat-toolbar>
