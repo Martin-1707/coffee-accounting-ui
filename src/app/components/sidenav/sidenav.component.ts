@@ -8,6 +8,11 @@ import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { TopbarComponent } from "../topbar/topbar.component";
+
+type MenuSection = { kind: 'section'; section: string };
+type MenuItem = { kind: 'item'; icon: string; label: string; route: string; roles: string[] };
+type MenuNode = MenuSection | MenuItem;
 
 @Component({
   selector: 'app-sidenav',
@@ -20,7 +25,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatIconModule,
     MatButtonModule,
     MatListModule,
-    RouterModule
+    RouterModule,
+    TopbarComponent
   ],
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css'],
@@ -31,28 +37,73 @@ export class SidenavComponent implements OnInit {
   username: string = '';
 
   collapsed = false;
-  isLargeScreen = window.innerWidth > 768; // Detecta si la pantalla es grande
+  isLargeScreen = window.innerWidth > 768;
   mode: 'over' | 'side' = this.isLargeScreen ? 'side' : 'over';
 
-  // 📌 Esta propiedad permitirá cambiar la clase en `<mat-sidenav-content>`
   @HostBinding('class.content-shifted') get contentShifted() {
     return !this.collapsed && this.isLargeScreen;
   }
 
-  menuItems: any[] = [
-    { icon: 'dashboard', label: 'Inicio', route: '/dashboard', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo', roles: ['Administrador', 'Supervisor', 'Vendedor'] },
-    { icon: 'assignment', label: 'Estado de Venta', route: '/estado-venta', roles: ['Administrador'] },
-    { icon: 'history', label: 'Historial', route: '/historial-estado-venta', roles: ['Administrador', 'Cliente', 'Vendedor'] },
-    { icon: 'store', label: 'Producto', route: '/producto', roles: ['Administrador', 'Supervisor', 'Cliente', 'Vendedor'] },
-    { icon: 'admin_panel_settings', label: 'Rol', route: '/rol', roles: ['Administrador'] },
-    { icon: 'credit_card', label: 'Tipo de Pago', route: '/tipo-pago', roles: ['Administrador'] },
-    { icon: 'people', label: 'Usuario', route: '/usuario', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'sell', label: 'Venta', route: '/venta', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'payments', label: 'Abono', route: '/abonos', roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente'] },
-    { icon: 'receipt_long', label: 'Ventas-Producto', route: '/ventas-producto', roles: ['Administrador', 'Vendedor', 'Cliente'] },
-    { icon: 'history', label: 'Historial-Precio-Producto', route: '/historial-precio-producto', roles: ['Administrador', 'Vendedor'] }
+  // --- Menú completo con secciones ---
+  private allMenu: MenuNode[] = [
+    // PRINCIPAL
+    { kind: 'section', section: 'PRINCIPAL' },
+    {
+      kind: 'item', icon: 'home', label: 'Inicio', route: '/dashboard',
+      roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente']
+    },
+
+    // OPERACIONES
+    { kind: 'section', section: 'OPERACIONES' },
+    {
+      kind: 'item', icon: 'shopping_cart', label: 'Compras', route: '/compra-insumo',
+      roles: ['Administrador', 'Supervisor', 'Vendedor']
+    },
+    {
+      kind: 'item', icon: 'trending_up', label: 'Ventas', route: '/venta',
+      roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente']
+    },
+    {
+      kind: 'item', icon: 'inventory_2', label: 'Productos', route: '/producto',
+      roles: ['Administrador', 'Supervisor', 'Cliente']
+    },
+    {
+      kind: 'item', icon: 'credit_card', label: 'Abonos', route: '/abonos',
+      roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente']
+    },
+
+    // FINANZAS
+    { kind: 'section', section: 'FINANZAS' },
+    {
+      kind: 'item', icon: 'account_balance_wallet', label: 'Ventas - Producto', route: '/ventas-producto',
+      roles: ['Administrador', 'Cliente']
+    },
+    {
+      kind: 'item', icon: 'assignment', label: 'Historial de Ventas', route: '/historial-estado-venta',
+      roles: ['Administrador', 'Supervisor', 'Cliente']
+    },
+
+    // ADMINISTRACIÓN
+    { kind: 'section', section: 'ADMINISTRACIÓN' },
+    { kind: 'item', icon: 'admin_panel_settings', label: 'Roles', route: '/rol', roles: ['Administrador'] },
+    { kind: 'item', icon: 'credit_card', label: 'Tipos de Pago', route: '/tipo-pago', roles: ['Administrador'] },
+    {
+      kind: 'item', icon: 'description', label: 'Estado de Venta', route: '/estado-venta',
+      roles: ['Administrador', 'Supervisor']
+    },
+    {
+      kind: 'item', icon: 'people', label: 'Usuarios', route: '/usuario',
+      roles: ['Administrador', 'Supervisor', 'Cliente']
+    },
+    {
+      kind: 'item', icon: 'history', label: 'Historial de Precios', route: '/historial-precio-producto',
+      roles: ['Administrador', 'Supervisor']
+    },
   ];
+
+
+  // Menú que se pinta según rol
+  menuItems: MenuNode[] = [];
 
   constructor(
     private loginService: LoginService,
@@ -61,25 +112,43 @@ export class SidenavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.rol = this.loginService.showRole() || '';
     this.username = this.loginService.showUser() || '';
 
-    this.menuItems = this.menuItems.filter(item => item.roles.includes(this.rol));
+    // Filtra manteniendo encabezados que tengan al menos un item visible debajo
+    const out: MenuNode[] = [];
+    for (let i = 0; i < this.allMenu.length; i++) {
+      const node = this.allMenu[i];
 
+      if (node.kind === 'section') {
+        // ¿hay algún item visible bajo esta sección?
+        let keepSection = false;
+        for (let j = i + 1; j < this.allMenu.length; j++) {
+          const next = this.allMenu[j];
+          if (next.kind === 'section') break;
+          if (next.roles.includes(this.rol)) { keepSection = true; break; }
+        }
+        if (keepSection) out.push(node);
+      } else {
+        if (node.roles.includes(this.rol)) out.push(node);
+      }
+    }
+    this.menuItems = out;
+
+
+    // Responsivo
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       this.isLargeScreen = !result.matches;
       this.mode = this.isLargeScreen ? 'side' : 'over';
 
       if (!this.isLargeScreen) {
-        this.collapsed = true; // En móviles, siempre cerrado
+        this.collapsed = true; // móvil: cerrado
       } else {
         const savedState = localStorage.getItem('sidenavCollapsed');
         this.collapsed = savedState ? JSON.parse(savedState) : false;
       }
     });
   }
-
 
   // Alternar colapsado sin afectar si el sidenav está abierto
   toggleCollapse(): void {
@@ -96,9 +165,11 @@ export class SidenavComponent implements OnInit {
     }
   }
 
+  goHome() { this.router.navigate(['/home']); }
+
   logout() {
     this.loginService.logout();
     this.router.navigate(['/home']);
     console.log("Cerrando sesión...");
-  }
+  }  
 }

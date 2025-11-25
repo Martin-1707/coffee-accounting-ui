@@ -1,159 +1,262 @@
+/* ====== SIDENAV BASE ====== */
 .sidenav {
-  background: #263238;
-  transition: all 0.3s ease;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  width: 5rem;
-  height: 100vh; /* Ajusta la altura para que ocupe toda la pantalla */
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+  background: var(--card);
+  color: var(--foreground);
+  width: 260px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Distribuye los elementos */
-
-  .logo-container {
-  display: flex;
-    align-items: center;
-  padding: 0.938rem 0.938rem 0.938rem;
-    width: 100%;
-
-    .logo {
-      background: #fff;
-      text-align: center;
-      width: 3rem;
-      min-width: 3rem;
-      border-radius: 0.313rem;
-      padding: 0.313rem;
-      font-size: 24px;
-      font-weight: 900;
-      cursor: pointer;
-      border: none;
-    }
-
-    .logo-text {
-      margin-left: 1.5rem;
-      font-size: 24px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .btn-close {
-      margin-left: auto;
-      cursor: pointer;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background-color: transparent;
-      border: none;
-
-      .mat-icon {
-        color: #fff;
-        font-size: 24px;
-      }
-    }
-  }
-}
-
-.logout-button {
-  width: 100%; /* Para que ocupe el ancho completo */
-  text-align: left;
-  padding: 0.938rem; /* Añade padding para que no esté pegado al borde */
-  margin-top: auto; /* Se pegará al fondo del sidenav */
-}
-
-.sidenav-collapsed {
-  width: 16.5625rem;
-}
-
-.sidenav-nav {
-  list-style: none;
-  padding: 0.938rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-
-  .sidenav-nav-item {
-    width: 100%;
-    margin-bottom: 0.625rem;
-
-    .sidenav-nav-link {
-      display: flex;
-      align-items: center;
-      height: 3rem;
-      text-decoration: none;
-      border-radius: 0.625rem;
-      transition: all 0.3s ease;
-
-      .sidenav-link-icon {
-        font-size: 22px;
-        width: 2rem;
-        min-width: 2rem;
-        margin: 0 0.5rem;
-        text-align: center;
-        color: #f3f3f3;
-      }
-
-      .sidenav-link-text {
-        margin-left: 1.5rem;
-        color: #f3f3f3;
-      }
-    }
-  }
-  
-.sidenav-nav-item:hover .sidenav-nav-link,
-.sidenav-nav-item .sidenav-nav-link.active {
-  background-color: #fff;
-}
-
-.sidenav-nav-item:hover .sidenav-link-icon,
-.sidenav-nav-item .sidenav-nav-link.active .sidenav-link-icon,
-.sidenav-nav-item:hover .sidenav-link-text,
-.sidenav-nav-item .sidenav-nav-link.active .sidenav-link-text {
-  color: #000;
-}
-
+  box-sizing: border-box;
+  transition: width .3s ease;
 }
 
 .sidenav-container {
   height: 100vh;
+  overflow-x: hidden;
 }
 
-.mat-sidenav-content {
-  flex: 1; /* Que ocupe el espacio restante */
+.sidenav-inner {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
-.content-container {
-  padding: 20px;
-  background-color: #ecf0f1;
+/* ====== LOGO ====== */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background 0.2s ease;
+}
+
+.logo:hover {
+  background: var(--primary-hover);
+}
+
+.logo mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+.logo-subtitle {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  line-height: 1.2;
+}
+
+/* ====== MENÚ PRINCIPAL ====== */
+.sidenav-nav {
   flex: 1;
-  transition: margin-left 0.3s ease;
+  padding: 10px 8px;
+  overflow-x: hidden;
 }
 
-/* Cuando el sidenav está expandido */
-.content-expanded {
-  margin-left: 16.5625rem; /* Ajusta esto según el ancho de tu sidenav */
-  transition: margin-left 0.3s ease;
+.section-title {
+  padding: 10px 14px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
 }
 
-/* Cuando el sidenav está colapsado */
-.content-collapsed {
-  margin-left: 5rem; /* Ajusta esto según el ancho del sidenav colapsado */
-  transition: margin-left 0.3s ease;
+.section-title:not(:first-child) {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
 }
 
-/* Hacer responsive */
-@media (max-width: 768px) {
-  .sidenav-container {
-    flex-direction: column;
-  }
-  .sidenav {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
+/* ====== ÍTEMS DEL MENÚ ====== */
+.sidenav-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin: 4px 6px;
+  border-radius: 12px;
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hover */
+.sidenav-nav-link:hover {
+  background: var(--secondary);
+  color: var(--sidebar-border);
+}
+
+/* Activo */
+.sidenav-nav-link.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.sidenav-nav-link.active .sidenav-link-icon {
+  color: var(--primary-foreground);
+}
+
+/* Íconos */
+.sidenav-link-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--foreground);
+  transition: color 0.15s ease;
+}
+
+.sidenav-nav-link:hover .sidenav-link-icon {
+  color: var(--sidebar-border);
+}
+
+/* ====== FOOTER ====== */
+.sidenav-footer {
+  border-top: 1px solid var(--border);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--card);
+}
+
+.footer-btn {
+  width: 100%;
+  justify-content: flex-start;
+  color: var(--muted-foreground);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.footer-btn:hover {
+  background: var(--secondary);
+  color: var(--sidebar-border);
+}
+
+.footer-btn mat-icon {
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.footer-btn[color="warn"],
+.logout-button {
+  color: var(--destructive);
+}
+
+.logout-button:hover,
+.footer-btn[color="warn"]:hover {
+  background: color-mix(in srgb, var(--destructive) 10%, transparent);
+}
+
+/* ====== MODO COLAPSADO ====== */
+.sidenav-collapsed {
+  width: 80px;
+}
+
+.sidenav-collapsed .logo {
+  width: 36px;
+  height: 36px;
+}
+
+.sidenav-collapsed .sidenav-link-text,
+.sidenav-collapsed .section-title,
+.sidenav-collapsed .logo-text-container,
+.sidenav-collapsed .footer-btn span {
+  display: none;
+}
+
+.sidenav-collapsed .sidenav-link-icon {
+  margin-right: 0;
+}
+
+.sidenav-collapsed .footer-btn {
+  justify-content: center;
+}
+
+/* Hover / Activo colapsado (círculo centrado) */
+.sidenav-collapsed .sidenav-nav-link {
+  justify-content: center;
+  padding: 10px 0;
+  margin: 6px 8px;
+  position: relative;
+}
+
+.sidenav-collapsed .sidenav-nav-link::before {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: transparent;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  transition: background 0.2s ease;
+}
+
+.sidenav-collapsed .sidenav-nav-link:hover::before {
+  background: var(--secondary);
+}
+
+.sidenav-collapsed .sidenav-nav-link.active::before {
+  background: var(--primary);
+}
+
+.sidenav-collapsed .sidenav-nav-link.active {
+  color: var(--primary-foreground);
+}
+
+/* Quitar cualquier borde redondeado del sidenav */
+.sidenav {
+  border-radius: 0 !important;
+}
+
+/* Angular Material: contenedor interno del drawer */
+.sidenav .mat-drawer-inner-container {
+  border-radius: 0 !important;
+  box-shadow: none; /* opcional: por si no quieres sombra tipo card */
 }
