@@ -1,14 +1,12 @@
 /* ===== Header ===== */
-
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.92);
-  /* card con transparencia */
+  background: color-mix(in srgb, var(--card) 92%, transparent); /* card con transparencia */
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(111, 78, 55, 0.15);
-  /* border */
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* ===== Layout ===== */
@@ -35,13 +33,10 @@
   display: inline-flex;
   width: 40px;
   height: 40px;
-  border-radius: 0.625rem;
-  /* radius-lg */
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #6F4E37;
-  /* primary */
+  background: var(--primary);
 }
-
 .brand__logo img {
   width: 100%;
   height: 100%;
@@ -50,8 +45,8 @@
 
 .brand__name {
   font-size: 18px;
-  color: #3E2723;
-  /* foreground */
+  color: var(--foreground);
+  font-weight: 600;
 }
 
 /* ===== Nav ===== */
@@ -65,100 +60,67 @@
 
 .nav a {
   text-decoration: none;
-  color: #6B5D54;
-  /* muted-foreground */
+  color: var(--muted-foreground);
   font-size: 14px;
   transition: color 0.15s ease;
 }
-
 .nav a:hover,
 .nav a.active {
-  color: #6F4E37;
-  /* primary */
+  color: var(--primary);
 }
 
-/* ===== Botón de login ===== */
-.login-button .btn-login {
+/* ===== Botones ===== */
+.login-button {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* separa “Ir al sistema” de “Cerrar/Iniciar” */
+}
+
+.btn-login {
   height: 36px;
   padding: 0 14px;
-  border-radius: 0.625rem;
-  /* radius-lg */
-  border: 1px solid rgba(111, 78, 55, 0.15);
-  /* border */
-  background: #6F4E37;
-  /* primary */
-  color: #ffffff;
-  /* primary-foreground */
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--primary);
+  color: var(--primary-foreground);
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
   transition: box-shadow 0.15s ease, transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
 }
-
-.login-button .btn-login:hover {
-  box-shadow: 0 6px 16px rgba(160, 130, 109, 0.35);
-  /* ring */
+.btn-login:hover {
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--ring) 35%, transparent);
+}
+.btn-login:active {
+  transform: translateY(1px);
 }
 
-.login-button .btn-login:active {
-  transform: translateY(1px);
+/* Outline button (Ir al sistema) */
+.btn-outline {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn-outline:hover {
+  background: color-mix(in srgb, var(--primary) 6%, var(--background));
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  color: var(--primary);
 }
 
 /* ===== Accesibilidad focus ===== */
 .nav a:focus-visible,
-.login-button .btn-login:focus-visible,
-.brand__logo:focus-visible {
-  outline: 2px solid rgba(160, 130, 109, 0.7);
-  /* ring */
+.btn-login:focus-visible,
+.brand__logo:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ring) 70%, transparent);
   outline-offset: 2px;
-  border-radius: 0.5rem;
-}
-
-.login-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* separa “Ir al sistema” de “Cerrar/Iniciar” */
-}
-
-.btn-outline {
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(111, 78, 55, 0.25);
-  background: transparent;
-  color: #3E2723;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background .15s ease, border-color .15s ease;
-}
-
-.btn-outline:hover {
-  background: rgba(111, 78, 55, 0.06);
-  border-color: rgba(111, 78, 55, 0.35);
-}
-
-.login-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* separa “Ir al sistema” de “Cerrar/Iniciar” */
-}
-
-.btn-outline {
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(111, 78, 55, 0.25);
-  background: transparent;
-  color: #3E2723;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background .15s ease, border-color .15s ease;
-}
-
-.btn-outline:hover {
-  background: rgba(111, 78, 55, 0.06);
-  border-color: rgba(111, 78, 55, 0.35);
+  border-radius: calc(var(--radius) - 2px);
 }
 
 /* ===== Responsive ===== */

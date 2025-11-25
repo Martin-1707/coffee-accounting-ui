@@ -39,7 +39,7 @@
     --chart-4: #8B7355;
     --chart-5: #D4A574;
     --radius: 0.625rem;
-    --sidebar: #3E2723;
+    --sidebar: #ffffff;
     --sidebar-foreground: #F5F1ED;
     --sidebar-primary: #C17817;
     --sidebar-primary-foreground: #ffffff;
@@ -188,4 +188,15 @@ body {
     background: var(--card);
     color: var(--card-foreground);
     border: 1px solid var(--border);
+}
+
+/* ==== Fix fondo en todo el shell ==== */
+mat-sidenav-container,
+mat-drawer-container {
+  background: var(--background) !important;
+}
+
+mat-sidenav-content,
+.mat-drawer-content {
+  background: var(--background) !important;
 }
