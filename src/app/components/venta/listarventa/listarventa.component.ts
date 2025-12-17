@@ -22,6 +22,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
+type Vista = 'cards' | 'table';
+
 @Component({
   selector: 'app-listarventa',
   standalone: true,
@@ -42,6 +46,7 @@ import { FormsModule } from '@angular/forms';
     MatDatepickerModule,
     MatNativeDateModule,
     FormsModule,
+    MatButtonToggleModule
   ],
   templateUrl: './listarventa.component.html',
   styleUrl: './listarventa.component.css',
@@ -56,7 +61,8 @@ export class ListarventaComponent implements OnInit {
   historialEstados: HistorialEstadoVenta[] = [];
   ventasProductos: VentasProducto[] = [];
 
-  modoTarjeta: boolean = true;
+  /** Vista actual */
+  vista: Vista = 'table';
 
   // Filtros para la tabla
   estadosVenta: string[] = ['Pagado', 'Pagando', 'Sin pagar']; // o los estados que uses en tu sistema
@@ -66,6 +72,7 @@ export class ListarventaComponent implements OnInit {
   clienteSeleccionado: string = '';
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
+  q = '';
 
   // Lista de clientes únicos para el filtro
   clientesUnicos: string[] = [];
@@ -73,55 +80,52 @@ export class ListarventaComponent implements OnInit {
   // Backup original para aplicar filtros sin perder datos
   todasLasVentas: Venta[] = [];
 
-  constructor(private vS: VentaService, private hevS: HistorialEstadoVentaService, private vpS: VentasProductoService, private router: Router, private loginService: LoginService) { }
+  constructor(
+    private vS: VentaService,
+    private hevS: HistorialEstadoVentaService,
+    private vpS: VentasProductoService,
+    private router: Router,
+    private loginService: LoginService
+  ) { }
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
-
     this.cargarProductosVenta();
 
     this.usuarioAutenticado = this.loginService.showUser() || '';
     this.rolUsuario = this.loginService.showRole() || '';
 
     this.vS.list().subscribe((data) => {
-      let ventasFiltradas: Venta[] = [];
-
-      if (this.rolUsuario === 'Cliente') {
-        ventasFiltradas = data.filter((venta) => venta.usuarioCliente.username === this.usuarioAutenticado);
-      } else if (this.rolUsuario === 'Vendedor') {
-        ventasFiltradas = data.filter((venta) => venta.usuarioVendedor.username === this.usuarioAutenticado);
-      } else {
-        ventasFiltradas = data;
-      }
-
-      this.todasLasVentas = ventasFiltradas; // Guardamos para filtros
-      this.dataSource = new MatTableDataSource(ventasFiltradas);
+      const porRol = this.aplicarFiltroPorRol(data);
+      this.todasLasVentas = porRol;
+      this.dataSource = new MatTableDataSource(porRol);
       this.dataSource.paginator = this.paginator;
 
-      // Extraer clientes únicos para el filtro
-      this.clientesUnicos = Array.from(
-        new Set(ventasFiltradas.map(v => v.usuarioCliente.username))
-      );
+      // clientes únicos (usar username para precisión o nombre si prefieres)
+      this.clientesUnicos = Array.from(new Set(porRol.map(v => v.usuarioCliente?.username || ''))).filter(Boolean);
     });
 
     this.vS.getList().subscribe((data) => {
-      if (this.rolUsuario === 'Cliente') {
-        this.dataSource = new MatTableDataSource(
-          data.filter((venta) => venta.usuarioCliente.username === this.usuarioAutenticado)
-        );
-      } else if (this.rolUsuario === 'Vendedor') {
-        this.dataSource = new MatTableDataSource(
-          data.filter((venta) => venta.usuarioVendedor.username === this.usuarioAutenticado)
-        );
-      } else {
-        this.dataSource = new MatTableDataSource(data);
-      }
+      const porRol = this.aplicarFiltroPorRol(data);
+      this.todasLasVentas = porRol;
+      this.dataSource = new MatTableDataSource(porRol);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  private aplicarFiltroPorRol(data: Venta[]): Venta[] {
+    if (this.rolUsuario === 'Cliente') {
+      return data.filter(v => v.usuarioCliente?.username === this.usuarioAutenticado);
+    }
+    if (this.rolUsuario === 'Vendedor') {
+      return data.filter(v => v.usuarioVendedor.nombre === this.usuarioAutenticado);
+    }
+    return data;
   }
 
   irACrearVenta() {
@@ -134,22 +138,30 @@ export class ListarventaComponent implements OnInit {
     });
   }
 
-  getEstadoVenta(venta: Venta): { texto: string; color: string } {
+  getEstadoVenta(venta: Venta): { texto: 'Pagado' | 'Pagando' | 'Sin pagar'; color: string } {
     if (venta.saldopendiente === 0) {
-      return { texto: 'Pagado', color: 'green' };
+      return { texto: 'Pagado', color: '#198754' };
     } else if (venta.saldopendiente < venta.monto) {
-      return { texto: 'Pagando', color: 'orange' };
+      return { texto: 'Pagando', color: '#d97706' };
     } else {
-      return { texto: 'Sin pagar', color: 'red' };
+      return { texto: 'Sin pagar', color: '#dc2626' };
     }
   }
 
+  estadoChip(estado: string) {
+    return {
+      'chip--ok': estado === 'Pagado',
+      'chip--warn': estado === 'Pagando',
+      'chip--bad': estado === 'Sin pagar',
+    };
+  }
+
   obtenerProductosDeVenta(idVenta: number): VentasProducto[] {
-    return this.ventasProductos.filter(p => p.venta.idventa === idVenta);
+    return this.ventasProductos.filter(p => p.venta?.idventa === idVenta);
+    // si en tu DTO viene id directamente, ajusta a p.idventa
   }
 
   agregarAbono(venta: Venta) {
-    // Aquí puedes redirigir a un componente o abrir un diálogo para agregar abono
     this.router.navigate(['/abonos/nuevo'], { queryParams: { idVenta: venta.idventa } });
   }
 
@@ -157,50 +169,66 @@ export class ListarventaComponent implements OnInit {
     this.router.navigate(['/abonos/venta', venta.idventa]);
   }
 
-  aplicarFiltros(): void {
-    let ventasFiltradas = [...this.todasLasVentas];
-
-    // Filtro por estado
-    if (this.estadoSeleccionado) {
-      ventasFiltradas = ventasFiltradas.filter(v => {
-        const estado = this.getEstadoVenta(v).texto;
-        return estado === this.estadoSeleccionado;
-      });
-    }
-
-    // Filtro por cliente
-    if (this.clienteSeleccionado) {
-      ventasFiltradas = ventasFiltradas.filter(v =>
-        v.usuarioCliente.username === this.clienteSeleccionado
-      );
-    }
-
-    // Filtro por rango de fechas
-    if (this.fechaInicio && this.fechaFin) {
-      ventasFiltradas = ventasFiltradas.filter(v => {
-        const fechaVenta = new Date(v.fechaventa); // Asegúrate que `fechaventa` es una fecha válida
-        return fechaVenta >= this.fechaInicio! && fechaVenta <= this.fechaFin!;
-      });
-    }
-
-    // Aplicar resultado filtrado
-    this.dataSource = new MatTableDataSource(ventasFiltradas);
-    this.dataSource.paginator = this.paginator;
-  }
-
-  onCambioFiltro(): void {
+  onSearch(v: string) {
+    this.q = (v || '').trim();
     this.aplicarFiltros();
   }
 
+  aplicarFiltros(): void {
+    let list = [...this.todasLasVentas];
+
+    // texto
+    const q = this.q.toLowerCase();
+    if (q) {
+      list = list.filter(v =>
+        String(v.idventa ?? '').toLowerCase().includes(q) ||
+        String(v.usuarioCliente?.nombre ?? '').toLowerCase().includes(q) ||
+        String(v.usuarioVendedor?.nombre ?? '').toLowerCase().includes(q)
+      );
+    }
+
+    // estado
+    if (this.estadoSeleccionado) {
+      list = list.filter(v => this.getEstadoVenta(v).texto === this.estadoSeleccionado);
+    }
+
+    // cliente (usando username; cambia a nombre si prefieres)
+    if (this.clienteSeleccionado) {
+      list = list.filter(v => v.usuarioCliente?.username === this.clienteSeleccionado);
+    }
+
+    // fechas (acepta desde, hasta o ambos; “hasta” inclusivo a 23:59:59)
+    if (this.fechaInicio || this.fechaFin) {
+      const ini = this.fechaInicio ? new Date(this.fechaInicio) : null;
+      const fin = this.fechaFin ? new Date(this.fechaFin) : null;
+      if (fin) fin.setHours(23, 59, 59, 999);
+
+      list = list.filter(v => {
+        const fv = new Date(v.fechaventa);
+        if (ini && !fin) return fv >= ini;
+        if (!ini && fin) return fv <= fin;
+        if (ini && fin) return fv >= ini && fv <= fin;
+        return true;
+      });
+    }
+
+    this.dataSource = new MatTableDataSource(list);
+    this.dataSource.paginator = this.paginator;
+  }
+
   limpiarFiltros(): void {
+    this.q = '';
     this.estadoSeleccionado = '';
     this.clienteSeleccionado = '';
     this.fechaInicio = null;
     this.fechaFin = null;
 
-    // Restaurar ventas originales sin filtros
     this.dataSource = new MatTableDataSource(this.todasLasVentas);
     this.dataSource.paginator = this.paginator;
   }
 
+  // Puedes agregar este método para cambiar la vista desde el template
+  cambiarVista(vista: Vista) {
+    this.vista = vista;
+  }
 }

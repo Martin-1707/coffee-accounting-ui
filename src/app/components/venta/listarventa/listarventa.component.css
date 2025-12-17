@@ -1,202 +1,82 @@
-/* Contenedor principal */
-.ventas-container {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+/* separación del sidenav */
+.page-wrap {
+  padding: 24px 28px 40px;
 }
 
-/* === NUEVO CONTENEDOR GENERAL DE ENCABEZADO + FILTROS === */
-.header-filtros-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+/* header */
+.header-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 12px;
 }
+.header-left .title { margin: 0; font-size: 22px; font-weight: 700; color: #3E2522; }
+.header-left .subtitle { margin: 4px 0 0; color: #6b7280; font-size: 13px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
 
-/* Header: título + botones de vista */
-.header-acciones {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+/* filtros */
+.filters {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  background: #fff; border: 1px solid #eee; border-radius: 12px;
+  padding: 12px; margin: 12px 0 18px;
 }
+.filters .w-250{ width:250px; } .filters .w-220{ width:220px; }
+.filters .w-200{ width:200px; } .filters .w-160{ width:160px; }
+.filters .filters-actions { margin-left: auto; display: flex; gap: 8px; }
 
-/* Título */
-.header-title .title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin: 0;
-}
+/* tabla */
+.table-wrap { background:#fff; border:1px solid #eee; border-radius:12px; padding:8px; }
+.nice-table th { font-weight:600; color:#463a35; }
+.nice-table td, .nice-table th { padding: 12px 10px; }
 
-/* Botones de vista */
-.view-toggle {
-  display: flex;
-  gap: 0.5rem;
+/* chips */
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:2px 10px; border-radius:999px; font-size:12px; font-weight:600;
+  border:1px solid transparent; background:#f4f4f5; color:#444;
 }
+.chip--ok{ background:#e7f7ed; color:#15803d; border-color:#bbf7d0;}
+.chip--warn{ background:#fff7ed; color:#d97706; border-color:#fed7aa;}
+.chip--bad{ background:#feecec; color:#dc2626; border-color:#fecaca;}
+.chip--soft{ background:#f2f4f7; color:#475569; border-color:#e5e7eb;}
+.chip--muted{ background:#f7f7f7; color:#9ca3af; border-color:#eee;}
+.chip-ico{ font-size:16px; height:16px; width:16px; line-height:16px; }
 
-.view-toggle button {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
-}
+/* texto helper */
+.txt-warn{ color:#d97706; font-weight:600; }
+.txt-muted{ color:#9ca3af; }
 
-.view-toggle button:hover {
-  background-color: #f1f1f1;
+/* cards */
+.cards-grid{
+  display:grid; gap:14px; grid-template-columns: repeat(12,1fr);
 }
+.sale-card{
+  grid-column: span 12 / span 12;
+  border-radius:16px; border:1px solid #eee;
+}
+@media (min-width: 960px){
+  .sale-card{ grid-column: span 4 / span 4; }
+}
+.sale-head{
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:14px 16px 0;
+}
+.sale-id{ font-size:16px; font-weight:700; color:#3E2522; }
+.sale-date{ display:flex; gap:6px; align-items:center; color:#6b7280; font-size:12px; }
+.head-right{ display:flex; gap:8px; align-items:center; }
 
-/* === CONTENEDOR DE FILTROS (GRID RESPONSIVO) === */
-.filtros-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1rem;
-  align-items: end;
-  width: 100%;
-  max-width: 100%;
-  padding: 1rem;
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-}
+.sale-body{ padding:0 16px 16px; }
+.row{ display:flex; gap:8px; align-items:flex-start; margin:8px 0; }
+.row mat-icon{ color:#9ca3af; }
+.col .label{ font-size:11px; color:#9aa1a9; }
+.col .value{ font-size:14px; font-weight:600; color:#463a35; }
+.divider{ height:1px; background:#eee; margin:12px 0; }
 
-/* Filtros individuales */
-.filtros-container mat-form-field {
-  width: 100%;
-}
+.kv{ display:flex; justify-content:space-between; font-size:14px; margin:4px 0; }
+.kv .k{ color:#6b7280; } .kv .v{ font-weight:600; }
 
-/* Botones de acciones */
-.filtros-container .botones-filtro {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 100%; /* Ocupa mismo alto que los campos */
-}
+.badges{ display:flex; gap:8px; margin-top:8px; }
 
-.botones-filtro button {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-weight: 500;
-}
+.mt-8{ margin-top:8px; }
+.empty{ padding:10px; color:#9aa1a9; font-size:13px; }
 
-.botones-filtro mat-icon {
-  font-size: 20px;
-}
- 
-/* Estilo de cada card */
-.venta-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-}
-
-.venta-card:hover {
-  transform: translateY(-5px);
-}
-
-.venta-card mat-card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-.venta-card mat-card-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.venta-card mat-card-content p {
-  margin: 0.4rem 0;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-.venta-card mat-expansion-panel {
-  margin-top: 1rem;
-  border-top: 1px solid #eee;
-}
-
-.venta-card mat-list-item {
-  font-size: 0.9rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed #ddd;
-}
-
-.venta-card mat-list-item:last-child {
-  border-bottom: none;
-}
-
-/* Títulos para agrupación en tabla */
-.ventaproducto-table-container h3 {
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  color: #2c3e50;
-}
-
-/* Tabla */
-table.mat-elevation-z8 {
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #ffffff;
-  margin-bottom: 2rem;
-}
-
-table th {
-  background-color: #f4f6f8;
-  font-weight: bold;
-  color: #333;
-}
-
-table td,
-table th {
-  text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-/* Espaciado para los paginadores */
-mat-paginator {
-  margin-top: 2rem;
-}
-
-/* Botón de menú tipo kebab */
-.boton-kebab {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: transparent !important;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-  min-width: auto;
-  width: auto;
-  height: auto;
-}
-
-.boton-kebab:hover,
-.boton-kebab:focus {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.boton-kebab mat-icon {
-  font-size: 1.6rem;
-  color: #444;
-}
-
-/* Responsive extra para móviles muy pequeños */
-@media (max-width: 600px) {
-  .header-acciones {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+.btn-outline{ width:100%; margin-top:10px; display:flex; gap:8px; align-items:center; justify-content:center; }
+.ml-8{ margin-left:8px; }

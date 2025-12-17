@@ -1,173 +1,236 @@
-<div class="container">
-  <!-- NUEVO CONTENEDOR UNIFICADO -->
-  <div class="header-filtros-container">
-
-    <!-- Título y Acciones -->
-    <div class="header-acciones">
-      <h1 class="title">Lista de ventas</h1>
-
-      <div class="acciones-header">
-        <button mat-mini-fab color="primary" (click)="irACrearVenta()">
-          <mat-icon>add</mat-icon>
-        </button>
-
-        <button mat-icon-button (click)="modoTarjeta = !modoTarjeta" matTooltip="Cambiar vista">
-          <mat-icon>{{ modoTarjeta ? 'table_view' : 'view_module' }}</mat-icon>
-        </button>
-      </div>
+<div class="page-wrap">
+  <!-- Header + acciones -->
+  <div class="header-bar">
+    <div class="header-left">
+      <h1 class="title">Gestión de Ventas</h1>
+      <p class="subtitle">Administre las ventas del sistema</p>
     </div>
 
-    <!-- Filtros -->
-    <div class="filtros-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Estado de venta</mat-label>
-        <mat-select [(ngModel)]="estadoSeleccionado">
-          <mat-option value="">Todos</mat-option>
-          <mat-option *ngFor="let estado of estadosVenta" [value]="estado">{{ estado }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="header-actions">
+      <button mat-mini-fab color="primary" (click)="irACrearVenta()" matTooltip="Nueva venta">
+        <mat-icon>add</mat-icon>
+      </button>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Cliente</mat-label>
-        <mat-select [(ngModel)]="clienteSeleccionado">
-          <mat-option value="">Todos</mat-option>
-          <mat-option *ngFor="let cliente of clientesUnicos" [value]="cliente">{{ cliente }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Desde</mat-label>
-        <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-        <mat-datepicker #pickerInicio></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Hasta</mat-label>
-        <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFin></mat-datepicker>
-      </mat-form-field>
-
-      <div class="botones-filtro">
-        <button mat-raised-button color="primary" (click)="aplicarFiltros()">
-          <mat-icon>filter_alt</mat-icon> Filtrar
-        </button>
-        <button mat-raised-button color="warn" (click)="limpiarFiltros()">
-          <mat-icon>close</mat-icon> Limpiar
-        </button>
-      </div>
+      <!-- Cambia el botón por el toggle group -->
+      <mat-button-toggle-group [value]="vista" (change)="cambiarVista($event.value)" exclusive>
+        <mat-button-toggle value="table">
+          <mat-icon>table_rows</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="cards">
+          <mat-icon>apps</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
   </div>
 
-  <!-- Tabla de Ventas -->
-  <div class="alergia-table" *ngIf="!modoTarjeta">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Filtros -->
+  <div class="filters">
+    <mat-form-field appearance="outline" class="w-250">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-label>Buscar ventas…</mat-label>
+      <input
+        matInput
+        [ngModel]="q"
+        (ngModelChange)="onSearch($event)"
+        placeholder="ID, cliente o vendedor"
+      />
+    </mat-form-field>
 
-      <!-- Columnas aquí... -->
+    <mat-form-field appearance="outline" class="w-200">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estadoSeleccionado" (selectionChange)="aplicarFiltros()">
+        <mat-option value="">Todos</mat-option>
+        <mat-option *ngFor="let estado of estadosVenta" [value]="estado">{{ estado }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-220">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="clienteSeleccionado" (selectionChange)="aplicarFiltros()">
+        <mat-option value="">Todos</mat-option>
+        <mat-option *ngFor="let cliente of clientesUnicos" [value]="cliente">{{ cliente }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-160">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio" (dateChange)="aplicarFiltros()">
+      <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerInicio></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-160">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin" (dateChange)="aplicarFiltros()">
+      <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFin></mat-datepicker>
+    </mat-form-field>
+
+    <div class="filters-actions">
+      <button mat-stroked-button color="primary" (click)="aplicarFiltros()">
+        <mat-icon>filter_alt</mat-icon>
+        Filtrar
+      </button>
+      <button mat-stroked-button color="warn" (click)="limpiarFiltros()">
+        <mat-icon>close</mat-icon>
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== TABLA ========== -->
+  <div class="table-wrap" *ngIf="vista === 'table'">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 nice-table">
+
       <ng-container matColumnDef="c1">
-        <th mat-header-cell *matHeaderCellDef>idVenta</th>
-        <td mat-cell *matCellDef="let element">{{ element.idventa }}</td>
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let e">{{ e.idventa }}</td>
       </ng-container>
 
       <ng-container matColumnDef="c2">
         <th mat-header-cell *matHeaderCellDef>Fecha</th>
-        <td mat-cell *matCellDef="let element">{{ element.fechaventa | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td mat-cell *matCellDef="let e">{{ e.fechaventa | date:'dd/MM/yyyy HH:mm' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="c3">
         <th mat-header-cell *matHeaderCellDef>Monto</th>
-        <td mat-cell *matCellDef="let element">{{ element.monto | currency:'PEN' }}</td>
+        <td mat-cell *matCellDef="let e">{{ e.monto | currency:'PEN' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="c4">
         <th mat-header-cell *matHeaderCellDef>Cliente</th>
-        <td mat-cell *matCellDef="let element">{{ element.usuarioCliente.nombre }}</td>
+        <td mat-cell *matCellDef="let e">{{ e.usuarioCliente?.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="c7">
         <th mat-header-cell *matHeaderCellDef>Vendedor</th>
-        <td mat-cell *matCellDef="let element">{{ element.usuarioVendedor.nombre }}</td>
+        <td mat-cell *matCellDef="let e">{{ e.usuarioVendedor?.nombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="c5">
         <th mat-header-cell *matHeaderCellDef>Factura</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-checkbox [checked]="element.factura" disabled></mat-checkbox>
+        <td mat-cell *matCellDef="let e">
+          <span class="chip chip--soft" [class.chip--ok]="e.factura" [class.chip--muted]="!e.factura">
+            <mat-icon class="chip-ico">{{ e.factura ? 'description' : 'do_not_disturb' }}</mat-icon>
+            {{ e.factura ? 'Sí' : 'No' }}
+          </span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="c6">
-        <th mat-header-cell *matHeaderCellDef>Saldo pendiente</th>
-        <td mat-cell *matCellDef="let element">{{ element.saldopendiente }}</td>
+        <th mat-header-cell *matHeaderCellDef>Pendiente</th>
+        <td mat-cell *matCellDef="let e">
+          <span [class.txt-warn]="e.saldopendiente>0" [class.txt-muted]="e.saldopendiente===0">
+            {{ e.saldopendiente | currency:'PEN' }}
+          </span>
+          <span class="chip ml-8" [ngClass]="estadoChip(getEstadoVenta(e).texto)">
+            {{ getEstadoVenta(e).texto }}
+          </span>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 8, 10, 20, 30]" showFirstLastButtons aria-label="Selecciona la página">
-    </mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 8, 10, 20, 30]" showFirstLastButtons></mat-paginator>
   </div>
 
-  <!-- Cards de Ventas -->
-  <div class="ventas-container" *ngIf="modoTarjeta">
-    <mat-card class="venta-card" *ngFor="let venta of dataSource.data">
-      <mat-card-header class="header-con-opciones">
-        <!-- Título -->
-        <mat-card-title>
-          🛒 {{ venta.usuarioCliente.nombre }} #{{ venta.idventa }}
-        </mat-card-title>
+  <!-- ========== CARDS ========== -->
+  <div class="cards-grid" *ngIf="vista === 'cards'">
+    <mat-card class="sale-card" *ngFor="let v of dataSource.data">
+      <div class="sale-head">
+        <div>
+          <div class="sale-id">VNT-{{ v.idventa | number:'2.0-0' }}</div>
+          <div class="sale-date">
+            <mat-icon>event</mat-icon>
+            {{ v.fechaventa | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
 
-        <!-- Menu de tres puntos -->
-        <button mat-icon-button [matMenuTriggerFor]="menuVenta" aria-label="Opciones de abonos" class="boton-kebab">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #menuVenta="matMenu">
-          <button *ngIf="venta.saldopendiente > 0" mat-menu-item (click)="agregarAbono(venta)">
-            <mat-icon>add</mat-icon>
-            <span>Agregar abono</span>
-          </button>
-          <button *ngIf="venta.saldopendiente < venta.monto" mat-menu-item (click)="verAbonos(venta)">
-            <mat-icon>receipt</mat-icon>
-            <span>Ver abonos</span>
-          </button>
-        </mat-menu>
-      </mat-card-header>
-
-      <mat-card-content>
-        <p>
-          🧾 <b>Estado:</b>
-          <span [ngStyle]="{ color: getEstadoVenta(venta).color }">
-            {{ getEstadoVenta(venta).texto }}
+        <div class="head-right">
+          <span class="chip" [ngClass]="estadoChip(getEstadoVenta(v).texto)">
+            {{ getEstadoVenta(v).texto }}
           </span>
-        </p>
-        <p>📅 <strong>Fecha:</strong> {{ venta.fechaventa | date:'dd/MM/yyyy HH:mm' }}</p>
-        <p>💰 <strong>Monto:</strong> S/{{ venta.monto }}</p>
-        <p>💳 <strong>Saldo Pendiente:</strong> S/{{ venta.saldopendiente }}</p>
-        <p>👤 <strong>Vendedor:</strong> {{ venta.usuarioVendedor.nombre }}</p>
-        <p>📜 <strong>Factura:</strong> {{ venta.factura ? '✅' : '❌' }}</p>
 
-        <!-- Productos Comprados -->
-        <mat-expansion-panel>
+          <button mat-icon-button [matMenuTriggerFor]="m" aria-label="Opciones">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #m="matMenu">
+            <button *ngIf="v.saldopendiente > 0" mat-menu-item (click)="agregarAbono(v)">
+              <mat-icon>credit_card</mat-icon>
+              <span>Agregar abono</span>
+            </button>
+            <button *ngIf="v.saldopendiente < v.monto" mat-menu-item (click)="verAbonos(v)">
+              <mat-icon>receipt</mat-icon>
+              <span>Ver abonos</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="sale-body">
+        <div class="row">
+          <mat-icon>person</mat-icon>
+          <div class="col">
+            <div class="label">Cliente</div>
+            <div class="value">{{ v.usuarioCliente.nombre }}</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <mat-icon>support_agent</mat-icon>
+          <div class="col">
+            <div class="label">Vendedor</div>
+            <div class="value">{{ v.usuarioVendedor.nombre }}</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="kv">
+          <span class="k">Total:</span>
+          <span class="v">{{ v.monto | currency:'PEN' }}</span>
+        </div>
+        <div class="kv">
+          <span class="k">Pendiente:</span>
+          <span class="v" [class.txt-warn]="v.saldopendiente>0" [class.txt-muted]="v.saldopendiente===0">
+            {{ v.saldopendiente | currency:'PEN' }}
+          </span>
+        </div>
+
+        <div class="badges">
+          <span class="chip chip--soft" [class.chip--ok]="v.factura" [class.chip--muted]="!v.factura">
+            <mat-icon class="chip-ico">description</mat-icon>
+            {{ v.factura ? 'Factura' : 'Sin factura' }}
+          </span>
+        </div>
+
+        <!-- Productos -->
+        <mat-expansion-panel class="mt-8">
           <mat-expansion-panel-header>
-            <mat-panel-title>📦 Productos Comprados</mat-panel-title>
+            <mat-panel-title>Productos</mat-panel-title>
           </mat-expansion-panel-header>
 
-          <ng-container *ngIf="obtenerProductosDeVenta(venta.idventa).length > 0; else noProductos">
+          <ng-container *ngIf="obtenerProductosDeVenta(v.idventa).length; else noProds">
             <mat-list>
-              <mat-list-item *ngFor="let producto of obtenerProductosDeVenta(venta.idventa)">
-                {{ producto.producto.nombre }} - Cant: {{ producto.cantidad }} Kg - Precio: S/{{ producto.precio }}
+              <mat-list-item *ngFor="let p of obtenerProductosDeVenta(v.idventa)">
+                {{ p.producto.nombre }} — Cant: {{ p.cantidad }} kg — Precio: {{ p.precio | currency:'PEN' }}
               </mat-list-item>
             </mat-list>
           </ng-container>
 
-          <ng-template #noProductos>
-            <p style="padding: 10px;">No hay productos registrados en esta venta.</p>
+          <ng-template #noProds>
+            <div class="empty">No hay productos registrados en esta venta.</div>
           </ng-template>
         </mat-expansion-panel>
-      </mat-card-content>
+
+        <button *ngIf="getEstadoVenta(v).texto==='Pagando'"
+                class="btn-outline" mat-stroked-button (click)="agregarAbono(v)">
+          <mat-icon>credit_card</mat-icon>
+          Agregar abono
+        </button>
+      </div>
     </mat-card>
   </div>
 </div>
