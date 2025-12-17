@@ -1,0 +1,236 @@
+/* ===============================
+   Layout general
+   =============================== */
+.page {
+  padding: 32px 0;
+  background: var(--background);
+  color: var(--foreground);
+  min-height: calc(100vh - 72px);
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  margin-bottom: 24px;
+}
+
+.titles h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.titles p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted-foreground);
+}
+
+/* ===============================
+   Botón principal
+   =============================== */
+.add-btn {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 12px;
+  padding: 8px 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: none;
+}
+
+.add-btn:hover {
+  background: var(--primary-hover);
+}
+
+.add-btn mat-icon,
+.add-btn span {
+  color: var(--primary-foreground);
+}
+
+/* ===============================
+   Métricas
+   =============================== */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 0 32px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: none;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* ===============================
+   Card contenedor
+   =============================== */
+.card-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 32px;
+  margin: 0 32px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.card-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+/* ===============================
+   Acciones superiores
+   =============================== */
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.search {
+  width: 320px;
+}
+
+/* ===============================
+   Soft fields (inputs, selects)
+   =============================== */
+:host ::ng-deep .soft-field .mat-mdc-text-field-wrapper {
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+:host ::ng-deep .soft-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+:host ::ng-deep .soft-field .mdc-notched-outline__leading,
+:host ::ng-deep .soft-field .mdc-notched-outline__notch,
+:host ::ng-deep .soft-field .mdc-notched-outline__trailing {
+  border: none !important;
+}
+
+/* ===============================
+   View buttons
+   =============================== */
+.view-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.view-buttons button {
+  border-radius: 10px;
+}
+
+.view-buttons button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ===============================
+   Tabla
+   =============================== */
+.table-container {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.nice-table {
+  width: 100%;
+}
+
+.nice-table th {
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.nice-table th,
+.nice-table td {
+  padding: 10px 16px;
+}
+
+.nice-table tr:hover td {
+  background: var(--secondary);
+}
+
+/* ===============================
+   Chips
+   =============================== */
+.chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.chip-success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+}
+
+.chip-muted {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--muted-foreground);
+}
+
+/* ===============================
+   Cards (vista cards)
+   =============================== */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.cliente-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: none;
+}
+
+.cliente-card-header h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cliente-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}

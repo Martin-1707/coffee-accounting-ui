@@ -71,6 +71,10 @@ export class SidenavComponent implements OnInit {
       kind: 'item', icon: 'credit_card', label: 'Abonos', route: '/abonos',
       roles: ['Administrador', 'Supervisor', 'Vendedor', 'Cliente']
     },
+    {
+      kind: 'item', icon: 'credit_card', label: 'Clientes', route: '/clientes',
+      roles: ['Administrador', 'Supervisor', 'Vendedor']
+    },
 
     // FINANZAS
     { kind: 'section', section: 'FINANZAS' },

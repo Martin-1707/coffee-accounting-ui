@@ -46,12 +46,12 @@ export class UsuarioService {
 
   // 🟠 Registrar un nuevo usuario
   insert(usuario: Usuario) {
-    return this.http.post(this.url, usuario);
+    return this.http.post(this.url, usuario, { responseType: 'text' });
   }
 
   // 🔵 Actualizar un usuario
   update(usuario: Usuario) {
-    return this.http.put(this.url, usuario);
+    return this.http.put(this.url, usuario, { responseType: 'text' });
   }
 
   // 🔴 Eliminar un usuario por ID

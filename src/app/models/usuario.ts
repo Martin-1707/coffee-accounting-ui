@@ -11,4 +11,5 @@ export class Usuario {
   enabled: boolean = true;
   rol: Rol = new Rol();
   subordinados?: Usuario[];
+  usuarioPadre?: Usuario;
 }

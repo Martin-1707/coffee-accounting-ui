@@ -1,0 +1,107 @@
+/* ===============================
+   Paleta (Figma)
+   =============================== */
+:host {
+  --brown-900: #3E2723;
+  --brown-700: #5D4037;
+  --brown-600: #6F4E37;
+  --cream-50: #F5F1ED;
+  --muted-fg: #6B5D54;
+  --accent: #C17817;
+}
+
+/* ===============================
+   Dialog base
+   =============================== */
+.dialog {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px 22px 24px;
+  color: var(--brown-900);
+}
+
+/* ===============================
+   Header
+   =============================== */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.dialog-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dialog-header p {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+}
+
+/* ===============================
+   Body
+   =============================== */
+.dialog-body {
+  display: grid;
+  gap: 12px;
+}
+
+/* ===============================
+   Inputs suaves
+   =============================== */
+:host ::ng-deep .soft-field .mat-mdc-text-field-wrapper {
+  background: var(--cream-50);
+  border: 1px solid rgba(111, 78, 55, 0.25);
+  border-radius: 10px;
+}
+
+:host ::ng-deep .soft-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: var(--brown-600);
+  box-shadow: 0 0 0 2px rgba(111, 78, 55, 0.12);
+}
+
+:host ::ng-deep .soft-field .mdc-notched-outline__leading,
+:host ::ng-deep .soft-field .mdc-notched-outline__notch,
+:host ::ng-deep .soft-field .mdc-notched-outline__trailing {
+  border: none !important;
+}
+
+/* ===============================
+   Botón principal
+   =============================== */
+.cta {
+  margin-top: 8px;
+  height: 44px;
+  width: 100%;
+  border-radius: 12px;
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(193, 120, 23, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cta:hover:not([disabled]) {
+  filter: brightness(0.95);
+}
+
+.cta[disabled] {
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+/* ===============================
+   Responsive
+   =============================== */
+@media (max-width: 480px) {
+  .dialog {
+    padding: 16px;
+  }
+}

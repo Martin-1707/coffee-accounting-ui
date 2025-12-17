@@ -1,0 +1,49 @@
+<div class="dialog">
+  <div class="dialog-header">
+    <div>
+      <h3>{{ esEdicion ? 'Editar Cliente' : 'Registrar Cliente' }}</h3>
+      <p>Completa el formulario</p>
+    </div>
+
+    <button type="button" mat-icon-button (click)="close()" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form class="dialog-body" [formGroup]="form" (ngSubmit)="guardar()">
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="apellido" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Vendedor asignado</mat-label>
+      <mat-select formControlName="vendedorId">
+        <mat-option *ngFor="let v of vendedores" [value]="v.idusuario">
+          {{ v.nombre }} {{ v.apellido }}
+        </mat-option>
+      </mat-select>
+      <mat-hint *ngIf="form.get('vendedorId')?.disabled">
+        Se asigna automáticamente según tu usuario.
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="enabled">
+        <mat-option [value]="true">Activo</mat-option>
+        <mat-option [value]="false">Inactivo</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button class="cta" mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      <mat-icon>save</mat-icon>
+      <span>Guardar</span>
+    </button>
+  </form>
+</div>

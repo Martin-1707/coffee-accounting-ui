@@ -24,6 +24,8 @@ import { CreareditartipopagoComponent } from './components/tipo-pago/creareditar
 import { CreareditarventaComponent } from './components/venta/creareditarventa/creareditarventa.component';
 import { HistorialPrecioProductoComponent } from './components/historial-precio-producto/historial-precio-producto.component';
 import { ListarabonoComponent } from './components/abono/listarabono/listarabono.component';
+import { ClientesComponent } from './components/clientes/clientes.component';
+import { CreareditarclientesComponent } from './components/clientes/creareditarclientes/creareditarclientes.component';
 
 export const routes: Routes = [
   {
@@ -188,6 +190,20 @@ export const routes: Routes = [
         component: HistorialPrecioProductoComponent,
         canActivate: [seguridadGuard],
         data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
+      },
+      {
+        path: 'clientes',
+        component: ClientesComponent,
+        canActivate: [seguridadGuard],
+        data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
+        children: [
+          {
+            path: 'nuevo',
+            component: CreareditarclientesComponent,
+            canActivate: [seguridadGuard],
+            data: { roles: ['Administrador', 'Supervisor', 'Vendedor'] },
+          },
+        ],
       },
     ]
   },
