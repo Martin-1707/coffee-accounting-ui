@@ -1,38 +1,140 @@
-<div class="container">
-  <div class="header-container">
-    <h1 class="title">Lista de Abonos</h1>
-    <button *ngIf="!esVistaVentaEspecifica" mat-mini-fab color="primary" (click)="irACrearAbono()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
+<div class="page">
+  <div class="header-bar">
+    <div class="titles">
+      <h2>Gestión de Abonos</h2>
+      <p>Registre y administre los abonos a ventas pendientes</p>
+    </div>
 
-  <div class="abono-cards-container">
-    <div *ngFor="let idventa of paginatedGroups">
-      <mat-card class="abono-card">
-        <mat-card-header>
-          <mat-card-title>Venta #{{ idventa.key }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ul>
-            <li *ngFor="let abono of idventa.value">
-              <strong>Monto:</strong> {{ abono.monto }} <br>
-              <strong>Fecha:</strong> {{ abono.fecha_abono | date:'dd-MM-yyyy HH:mm' }} <br>
-              <strong>Tipo de pago:</strong> {{ abono.tipoPago.nombre }}
-            </li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
+    <div class="actions">
+      <mat-form-field appearance="outline" class="search">
+        <mat-icon matPrefix>search</mat-icon>
+        <input #search matInput placeholder="Buscar por venta o cliente…" (input)="onSearch(search.value)" />
+      </mat-form-field>
+
+      <mat-button-toggle-group [value]="vista" (change)="cambiarVista($event.value)" exclusive>
+        <mat-button-toggle value="table"><mat-icon>table_rows</mat-icon></mat-button-toggle>
+        <mat-button-toggle value="cards"><mat-icon>grid_view</mat-icon></mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <button mat-raised-button color="primary" class="add-btn" *ngIf="!esVistaVentaEspecifica"
+        (click)="irACrearAbono()">
+        <mat-icon>add</mat-icon>
+        <span>Registrar Abono</span>
+      </button>
     </div>
   </div>
 
-  <div *ngIf="esVistaVentaEspecifica" class="volver-button-container">
+  <!-- Métricas -->
+  <div class="metrics">
+    <mat-card class="metric">
+      <div class="m-label">Total Abonos</div>
+      <div class="m-value">{{ money(totalAbonos()) }}</div>
+      <mat-icon class="m-ico">attach_money</mat-icon>
+    </mat-card>
+
+    <mat-card class="metric">
+      <div class="m-label">Pagos Completos</div>
+      <div class="m-value">{{ conteoCompletados() }}</div>
+      <mat-icon class="m-ico">check_circle</mat-icon>
+    </mat-card>
+
+    <mat-card class="metric">
+      <div class="m-label">Pagos Parciales</div>
+      <div class="m-value">{{ conteoParciales() }}</div>
+      <mat-icon class="m-ico">hourglass_top</mat-icon>
+    </mat-card>
+  </div>
+
+  <!-- ===== Vista Tabla ===== -->
+  <div *ngIf="vista === 'table'" class="table-container">
+    <table mat-table [dataSource]="pageResumenes" class="mat-elevation-z0 nice-table">
+      <ng-container matColumnDef="venta">
+        <th mat-header-cell *matHeaderCellDef>ID Venta</th>
+        <td mat-cell *matCellDef="let r">VNT-{{ r.idventa | number:'3.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <td mat-cell *matCellDef="let r">{{ r.cliente }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>Último abono</th>
+        <td mat-cell *matCellDef="let r">{{ date(r.fechaUltimo) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="suma">
+        <th mat-header-cell *matHeaderCellDef>Abonos</th>
+        <td mat-cell *matCellDef="let r">{{ money(r.sumaAbonos) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>Total Venta</th>
+        <td mat-cell *matCellDef="let r">{{ money(r.totalVenta) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="restante">
+        <th mat-header-cell *matHeaderCellDef>Restante</th>
+        <td mat-cell *matCellDef="let r" [class.text-green]="r.saldoPendiente === 0"
+          [class.text-red]="r.saldoPendiente > 0">
+          {{ money(r.saldoPendiente) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let r">
+          <span class="chip" [class.chip-success]="r.estado==='Completado'" [class.chip-warn]="r.estado==='Parcial'">
+            {{ r.estado }}
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+  <!-- ===== Vista Cards ===== -->
+  <div *ngIf="vista === 'cards'" class="cards">
+    <mat-card class="abono-card" *ngFor="let r of pageResumenes">
+      <div class="card-head">
+        <div>
+          <div class="venta">VNT-{{ r.idventa | number:'3.0-0' }}</div>
+          <div class="cliente">{{ r.cliente }}</div>
+        </div>
+        <span class="chip" [class.chip-success]="r.estado==='Completado'" [class.chip-warn]="r.estado==='Parcial'">
+          {{ r.estado }}
+        </span>
+      </div>
+
+      <div class="row">
+        <mat-icon>event</mat-icon>
+        <span>Último abono: {{ date(r.fechaUltimo) }}</span>
+      </div>
+      <div class="row">
+        <mat-icon>payments</mat-icon>
+        <span>Abonos: <b>{{ money(r.sumaAbonos) }}</b></span>
+      </div>
+      <div class="row">
+        <mat-icon>sell</mat-icon>
+        <span>Total venta: <b>{{ money(r.totalVenta) }}</b></span>
+      </div>
+      <div class="row" [class.text-green]="r.saldoPendiente===0" [class.text-red]="r.saldoPendiente>0">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Restante: <b>{{ money(r.saldoPendiente) }}</b></span>
+      </div>
+    </mat-card>
+  </div>
+
+  <div *ngIf="esVistaVentaEspecifica" class="volver">
     <button mat-raised-button color="primary" (click)="volverAVentas()">
-      <mat-icon class="icon-align">arrow_back</mat-icon>
+      <mat-icon>arrow_back</mat-icon>
       Volver al listado de ventas
     </button>
   </div>
 
-  <mat-paginator *ngIf="!esVistaVentaEspecifica" [pageSizeOptions]="[2, 3, 5, 8, 10]" showFirstLastButtons>
+  <mat-paginator *ngIf="!esVistaVentaEspecifica" [length]="length" [pageSizeOptions]="[6,9,12]" [pageSize]="6"
+    showFirstLastButtons>
   </mat-paginator>
-
 </div>

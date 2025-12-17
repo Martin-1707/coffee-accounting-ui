@@ -1,172 +1,52 @@
-/* Contenedor principal */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
+:host {
+  --brown-900:#3E2723;
+  --brown-700:#5D4037;
+  --brown-600:#6F4E37;
+  --cream-50:#F5F1ED;
+  --muted:#6B5D54;
+  --accent:#C17817;
 }
 
-/* Contenedor del encabezado */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 900px;
-  padding: 1rem;
-  box-sizing: border-box;
+.page { padding:20px; color:var(--brown-900); }
+
+.header-bar{
+  display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;
 }
+.titles h2{ margin:0; font-size:20px; font-weight:600; }
+.titles p { margin:0; font-size:13px; color:var(--muted); }
 
-/* Título */
-.title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #49225B;
-}
+.actions{ display:flex; align-items:center; gap:12px; }
+.search{ width:320px; }
+.add-btn mat-icon{ margin-right:6px; }
 
-/* Contenedor de las tarjetas */
-.abono-cards-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  max-width: 900px;
-  padding: 1rem;
-  box-sizing: border-box;
-}
+/* Metrics */
+.metrics{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:12px; }
+.metric{ position:relative; padding:14px 16px; }
+.m-label{ font-size:12px; color:var(--muted); }
+.m-value{ font-size:22px; font-weight:700; }
+.m-ico{ position:absolute; right:12px; bottom:12px; color:var(--muted); opacity:.6; }
 
-/* Tarjetas individuales */
-.abono-card {
-  background: #F5EBFA;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  transition: transform 0.3s ease-in-out;
-}
+/* Tabla */
+.table-container{ border:1px solid rgba(111,78,55,.15); border-radius:12px; background:#fff; padding:8px 12px; }
+.nice-table th{ color:var(--muted); font-weight:600; }
+.nice-table tr:hover td{ background:var(--cream-50); }
 
-.abono-card:hover {
-  transform: scale(1.02);
-}
+/* Cards */
+.cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px; }
+.abono-card{ border:1px solid rgba(111,78,55,.15); border-radius:10px; box-shadow:none; padding:12px; }
+.abono-card:hover{ background:#faf7f4; }
+.card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.venta{ font-weight:700; }
+.cliente{ color:var(--muted); font-size:13px; }
+.row{ display:flex; align-items:center; gap:8px; margin:4px 0; color:var(--brown-900); }
+.row mat-icon{ color:var(--muted); }
 
-/* Título de las tarjetas */
-mat-card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #6E3482;
-}
+/* Chips & helpers */
+.chip{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; }
+.chip-success{ background:#4a7c59; color:#fff; }
+.chip-warn{ background:#d4a574; color:#3e2723; }
+.text-red{ color:#b71c1c; }
+.text-green{ color:#1b5e20; }
 
-/* Lista dentro de las tarjetas */
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li {
-  background: #FFF;
-  padding: 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-strong {
-  color: #3E2522;
-}
-
-/* Botón flotante (crear abono) */
-.floating-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #1976d2;
-  color: white;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.floating-button:hover {
-  background: #125a9b;
-}
-
-/* Contenedor del botón */
-.volver-button-container {
-  width: 100%;
-  max-width: 900px;
-  padding: 1rem;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: flex-start;
-}
-
-/* Botón estilizado */
-.volver-button-container button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  background: linear-gradient(135deg, #6E3482, #8E44AD);
-  color: white;
-  border-radius: 8px;
-  padding: 10px 20px;
-  box-shadow: 0 4px 12px rgba(110, 52, 130, 0.3);
-  transition: all 0.3s ease;
-  line-height: 1.2;
-}
-
-/* Hover */
-.volver-button-container button:hover {
-  background: linear-gradient(135deg, #5a2c6f, #732d91);
-  box-shadow: 0 6px 16px rgba(110, 52, 130, 0.4);
-  transform: translateY(-2px);
-}
-
-/* Ícono bien alineado */
-.volver-button-container .icon-align {
-  font-size: 20px;
-  vertical-align: middle;
-  line-height: 1;
-}
-
-/* Paginador */
-mat-paginator {
-  margin-top: 1rem;
-  width: 100%;
-  max-width: 900px;
-}
-
-/* Responsivo */
-@media (max-width: 600px) {
-  .container {
-    padding: 10px;
-  }
-
-  .header-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .title {
-    font-size: 1.5rem;
-  }
-
-  .abono-cards-container {
-    padding: 0.5rem;
-  }
-
-  .volver-button-container {
-    justify-content: center;
-  }
-
-  .volver-button-container button {
-    width: 100%;
-  }
-}
+.volver{ margin-top:16px; }
+mat-paginator{ margin-top:16px; }
