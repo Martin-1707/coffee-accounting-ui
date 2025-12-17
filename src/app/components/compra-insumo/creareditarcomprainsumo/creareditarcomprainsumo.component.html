@@ -1,53 +1,48 @@
-<div class="container">
-  <div class="form-container">
-    <h2>Registrar Compra de Insumo</h2>
+<div class="dialog">
+  <div class="dialog-header">
+    <div>
+      <h3>Registrar Compra de Insumo</h3>
+      <p>Completa el formulario para registrar una nueva compra</p>
+    </div>
 
-    <form [formGroup]="compraInsumoForm" (ngSubmit)="guardarCompraInsumo()">
-      <mat-form-field class="full-width">
-        <mat-label>Rango de Fechas</mat-label>
-        <mat-date-range-input [formGroup]="compraInsumoForm" [rangePicker]="picker">
-          <input matStartDate formControlName="fecha_inicial" placeholder="Fecha Inicial (dd/MM/yyyy)" />
-          <input matEndDate formControlName="fecha_final" placeholder="Fecha Final (dd/MM/yyyy)" />
-        </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-        <mat-error *ngIf="compraInsumoForm.get('fecha_inicial')?.hasError('required')">
-          La fecha inicial es obligatoria.
-        </mat-error>
-        <mat-error *ngIf="compraInsumoForm.get('fecha_final')?.hasError('required')">
-          La fecha final es obligatoria.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Monto</mat-label>
-        <input matInput type="number" formControlName="monto" placeholder="Ingrese el monto" />
-        <mat-error *ngIf="compraInsumoForm.get('monto')?.touched && compraInsumoForm.get('monto')?.hasError('required')">
-          El monto es obligatorio.
-        </mat-error>
-        <mat-error *ngIf="compraInsumoForm.get('monto')?.hasError('min')">
-          El monto debe ser mayor o igual a 0.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Usuario</mat-label>
-        <ng-container *ngIf="usuario?.rol.nombre_rol === 'Administrador' || usuario?.rol.nombre_rol === 'Supervisor'; else soloLectura">
-          <mat-select formControlName="idusuario">
-            <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
-              {{ u.nombre }} {{ u.apellido }}
-            </mat-option>
-          </mat-select>
-        </ng-container>
-        <ng-template #soloLectura>
-          <input matInput [value]="usuario?.nombre + ' ' + usuario?.apellido" disabled />
-        </ng-template>
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" type="submit" [disabled]="compraInsumoForm.invalid">
-        <mat-icon>save</mat-icon>
-        Guardar
-      </button>
-    </form>
+    <button type="button" mat-icon-button (click)="closeDialog()" aria-label="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
+
+  <form class="dialog-body" [formGroup]="compraInsumoForm" (ngSubmit)="guardarCompraInsumo()">
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Rango de Fechas</mat-label>
+      <mat-date-range-input [formGroup]="compraInsumoForm" [rangePicker]="picker">
+        <input matStartDate formControlName="fecha_inicial" placeholder="dd/mm/yyyy" />
+        <input matEndDate   formControlName="fecha_final"   placeholder="dd/mm/yyyy" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Monto</mat-label>
+      <input matInput type="number" formControlName="monto" placeholder="0.00" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="soft-field full">
+      <mat-label>Usuario</mat-label>
+      <ng-container *ngIf="usuario?.rol?.nombre_rol === 'Administrador' || usuario?.rol?.nombre_rol === 'Supervisor'; else soloLectura">
+        <mat-select formControlName="idusuario">
+          <mat-option *ngFor="let u of listaUsuarios" [value]="u.idusuario">
+            {{ u.nombre }} {{ u.apellido }}
+          </mat-option>
+        </mat-select>
+      </ng-container>
+      <ng-template #soloLectura>
+        <input matInput [value]="usuario?.nombre + ' ' + usuario?.apellido" disabled />
+      </ng-template>
+    </mat-form-field>
+
+    <button class="cta" mat-raised-button color="primary" type="submit" [disabled]="compraInsumoForm.invalid">
+      <mat-icon>save</mat-icon>
+      <span>Guardar</span>
+    </button>
+  </form>
 </div>

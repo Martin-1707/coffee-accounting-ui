@@ -1,27 +1,87 @@
-<div class="container">
-  <div class="header-container">
-    <h1 class="title">Lista de Compras</h1>
-    <button mat-mini-fab color="primary" (click)="irACrearCompra()">
+<div class="page">
+  <div class="header-bar">
+    <div class="titles">
+      <h2>Gestión de Compras</h2>
+      <p>Administra y registra las compras de insumos del negocio</p>
+    </div>
+    <button mat-raised-button color="primary" class="add-btn" (click)="irACrearCompra()">
       <mat-icon>add</mat-icon>
+      <span>Agregar Compra</span>
     </button>
   </div>
 
-  <div class="compra-cards-container">
-    <div *ngFor="let compra of paginatedCompras">
-      <mat-card class="compra-card">
-        <mat-card-header>
-          <mat-card-title>Compra #{{ compra.idcompra }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p><strong>Fecha Inicial:</strong> {{ compra.fecha_inicial | date: 'dd/MM/yyyy' }}</p>
-          <p><strong>Fecha Final:</strong> {{ compra.fecha_final | date: 'dd/MM/yyyy' }}</p>
-          <p><strong>Monto:</strong> {{ compra.monto }}</p>
-          <p><strong>Vendedor:</strong> {{ compra.usuario.nombre }}</p>
-        </mat-card-content>
+  <div class="card-list">
+    <div class="card-header">
+      <div>
+        <h3>Listado de Compras</h3>
+        <p>Visualiza todas las compras de insumos registradas</p>
+      </div>
+    </div>
+    <div class="card-actions-row">
+      <mat-form-field appearance="outline" class="search soft-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Buscar por ID, usuario o fecha..." (input)="onSearch($any($event.target).value)" />
+      </mat-form-field>
+      <div class="view-buttons">
+        <button mat-icon-button color="primary" [class.active]="vista === 'table'" (click)="cambiarVista('table')">
+          <mat-icon>table_rows</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" [class.active]="vista === 'cards'" (click)="cambiarVista('cards')">
+          <mat-icon>apps</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- ======== Vista Tabla ======== -->
+    <div *ngIf="vista === 'table'" class="table-container">
+      <table mat-table [dataSource]="paginatedCompras" class="mat-elevation-z0 nice-table">
+        <ng-container matColumnDef="idcompra">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let c">P{{ c.idcompra }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rango">
+          <th mat-header-cell *matHeaderCellDef>Rango de Fechas</th>
+          <td mat-cell *matCellDef="let c">
+            {{ formatDate(c.fecha_inicial) }} - {{ formatDate(c.fecha_final) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let c">{{ formatMoney(c.monto) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="usuario">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let c">{{ c.usuario?.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="registro">
+          <th mat-header-cell *matHeaderCellDef>Fecha de Registro</th>
+          <td mat-cell *matCellDef="let c">
+            {{ formatDate(c.fecha_registro) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- ======== Vista Cards ======== -->
+    <div *ngIf="vista === 'cards'" class="cards-container">
+      <mat-card *ngFor="let c of paginatedCompras; trackBy: trackByCompraId" class="compra-card">
+        <div class="card-header">
+          <h4>P{{ c.idcompra }}</h4>
+        </div>
+        <p class="rango">{{ formatDate(c.fecha_inicial) }} - {{ formatDate(c.fecha_final) }}</p>
+        <p><mat-icon>payments</mat-icon> {{ formatMoney(c.monto) }}</p>
+        <p><mat-icon>account_circle</mat-icon> {{ c.usuario.nombre }} {{ c.usuario.apellido }}</p>
+        <p><mat-icon>calendar_today</mat-icon> Registrado: {{ formatDate(c.fecha_registro) }}</p>
       </mat-card>
     </div>
   </div>
 
-  <mat-paginator [pageSizeOptions]="[6, 9 , 12]" showFirstLastButtons>
-  </mat-paginator>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSizeOptions[0]" showFirstLastButtons></mat-paginator>
 </div>

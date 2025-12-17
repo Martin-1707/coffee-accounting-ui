@@ -1,53 +1,117 @@
-.container {
+/* Paleta usada en Figma (valores directos) */
+:host {
+  --brown-900: #3E2723;
+  --brown-700: #5D4037;
+  --brown-600: #6F4E37;     /* primary */
+  --cream-50:  #F5F1ED;     /* secondary bg */
+  --muted-fg:  #6B5D54;
+  --accent:    #C17817;
+  --danger:    #C1440E;
+}
+
+/* ====== LAYOUT ====== */
+.dialog {
+  padding: 18px 20px 22px;
+  background: #fff;
+  border-radius: 16px;
+  color: var(--brown-900);
+}
+
+.dialog-header {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.form-container {
-  max-width: 400px;
-  width: 90%;
-  padding: 20px;
-  background: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.dialog-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brown-900);
 }
 
-h2 {
-  color: #3E2522;
+.dialog-header p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--muted-fg);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+.dialog-header button mat-icon {
+  color: var(--brown-700);
+}
+
+.dialog-body {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
-mat-form-field {
+/* ====== CAMPOS ====== */
+.full { width: 100%; }
+
+/* Fondo crema + borde suave a los form-field */
+:host ::ng-deep .soft-field .mat-mdc-text-field-wrapper {
+  background: var(--cream-50);
+  border: 1px solid rgba(111, 78, 55, 0.25);
+  border-radius: 10px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+/* Borde activo */
+:host ::ng-deep .soft-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: var(--brown-600);
+  box-shadow: 0 0 0 2px rgba(111, 78, 55, 0.10);
+}
+
+/* Texto/labels */
+:host ::ng-deep .soft-field .mdc-floating-label,
+:host ::ng-deep .soft-field .mat-mdc-select-placeholder {
+  color: var(--muted-fg);
+}
+
+/* Iconos dentro de los inputs */
+:host ::ng-deep .soft-field .mat-mdc-form-field-icon-suffix mat-icon,
+:host ::ng-deep .soft-field .mat-mdc-form-field-icon-prefix mat-icon {
+  color: var(--muted-fg);
+}
+
+/* Outline de MDC (quitamos bordes dobles del outline) */
+:host ::ng-deep .soft-field .mdc-notched-outline__leading,
+:host ::ng-deep .soft-field .mdc-notched-outline__notch,
+:host ::ng-deep .soft-field .mdc-notched-outline__trailing {
+  border: none !important;
+}
+
+/* ====== BOTÓN CTA ====== */
+.cta {
   width: 100%;
-  margin-bottom: 20px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--accent) !important;   /* #C17817 */
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(193, 120, 23, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #B5835A;
-  color: #FFF2DF;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
+.cta mat-icon {
+  font-size: 20px;
 }
 
-button:hover {
-  background-color: #7A554D;
+.cta:hover:not([disabled]) {
+  filter: brightness(0.95);
 }
 
-.error-message {
-  color: red;
-  margin-top: 10px;
+.cta[disabled] {
+  opacity: .6;
+  box-shadow: none;
+}
+
+/* ====== DIALOG EN VIEWPORT PEQUEÑO ====== */
+@media (max-width: 480px) {
+  .dialog { padding: 16px; }
 }

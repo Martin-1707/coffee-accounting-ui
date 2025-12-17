@@ -15,6 +15,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { UsuarioService } from '../../../services/usuario.service';
 import { MatIconModule } from '@angular/material/icon';
 import { LoginService } from '../../../services/login.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 // Definir el formato de fecha en DD/MM/YYYY
 export const MY_DATE_FORMATS = {
@@ -66,7 +67,8 @@ export class CreareditarcomprainsumoComponent {
     private uS: UsuarioService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private loginservice: LoginService // Inyectar el servicio de login
+    private loginservice: LoginService, // Inyectar el servicio de login
+    private dialogRef: MatDialogRef<CreareditarcomprainsumoComponent>
   ) { }
 
   ngOnInit(): void {
@@ -74,7 +76,7 @@ export class CreareditarcomprainsumoComponent {
       fecha_inicial: ['', [Validators.required, this.noFechaFuturaValidator.bind(this)]],
       fecha_final: ['', [Validators.required, this.noFechaFuturaValidator.bind(this)]],
       monto: ['', [Validators.required, Validators.min(0)]],
-      idusuario: ['', Validators.required]
+      idusuario: ['', Validators.required],
     });
 
     const username = this.loginservice.showUser(); // "martin"
@@ -117,7 +119,40 @@ export class CreareditarcomprainsumoComponent {
       console.warn('❗ No se pudo obtener usuario o rol desde el token.');
     }
   }
+  guardarCompraInsumo() {
+    if (this.compraInsumoForm.invalid) {
+      this.compraInsumoForm.markAllAsTouched();
+      this.snackBar.open('⚠️ Completa los campos correctamente', 'Cerrar', { duration: 3000 });
+      return;
+    }
 
+    const compraData: CompraInsumo = {
+      ...this.compraInsumoForm.getRawValue(), // incluye controles deshabilitados
+      usuario: { idusuario: this.compraInsumoForm.get('idusuario')?.value },
+      fecha_registro: new Date()
+    };
+
+    this.ciS.insert(compraData).subscribe({
+      next: () => {
+        // refresca la lista para la vista de listar
+        this.ciS.list().subscribe(data => this.ciS.setList(data));
+
+        this.snackBar.open('✅ Compra registrada con éxito', 'Cerrar', { duration: 3000 });
+
+        // si existe dialogRef => estamos en modal: cerrar y NO navegar
+        if ((this as any).dialogRef) {
+          (this as any).dialogRef.close(true);
+        } else {
+          // ruta normal
+          this.router.navigate(['/compra-insumo']);
+        }
+      },
+      error: () => {
+        this.snackBar.open('❌ Ocurrió un error al registrar la compra', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
+  /*
   guardarCompraInsumo() {
     if (this.compraInsumoForm.valid) {
       const compraData: CompraInsumo = {
@@ -147,6 +182,9 @@ export class CreareditarcomprainsumoComponent {
       });
     }
   }
+*/
+  closeDialog() { this.dialogRef.close(); }
+
   noFechaFuturaValidator(control: AbstractControl): ValidationErrors | null {
     const valor = control.value;
     if (!valor) return null;
@@ -156,11 +194,11 @@ export class CreareditarcomprainsumoComponent {
     return fecha > hoy ? { fechaFutura: true } : null;
   }
   filtrarFechasPasadas = (date: Date | null): boolean => {
-  if (!date) return false; // Si no hay fecha, no permitir
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0); // Asegúrate de comparar solo la fecha
-  date.setHours(0, 0, 0, 0);
-  return date <= hoy; // Solo permite fechas hasta hoy
-};
+    if (!date) return false; // Si no hay fecha, no permitir
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Asegúrate de comparar solo la fecha
+    date.setHours(0, 0, 0, 0);
+    return date <= hoy; // Solo permite fechas hasta hoy
+  };
 
 }

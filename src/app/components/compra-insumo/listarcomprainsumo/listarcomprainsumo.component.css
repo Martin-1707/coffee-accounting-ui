@@ -1,73 +1,269 @@
-/* Contenedor principal */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+.page {
+  padding: 32px 0;
+  padding-top: 32px;
+  background: var(--background);
+  color: var(--foreground);
+  min-height: calc(100vh - 72px);
+  box-sizing: border-box;
 }
 
-/* Encabezado con título y botón */
-.header-container {
+.header-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px; /* ← Se mantiene como pediste */
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  background: none;
+  color: inherit;
+  padding: 0 32px;
 }
 
-/* Botón */
-button[mat-mini-fab] {
-  background-color: #6E3482; /* Morado 400 */
-  color: white;
-  transition: background-color 0.3s ease;
+.titles h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
-button[mat-mini-fab]:hover {
-  background-color: #A56ABD; /* Morado 300 */
+.titles p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--muted-foreground);
 }
 
-/* Cards grid */
-.compra-cards-container {
+.add-btn {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius);
+  font-weight: 500;
+  box-shadow: none;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.add-btn:hover {
+  background: var(--primary-hover);
+  color: var(--primary-foreground);
+}
+
+.add-btn mat-icon,
+.add-btn span {
+  color: var(--primary-foreground) !important;
+}
+
+.card-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin: 0 32px;
+}
+
+.card-header {
+  display: block;
+  margin-bottom: 0;
+}
+
+.card-header h3 {
+  margin-bottom: 2px;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.card-header p {
+  margin-bottom: 0;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted-foreground);
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0 12px 0;
+  width: 100%;
+}
+
+
+.search {
+  width: 320px;
+  margin-bottom: 0;
+  background: transparent;
+}
+
+
+:host ::ng-deep .soft-field .mat-mdc-text-field-wrapper {
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+:host ::ng-deep .soft-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+/* label + iconos con color café suave */
+:host ::ng-deep .soft-field .mdc-floating-label,
+:host ::ng-deep .soft-field .mat-mdc-form-field-icon-prefix mat-icon {
+  color: var(--muted-foreground);
+}
+
+/* quitar el outline doble de MDC */
+:host ::ng-deep .soft-field .mdc-notched-outline__leading,
+:host ::ng-deep .soft-field .mdc-notched-outline__notch,
+:host ::ng-deep .soft-field .mdc-notched-outline__trailing {
+  border: none !important;
+}
+
+.view-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.view-buttons button[mat-icon-button].active {
+  background: var(--accent);
+  color: var(--primary-foreground);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 8%, transparent);
+  transition: background 0.2s, color 0.2s;
+}
+
+.view-buttons button[mat-icon-button].active .mat-icon {
+  color: var(--primary-foreground);
+}
+
+button[mat-icon-button] {
+  min-width: 36px;
+  min-height: 36px;
+  height: 36px;
+  width: 36px;
+  padding: 0;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button[mat-icon-button] .mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
+  margin-top: 8px;
 }
 
-/* Tarjeta */
 .compra-card {
-  background: #E7DBEF; /* Morado 200 */
-  border-radius: 12px;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: none;
+  padding: 18px 16px;
+  background: var(--card);
+  color: var(--card-foreground);
+  transition: background 0.2s, transform 0.2s;
 }
 
 .compra-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.15);
+  background: var(--secondary);
+  transform: translateY(-2px);
 }
 
-/* Encabezado de la tarjeta */
-mat-card-header {
-  background: #6E3482; /* Morado 400 */
-  color: white;
-  padding: 12px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+.card-header h4 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
-/* Contenido de la tarjeta */
-mat-card-content {
-  padding: 16px;
+.rango {
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
 }
 
-mat-card-content p {
-  margin: 6px 0;
+.compra-card p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
   font-size: 1rem;
-  color: #3E2522;
 }
 
-/* Paginador */
+.mat-icon {
+  color: var(--muted-foreground);
+  font-size: 18px;
+}
+
+/* ====== Tabla ====== */
+.table-container {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--card-foreground);
+  padding: 8px 0;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.nice-table {
+  width: 100%;
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.nice-table th,
+.nice-table td {
+  padding: 8px 16px;
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.nice-table th {
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.nice-table td:first-child {
+  font-weight: 700;
+}
+
+.nice-table tr:hover td {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+/* ====== Paginador ====== */
 mat-paginator {
-  margin-top: 20px;
-  background: #F5EBFA;
-  border-radius: 8px;
+  margin: 24px 32px 0 32px;
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+mat-paginator .mat-mdc-select-value,
+mat-paginator .mat-mdc-paginator-range-label,
+mat-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target,
+mat-paginator .mat-mdc-icon-button .mat-mdc-button-base {
+  color: var(--card-foreground);
+  background: transparent;
 }

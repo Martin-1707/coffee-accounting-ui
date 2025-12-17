@@ -6,4 +6,5 @@ export class CompraInsumo {
   fecha_final: Date = new Date();
   monto: number = 0;
   usuario: Usuario = new Usuario();
+  fecha_registro: Date = new Date();
 }
