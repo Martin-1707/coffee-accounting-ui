@@ -23,6 +23,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { UsuarioService } from '../../../services/usuario.service';
 
 type Vista = 'cards' | 'table';
 
@@ -57,6 +58,7 @@ export class ListarventaComponent implements OnInit {
 
   usuarioAutenticado: string = '';
   rolUsuario: string = '';
+  idUsuarioAuth: number | null = null;
 
   historialEstados: HistorialEstadoVenta[] = [];
   ventasProductos: VentasProducto[] = [];
@@ -85,7 +87,8 @@ export class ListarventaComponent implements OnInit {
     private hevS: HistorialEstadoVentaService,
     private vpS: VentasProductoService,
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private uS: UsuarioService
   ) { }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -93,24 +96,25 @@ export class ListarventaComponent implements OnInit {
   ngOnInit(): void {
     this.cargarProductosVenta();
 
-    this.usuarioAutenticado = this.loginService.showUser() || '';
     this.rolUsuario = this.loginService.showRole() || '';
 
-    this.vS.list().subscribe((data) => {
-      const porRol = this.aplicarFiltroPorRol(data);
-      this.todasLasVentas = porRol;
-      this.dataSource = new MatTableDataSource(porRol);
-      this.dataSource.paginator = this.paginator;
+    // Traemos el usuario real (id) desde backend
+    this.uS.getCurrentUser().subscribe({
+      next: (u) => {
+        this.idUsuarioAuth = u.idusuario ?? null;
 
-      // clientes únicos (usar username para precisión o nombre si prefieres)
-      this.clientesUnicos = Array.from(new Set(porRol.map(v => v.usuarioCliente?.username || ''))).filter(Boolean);
-    });
+        // Opcional: si también quieres el username real del backend
+        // this.usuarioAutenticado = u.username ?? this.loginService.showUser() ?? '';
 
-    this.vS.getList().subscribe((data) => {
-      const porRol = this.aplicarFiltroPorRol(data);
-      this.todasLasVentas = porRol;
-      this.dataSource = new MatTableDataSource(porRol);
-      this.dataSource.paginator = this.paginator;
+        // Luego recién cargamos ventas
+        this.cargarVentas();
+      },
+      error: (err) => {
+        console.error('Error /usuarios/me', err);
+        // Fallback: si falla /me, usa token para no romper
+        this.usuarioAutenticado = this.loginService.showUser() || '';
+        this.cargarVentas();
+      }
     });
   }
 
@@ -118,12 +122,27 @@ export class ListarventaComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  private cargarVentas() {
+    this.vS.list().subscribe((data) => {
+      const porRol = this.aplicarFiltroPorRol(data);
+      this.todasLasVentas = porRol;
+
+      this.dataSource = new MatTableDataSource(porRol);
+      this.dataSource.paginator = this.paginator;
+
+      this.clientesUnicos = Array.from(
+        new Set(porRol.map(v => v.usuarioCliente?.username || ''))
+      ).filter(Boolean);
+    });
+  }
+
   private aplicarFiltroPorRol(data: Venta[]): Venta[] {
+    if (!this.idUsuarioAuth) return data;
     if (this.rolUsuario === 'Cliente') {
-      return data.filter(v => v.usuarioCliente?.username === this.usuarioAutenticado);
+      return data.filter(v => v.usuarioCliente?.idusuario === this.idUsuarioAuth);
     }
     if (this.rolUsuario === 'Vendedor') {
-      return data.filter(v => v.usuarioVendedor.nombre === this.usuarioAutenticado);
+      return data.filter(v => v.usuarioVendedor?.idusuario === this.idUsuarioAuth);
     }
     return data;
   }
